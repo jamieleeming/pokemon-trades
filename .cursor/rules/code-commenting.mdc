@@ -1,0 +1,6 @@
+---
+description: Ensure code is commented thoroughly throughout
+globs: 
+alwaysApply: false
+---
+Ensure code is commented thoroughly to assist with editing and reviewing.

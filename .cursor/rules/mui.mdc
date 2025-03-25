@@ -1,0 +1,6 @@
+---
+description: Design library and mobile optimization
+globs: 
+alwaysApply: false
+---
+Alwasy use mui components for any front end components and make sure UI edits are always mobile-optimized. App design must be simple, clean and modern.

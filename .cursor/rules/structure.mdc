@@ -1,0 +1,6 @@
+---
+description: Ensure the app has a clear structure
+globs: 
+alwaysApply: false
+---
+If a structure file does not exist, create one and document the app structure. If it does exist, make sure it is updated any time a new file is added to the project.

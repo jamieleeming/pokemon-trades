@@ -1,0 +1,6 @@
+---
+description: Optimize component creation, usage, and strucutre
+globs: 
+alwaysApply: false
+---
+Ensure components are broken out into the correct folder so that they sit with all the other components. Never create a new component if it is not necessary.

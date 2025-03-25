@@ -1,0 +1,7 @@
+---
+description: Improving documentation in each file.
+globs: 
+alwaysApply: false
+---
+
+Every time a file is created or updated, make sure there is an appropriate description of what the file is at the top of the file. If there is no description, add one.
