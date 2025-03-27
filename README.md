@@ -199,6 +199,6 @@ This project is licensed under the MIT License.
 
 ## Deployment
 
-This app is deployed on GitHub Pages with clean URL routing.
+This app is deployed on GitHub Pages with clean URL routing using GitHub Actions. Each push to the main branch automatically triggers a deployment workflow.
 
 Last deployment trigger: March 27, 2025 

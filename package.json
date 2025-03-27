@@ -7,9 +7,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "clean-gh-pages": "node scripts/clean-gh-pages.js",
-    "deploy-script": "node scripts/deploy.js"
+    "eject": "react-scripts eject"
   },
   "keywords": [],
   "author": "",
@@ -45,7 +43,6 @@
   "devDependencies": {
     "ajv": "^6.12.6",
     "ajv-keywords": "^3.5.2",
-    "gh-pages": "^6.3.0",
     "react-scripts": "^5.0.1",
     "typescript": "^4.9.5"
   }
