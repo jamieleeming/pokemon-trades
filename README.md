@@ -195,4 +195,10 @@ If you encounter any issues with the trade system, the most common problems are:
 
 ## License
 
-This project is licensed under the MIT License. 
+This project is licensed under the MIT License.
+
+## Deployment
+
+This app is deployed on GitHub Pages with clean URL routing.
+
+Last deployment trigger: March 27, 2025 
