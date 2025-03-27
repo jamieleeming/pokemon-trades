@@ -2,7 +2,7 @@
   "name": "pokemon-trades",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://pocket-leagues.com",
+  "homepage": "https://pocket-trades.com",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
