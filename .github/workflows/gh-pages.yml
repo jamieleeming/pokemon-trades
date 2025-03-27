@@ -39,6 +39,17 @@ jobs:
           CI: false
           REACT_APP_SUPABASE_URL: ${{ secrets.REACT_APP_SUPABASE_URL }}
           REACT_APP_SUPABASE_ANON_KEY: ${{ secrets.REACT_APP_SUPABASE_ANON_KEY }}
+      
+      - name: Copy files
+        run: |
+          cp public/CNAME build/
+          cp public/404.html build/
+          cp public/robots.txt build/
+          cp public/sitemap.xml build/
+          touch build/.nojekyll
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
