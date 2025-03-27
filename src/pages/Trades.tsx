@@ -544,14 +544,14 @@ const Trades = () => {
           <div className="md:hidden divide-y divide-gray-200">
             {filteredTrades.map((trade) => (
               <div key={trade.id} className="p-4 hover:bg-gray-50">
-                <div className="flex items-start space-x-3">
+                <div className="flex items-center space-x-3">
                   {/* Card thumbnail */}
                   {trade.cards?.image_url && (
                     <div className="flex-shrink-0">
                       <img 
                         src={trade.cards.image_url} 
                         alt={trade.cards.card_name || 'Card'}
-                        className="h-14 w-auto object-contain rounded"
+                        className="h-16 w-auto object-contain rounded"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                         }}
@@ -561,45 +561,51 @@ const Trades = () => {
                   
                   {/* Card info */}
                   <div className="flex-grow">
-                    <div className="font-medium text-gray-900">{trade.cards?.card_name || 'Unknown Card'}</div>
-                    <div className="text-xs text-gray-500">
-                      #{String(trade.cards?.card_number || '000').padStart(3, '0')}
+                    <div className="font-medium text-gray-900 text-sm">{trade.cards?.card_name || 'Unknown Card'}</div>
+                    
+                    {/* Card details in a single row */}
+                    <div className="flex items-center flex-wrap gap-2 mt-1">
+                      <span className="text-xs text-gray-600">
+                        #{String(trade.cards?.card_number || '000').padStart(3, '0')}
+                      </span>
+                      
                       {trade.offered_by ? (
-                        <span className="ml-2 inline-block rounded-full bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-800">
+                        <span className="inline-block rounded-full bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-800">
                           Offer Available
                         </span>
                       ) : (
-                        <span className="ml-2 inline-block rounded-full bg-yellow-100 px-1.5 py-0.5 text-xs font-semibold text-yellow-800">
+                        <span className="inline-block rounded-full bg-yellow-100 px-1.5 py-0.5 text-xs font-semibold text-yellow-800">
                           Searching
                         </span>
                       )}
                     </div>
-                    {/* Show user info */}
-                    {trade.users?.id !== user?.id && (
-                      <div className="text-xs text-gray-500 mt-1">
-                        By: {trade.users?.username || 'Unknown User'}
-                      </div>
-                    )}
-                    {/* Show "Your request" for own trades */}
-                    {trade.users?.id === user?.id && (
-                      <div className="text-xs text-gray-500 mt-1 italic">
-                        Your request
-                      </div>
-                    )}
-                    {/* Show offer info */}
-                    {trade.users?.id === user?.id && trade.offered_by && trade.offerers && (
-                      <div className="text-xs text-green-600 mt-1">
-                        Offered by: {trade.offerers.username || 'Unknown User'}
-                      </div>
-                    )}
+                    
+                    {/* User info */}
+                    <div className="mt-1 text-xs">
+                      {trade.users?.id !== user?.id ? (
+                        <span className="text-gray-600">
+                          By: {trade.users?.username || 'Unknown User'}
+                        </span>
+                      ) : (
+                        <span className="text-gray-600 italic">
+                          Your request
+                        </span>
+                      )}
+                      
+                      {trade.users?.id === user?.id && trade.offered_by && trade.offerers && (
+                        <span className="text-green-600 ml-2">
+                          Offered by: {trade.offerers.username || 'Unknown User'}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   
                   {/* Actions */}
-                  <div className="flex-shrink-0 flex flex-col space-y-2">
+                  <div className="flex-shrink-0 flex flex-col items-center justify-center space-y-2">
                     {!trade.offered_by && trade.users?.id !== user?.id && (
                       <button
                         onClick={() => handleOfferTrade(trade.id)}
-                        className="btn btn-primary text-xs px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors w-20 text-center"
+                        className="btn btn-primary text-xs px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors w-20 text-center"
                         disabled={actionLoading && processingTradeId === trade.id}
                       >
                         {actionLoading && processingTradeId === trade.id ? (
@@ -612,7 +618,7 @@ const Trades = () => {
                     
                     <button
                       onClick={() => handleOpenTradeDetails(trade)}
-                      className="text-xs px-2 py-1 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors w-20 text-center"
+                      className="text-xs font-medium px-3 py-1.5 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors w-20 text-center"
                     >
                       See More
                     </button>
