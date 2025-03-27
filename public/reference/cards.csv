@@ -1,0 +1,846 @@
+pack,card_number,card_name,card_element,card_type,card_rarity,tradeable,image_url
+Genetic Apex,1,Bulbasaur,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_001_EN.webp
+Genetic Apex,2,Ivysaur,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_002_EN.webp
+Genetic Apex,3,Venusaur,Grass,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_003_EN.webp
+Genetic Apex,4,Venusaur ex,Grass,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_004_EN.webp
+Genetic Apex,5,Caterpie,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_005_EN.webp
+Genetic Apex,6,Metapod,Grass,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_006_EN.webp
+Genetic Apex,7,Butterfree,Grass,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_007_EN.webp
+Genetic Apex,8,Weedle,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_008_EN.webp
+Genetic Apex,9,Kakuna,Grass,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_009_EN.webp
+Genetic Apex,10,Beedrill,Grass,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_010_EN.webp
+Genetic Apex,11,Oddish,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_011_EN.webp
+Genetic Apex,12,Gloom,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_012_EN.webp
+Genetic Apex,13,Vileplume,Grass,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_013_EN.webp
+Genetic Apex,14,Paras,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_014_EN.webp
+Genetic Apex,15,Parasect,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_015_EN.webp
+Genetic Apex,16,Venonat,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_016_EN.webp
+Genetic Apex,17,Venomoth,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_017_EN.webp
+Genetic Apex,18,Bellsprout,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_018_EN.webp
+Genetic Apex,19,Weepinbell,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_019_EN.webp
+Genetic Apex,20,Victreebel,Grass,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_020_EN.webp
+Genetic Apex,21,Exeggcute,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_021_EN.webp
+Genetic Apex,22,Exeggutor,Grass,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_022_EN.webp
+Genetic Apex,23,Exeggutor ex,Grass,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_023_EN.webp
+Genetic Apex,24,Tangela,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_024_EN.webp
+Genetic Apex,25,Scyther,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_025_EN.webp
+Genetic Apex,26,Pinsir,Grass,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_026_EN.webp
+Genetic Apex,27,Cottonee,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_027_EN.webp
+Genetic Apex,28,Whimsicott,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_028_EN.webp
+Genetic Apex,29,Petilil,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_029_EN.webp
+Genetic Apex,30,Lilligant,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_030_EN.webp
+Genetic Apex,31,Skiddo,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_031_EN.webp
+Genetic Apex,32,Gogoat,Grass,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_032_EN.webp
+Genetic Apex,33,Charmander,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_033_EN.webp
+Genetic Apex,34,Charmeleon,Fire,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_034_EN.webp
+Genetic Apex,35,Charizard,Fire,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_035_EN.webp
+Genetic Apex,36,Charizard ex,Fire,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_036_EN.webp
+Genetic Apex,37,Vulpix,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_037_EN.webp
+Genetic Apex,38,Ninetales,Fire,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_038_EN.webp
+Genetic Apex,39,Growlithe,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_039_EN.webp
+Genetic Apex,40,Arcanine,Fire,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_040_EN.webp
+Genetic Apex,41,Arcanine ex,Fire,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_041_EN.webp
+Genetic Apex,42,Ponyta,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_042_EN.webp
+Genetic Apex,43,Rapidash,Fire,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_043_EN.webp
+Genetic Apex,44,Magmar,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_044_EN.webp
+Genetic Apex,45,Flareon,Fire,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_045_EN.webp
+Genetic Apex,46,Moltres,Fire,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_046_EN.webp
+Genetic Apex,47,Moltres ex,Fire,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_047_EN.webp
+Genetic Apex,48,Heatmor,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_048_EN.webp
+Genetic Apex,49,Salandit,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_049_EN.webp
+Genetic Apex,50,Salazzle,Fire,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_050_EN.webp
+Genetic Apex,51,Sizzlipede,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_051_EN.webp
+Genetic Apex,52,Centiskorch,Fire,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_052_EN.webp
+Genetic Apex,53,Squirtle,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_053_EN.webp
+Genetic Apex,54,Wartortle,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_054_EN.webp
+Genetic Apex,55,Blastoise,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_055_EN.webp
+Genetic Apex,56,Blastoise ex,Water,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_056_EN.webp
+Genetic Apex,57,Psyduck,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_057_EN.webp
+Genetic Apex,58,Golduck,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_058_EN.webp
+Genetic Apex,59,Poliwag,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_059_EN.webp
+Genetic Apex,60,Poliwhirl,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_060_EN.webp
+Genetic Apex,61,Poliwrath,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_061_EN.webp
+Genetic Apex,62,Tentacool,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_062_EN.webp
+Genetic Apex,63,Tentacruel,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_063_EN.webp
+Genetic Apex,64,Seel,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_064_EN.webp
+Genetic Apex,65,Dewgong,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_065_EN.webp
+Genetic Apex,66,Shellder,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_066_EN.webp
+Genetic Apex,67,Cloyster,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_067_EN.webp
+Genetic Apex,68,Krabby,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_068_EN.webp
+Genetic Apex,69,Kingler,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_069_EN.webp
+Genetic Apex,70,Horsea,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_070_EN.webp
+Genetic Apex,71,Seadra,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_071_EN.webp
+Genetic Apex,72,Goldeen,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_072_EN.webp
+Genetic Apex,73,Seaking,Water,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_073_EN.webp
+Genetic Apex,74,Staryu,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_074_EN.webp
+Genetic Apex,75,Starmie,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_075_EN.webp
+Genetic Apex,76,Starmie ex,Water,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_076_EN.webp
+Genetic Apex,77,Magikarp,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_077_EN.webp
+Genetic Apex,78,Gyarados,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_078_EN.webp
+Genetic Apex,79,Lapras,Water,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_079_EN.webp
+Genetic Apex,80,Vaporeon,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_080_EN.webp
+Genetic Apex,81,Omanyte,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_081_EN.webp
+Genetic Apex,82,Omastar,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_082_EN.webp
+Genetic Apex,83,Articuno,Water,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_083_EN.webp
+Genetic Apex,84,Articuno ex,Water,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_084_EN.webp
+Genetic Apex,85,Ducklett,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_085_EN.webp
+Genetic Apex,86,Swanna,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_086_EN.webp
+Genetic Apex,87,Froakie,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_087_EN.webp
+Genetic Apex,88,Frogadier,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_088_EN.webp
+Genetic Apex,89,Greninja,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_089_EN.webp
+Genetic Apex,90,Pyukumuku,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_090_EN.webp
+Genetic Apex,91,Bruxish,Water,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_091_EN.webp
+Genetic Apex,92,Snom,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_092_EN.webp
+Genetic Apex,93,Frosmoth,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_093_EN.webp
+Genetic Apex,94,Pikachu,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_094_EN.webp
+Genetic Apex,95,Raichu,Lightning,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_095_EN.webp
+Genetic Apex,96,Pikachu ex,Lightning,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_096_EN.webp
+Genetic Apex,97,Magnemite,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_097_EN.webp
+Genetic Apex,98,Magneton,Lightning,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_098_EN.webp
+Genetic Apex,99,Voltorb,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_099_EN.webp
+Genetic Apex,100,Electrode,Lightning,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_100_EN.webp
+Genetic Apex,101,Electabuzz,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_101_EN.webp
+Genetic Apex,102,Jolteon,Lightning,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_102_EN.webp
+Genetic Apex,103,Zapdos,Lightning,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_103_EN.webp
+Genetic Apex,104,Zapdos ex,Lightning,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_104_EN.webp
+Genetic Apex,105,Blitzle,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_105_EN.webp
+Genetic Apex,106,Zebstrika,Lightning,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_106_EN.webp
+Genetic Apex,107,Tynamo,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_107_EN.webp
+Genetic Apex,108,Eelektrik,Lightning,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_108_EN.webp
+Genetic Apex,109,Eelektross,Lightning,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_109_EN.webp
+Genetic Apex,110,Helioptile,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_110_EN.webp
+Genetic Apex,111,Heliolisk,Lightning,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_111_EN.webp
+Genetic Apex,112,Pincurchin,Lightning,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_112_EN.webp
+Genetic Apex,113,Clefairy,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_113_EN.webp
+Genetic Apex,114,Clefable,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_114_EN.webp
+Genetic Apex,115,Abra,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_115_EN.webp
+Genetic Apex,116,Kadabra,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_116_EN.webp
+Genetic Apex,117,Alakazam,Psychic,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_117_EN.webp
+Genetic Apex,118,Slowpoke,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_118_EN.webp
+Genetic Apex,119,Slowbro,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_119_EN.webp
+Genetic Apex,120,Gastly,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_120_EN.webp
+Genetic Apex,121,Haunter,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_121_EN.webp
+Genetic Apex,122,Gengar,Psychic,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_122_EN.webp
+Genetic Apex,123,Gengar ex,Psychic,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_123_EN.webp
+Genetic Apex,124,Drowzee,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_124_EN.webp
+Genetic Apex,125,Hypno,Psychic,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_125_EN.webp
+Genetic Apex,126,Mr. Mime,Psychic,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_126_EN.webp
+Genetic Apex,127,Jynx,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_127_EN.webp
+Genetic Apex,128,Mewtwo,Psychic,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_128_EN.webp
+Genetic Apex,129,Mewtwo ex,Psychic,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_129_EN.webp
+Genetic Apex,130,Ralts,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_130_EN.webp
+Genetic Apex,131,Kirlia,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_131_EN.webp
+Genetic Apex,132,Gardevoir,Psychic,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_132_EN.webp
+Genetic Apex,133,Woobat,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_133_EN.webp
+Genetic Apex,134,Swoobat,Psychic,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_134_EN.webp
+Genetic Apex,135,Golett,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_135_EN.webp
+Genetic Apex,136,Golurk,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_136_EN.webp
+Genetic Apex,137,Sandshrew,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_137_EN.webp
+Genetic Apex,138,Sandslash,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_138_EN.webp
+Genetic Apex,139,Diglett,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_139_EN.webp
+Genetic Apex,140,Dugtrio,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_140_EN.webp
+Genetic Apex,141,Mankey,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_141_EN.webp
+Genetic Apex,142,Primeape,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_142_EN.webp
+Genetic Apex,143,Machop,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_143_EN.webp
+Genetic Apex,144,Machoke,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_144_EN.webp
+Genetic Apex,145,Machamp,Fighting,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_145_EN.webp
+Genetic Apex,146,Machamp ex,Fighting,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_146_EN.webp
+Genetic Apex,147,Geodude,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_147_EN.webp
+Genetic Apex,148,Graveler,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_148_EN.webp
+Genetic Apex,149,Golem,Fighting,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_149_EN.webp
+Genetic Apex,150,Onix,Fighting,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_150_EN.webp
+Genetic Apex,151,Cubone,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_151_EN.webp
+Genetic Apex,152,Marowak,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_152_EN.webp
+Genetic Apex,153,Marowak ex,Fighting,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_153_EN.webp
+Genetic Apex,154,Hitmonlee,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_154_EN.webp
+Genetic Apex,155,Hitmonchan,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_155_EN.webp
+Genetic Apex,156,Rhyhorn,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_156_EN.webp
+Genetic Apex,157,Rhydon,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_157_EN.webp
+Genetic Apex,158,Kabuto,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_158_EN.webp
+Genetic Apex,159,Kabutops,Fighting,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_159_EN.webp
+Genetic Apex,160,Mienfoo,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_160_EN.webp
+Genetic Apex,161,Mienshao,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_161_EN.webp
+Genetic Apex,162,Clobbopus,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_162_EN.webp
+Genetic Apex,163,Grapploct,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_163_EN.webp
+Genetic Apex,164,Ekans,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_164_EN.webp
+Genetic Apex,165,Arbok,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_165_EN.webp
+Genetic Apex,166,Nidoran♀,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_166_EN.webp
+Genetic Apex,167,Nidorina,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_167_EN.webp
+Genetic Apex,168,Nidoqueen,Dark,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_168_EN.webp
+Genetic Apex,169,Nidoran♂,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_169_EN.webp
+Genetic Apex,170,Nidorino,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_170_EN.webp
+Genetic Apex,171,Nidoking,Dark,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_171_EN.webp
+Genetic Apex,172,Zubat,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_172_EN.webp
+Genetic Apex,173,Golbat,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_173_EN.webp
+Genetic Apex,174,Grimer,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_174_EN.webp
+Genetic Apex,175,Muk,Dark,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_175_EN.webp
+Genetic Apex,176,Koffing,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_176_EN.webp
+Genetic Apex,177,Weezing,Dark,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_177_EN.webp
+Genetic Apex,178,Mawile,Metal,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_178_EN.webp
+Genetic Apex,179,Pawniard,Metal,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_179_EN.webp
+Genetic Apex,180,Bisharp,Metal,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_180_EN.webp
+Genetic Apex,181,Meltan,Metal,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_181_EN.webp
+Genetic Apex,182,Melmetal,Metal,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_182_EN.webp
+Genetic Apex,183,Dratini,Dragon,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_183_EN.webp
+Genetic Apex,184,Dragonair,Dragon,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_184_EN.webp
+Genetic Apex,185,Dragonite,Dragon,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_185_EN.webp
+Genetic Apex,186,Pidgey,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_186_EN.webp
+Genetic Apex,187,Pidgeotto,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_187_EN.webp
+Genetic Apex,188,Pidgeot,Common,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_188_EN.webp
+Genetic Apex,189,Rattata,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_189_EN.webp
+Genetic Apex,190,Raticate,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_190_EN.webp
+Genetic Apex,191,Spearow,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_191_EN.webp
+Genetic Apex,192,Fearow,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_192_EN.webp
+Genetic Apex,193,Jigglypuff,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_193_EN.webp
+Genetic Apex,194,Wigglytuff,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_194_EN.webp
+Genetic Apex,195,Wigglytuff ex,Common,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_195_EN.webp
+Genetic Apex,196,Meowth,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_196_EN.webp
+Genetic Apex,197,Persian,Common,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_197_EN.webp
+Genetic Apex,198,Farfetch'd,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_198_EN.webp
+Genetic Apex,199,Doduo,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_199_EN.webp
+Genetic Apex,200,Dodrio,Common,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_200_EN.webp
+Genetic Apex,201,Lickitung,Common,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_201_EN.webp
+Genetic Apex,202,Chansey,Common,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_202_EN.webp
+Genetic Apex,203,Kangaskhan,Common,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_203_EN.webp
+Genetic Apex,204,Tauros,Common,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_204_EN.webp
+Genetic Apex,205,Ditto,Common,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_205_EN.webp
+Genetic Apex,206,Eevee,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_206_EN.webp
+Genetic Apex,207,Eevee,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_207_EN.webp
+Genetic Apex,208,Eevee,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_208_EN.webp
+Genetic Apex,209,Porygon,Common,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_209_EN.webp
+Genetic Apex,210,Aerodactyl,Common,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_210_EN.webp
+Genetic Apex,211,Snorlax,Common,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_211_EN.webp
+Genetic Apex,212,Minccino,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_212_EN.webp
+Genetic Apex,213,Cinccino,Common,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_213_EN.webp
+Genetic Apex,214,Wooloo,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_214_EN.webp
+Genetic Apex,215,Dubwool,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_215_EN.webp
+Genetic Apex,216,Helix Fossil,,Item,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_216_EN.webp
+Genetic Apex,217,Dome Fossil,,Item,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_217_EN.webp
+Genetic Apex,218,Old Amber,,Item,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_218_EN.webp
+Genetic Apex,219,Erika,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_219_EN.webp
+Genetic Apex,220,Misty,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_220_EN.webp
+Genetic Apex,221,Blaine,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_221_EN.webp
+Genetic Apex,222,Koga,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_222_EN.webp
+Genetic Apex,223,Giovanni,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_223_EN.webp
+Genetic Apex,224,Brock,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_224_EN.webp
+Genetic Apex,225,Sabrina,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_225_EN.webp
+Genetic Apex,226,Lt. Surge,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_226_EN.webp
+Genetic Apex,227,Bulbasaur,Grass,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_227_EN.webp
+Genetic Apex,228,Gloom,Grass,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_228_EN.webp
+Genetic Apex,229,Pinsir,Grass,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_229_EN.webp
+Genetic Apex,230,Charmander,Fire,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_230_EN.webp
+Genetic Apex,231,Rapidash,Fire,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_231_EN.webp
+Genetic Apex,232,Squirtle,Water,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_232_EN.webp
+Genetic Apex,233,Gyarados,Water,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_233_EN.webp
+Genetic Apex,234,Lapras,Water,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_234_EN.webp
+Genetic Apex,235,Electrode,Lightning,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_235_EN.webp
+Genetic Apex,236,Alakazam,Psychic,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_236_EN.webp
+Genetic Apex,237,Slowpoke,Psychic,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_237_EN.webp
+Genetic Apex,238,Diglett,Fighting,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_238_EN.webp
+Genetic Apex,239,Cubone,Fighting,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_239_EN.webp
+Genetic Apex,240,Nidoqueen,Dark,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_240_EN.webp
+Genetic Apex,241,Nidoking,Dark,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_241_EN.webp
+Genetic Apex,242,Golbat,Dark,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_242_EN.webp
+Genetic Apex,243,Weezing,Dark,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_243_EN.webp
+Genetic Apex,244,Dragonite,Dragon,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_244_EN.webp
+Genetic Apex,245,Pidgeot,Common,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_245_EN.webp
+Genetic Apex,246,Meowth,Common,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_246_EN.webp
+Genetic Apex,247,Ditto,Common,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_247_EN.webp
+Genetic Apex,248,Eevee,Common,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_248_EN.webp
+Genetic Apex,249,Porygon,Common,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_249_EN.webp
+Genetic Apex,250,Snorlax,Common,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_250_EN.webp
+Genetic Apex,251,Venusaur ex,Grass,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_251_EN.webp
+Genetic Apex,252,Exeggutor ex,Grass,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_252_EN.webp
+Genetic Apex,253,Charizard ex,Fire,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_253_EN.webp
+Genetic Apex,254,Arcanine ex,Fire,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_254_EN.webp
+Genetic Apex,255,Moltres ex,Fire,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_255_EN.webp
+Genetic Apex,256,Blastoise ex,Water,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_256_EN.webp
+Genetic Apex,257,Starmie ex,Water,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_257_EN.webp
+Genetic Apex,258,Articuno ex,Water,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_258_EN.webp
+Genetic Apex,259,Pikachu ex,Lightning,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_259_EN.webp
+Genetic Apex,260,Zapdos ex,Lightning,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_260_EN.webp
+Genetic Apex,261,Gengar ex,Psychic,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_261_EN.webp
+Genetic Apex,262,Mewtwo ex,Psychic,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_262_EN.webp
+Genetic Apex,263,Machamp ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_263_EN.webp
+Genetic Apex,264,Marowak ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_264_EN.webp
+Genetic Apex,265,Wigglytuff ex,Common,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_265_EN.webp
+Genetic Apex,266,Erika,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_266_EN.webp
+Genetic Apex,267,Misty,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_267_EN.webp
+Genetic Apex,268,Blaine,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_268_EN.webp
+Genetic Apex,269,Koga,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_269_EN.webp
+Genetic Apex,270,Giovanni,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_270_EN.webp
+Genetic Apex,271,Brock,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_271_EN.webp
+Genetic Apex,272,Sabrina,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_272_EN.webp
+Genetic Apex,273,Lt. Surge,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_273_EN.webp
+Genetic Apex,274,Moltres ex,Fire,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_274_EN.webp
+Genetic Apex,275,Articuno ex,Water,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_275_EN.webp
+Genetic Apex,276,Zapdos ex,Lightning,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_276_EN.webp
+Genetic Apex,277,Gengar ex,Psychic,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_277_EN.webp
+Genetic Apex,278,Machamp ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_278_EN.webp
+Genetic Apex,279,Wigglytuff ex,Common,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_279_EN.webp
+Genetic Apex,280,Charizard ex,Fire,Stage,☆☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_280_EN.webp
+Genetic Apex,281,Pikachu ex,Lightning,Basic,☆☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_281_EN.webp
+Genetic Apex,282,Mewtwo ex,Psychic,Basic,☆☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_282_EN.webp
+Genetic Apex,283,Mew,Psychic,Basic,☆☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_283_EN.webp
+Genetic Apex,284,Charizard ex,Fire,Stage,Crown Rare,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_284_EN.webp
+Genetic Apex,285,Pikachu ex,Lightning,Basic,Crown Rare,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_285_EN.webp
+Genetic Apex,286,Mewtwo ex,Psychic,Basic,Crown Rare,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1/A1_286_EN.webp
+Mythical Island,1,Exeggcute,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_001_EN.webp
+Mythical Island,2,Exeggutor,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_002_EN.webp
+Mythical Island,3,Celebi ex,Grass,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_003_EN.webp
+Mythical Island,4,Snivy,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_004_EN.webp
+Mythical Island,5,Servine,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_005_EN.webp
+Mythical Island,6,Serperior,Grass,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_006_EN.webp
+Mythical Island,7,Morelull,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_007_EN.webp
+Mythical Island,8,Shiinotic,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_008_EN.webp
+Mythical Island,9,Dhelmise,Grass,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_009_EN.webp
+Mythical Island,10,Ponyta,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_010_EN.webp
+Mythical Island,11,Rapidash,Fire,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_011_EN.webp
+Mythical Island,12,Magmar,Fire,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_012_EN.webp
+Mythical Island,13,Larvesta,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_013_EN.webp
+Mythical Island,14,Volcarona,Fire,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_014_EN.webp
+Mythical Island,15,Salandit,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_015_EN.webp
+Mythical Island,16,Salazzle,Fire,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_016_EN.webp
+Mythical Island,17,Magikarp,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_017_EN.webp
+Mythical Island,18,Gyarados ex,Water,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_018_EN.webp
+Mythical Island,19,Vaporeon,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_019_EN.webp
+Mythical Island,20,Finneon,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_020_EN.webp
+Mythical Island,21,Lumineon,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_021_EN.webp
+Mythical Island,22,Chewtle,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_022_EN.webp
+Mythical Island,23,Drednaw,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_023_EN.webp
+Mythical Island,24,Cramorant,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_024_EN.webp
+Mythical Island,25,Pikachu,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_025_EN.webp
+Mythical Island,26,Raichu,Lightning,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_026_EN.webp
+Mythical Island,27,Electabuzz,Lightning,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_027_EN.webp
+Mythical Island,28,Joltik,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_028_EN.webp
+Mythical Island,29,Galvantula,Lightning,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_029_EN.webp
+Mythical Island,30,Dedenne,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_030_EN.webp
+Mythical Island,31,Mew,Psychic,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_031_EN.webp
+Mythical Island,32,Mew ex,Psychic,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_032_EN.webp
+Mythical Island,33,Sigilyph,Psychic,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_033_EN.webp
+Mythical Island,34,Elgyem,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_034_EN.webp
+Mythical Island,35,Beheeyem,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_035_EN.webp
+Mythical Island,36,Flabébé,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_036_EN.webp
+Mythical Island,37,Floette,Psychic,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_037_EN.webp
+Mythical Island,38,Florges,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_038_EN.webp
+Mythical Island,39,Swirlix,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_039_EN.webp
+Mythical Island,40,Slurpuff,Psychic,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_040_EN.webp
+Mythical Island,41,Mankey,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_041_EN.webp
+Mythical Island,42,Primeape,Fighting,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_042_EN.webp
+Mythical Island,43,Geodude,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_043_EN.webp
+Mythical Island,44,Graveler,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_044_EN.webp
+Mythical Island,45,Golem,Fighting,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_045_EN.webp
+Mythical Island,46,Aerodactyl ex,Fighting,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_046_EN.webp
+Mythical Island,47,Marshadow,Fighting,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_047_EN.webp
+Mythical Island,48,Stonjourner,Fighting,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_048_EN.webp
+Mythical Island,49,Koffing,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_049_EN.webp
+Mythical Island,50,Weezing,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_050_EN.webp
+Mythical Island,51,Purrloin,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_051_EN.webp
+Mythical Island,52,Liepard,Dark,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_052_EN.webp
+Mythical Island,53,Venipede,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_053_EN.webp
+Mythical Island,54,Whirlipede,Dark,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_054_EN.webp
+Mythical Island,55,Scolipede,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_055_EN.webp
+Mythical Island,56,Druddigon,Dragon,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_056_EN.webp
+Mythical Island,57,Pidgey,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_057_EN.webp
+Mythical Island,58,Pidgeotto,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_058_EN.webp
+Mythical Island,59,Pidgeot ex,Common,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_059_EN.webp
+Mythical Island,60,Tauros,Common,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_060_EN.webp
+Mythical Island,61,Eevee,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_061_EN.webp
+Mythical Island,62,Chatot,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_062_EN.webp
+Mythical Island,63,Old Amber,,Item,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_063_EN.webp
+Mythical Island,64,Pokémon Flute,,Item,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_064_EN.webp
+Mythical Island,65,Mythical Slab,,Item,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_065_EN.webp
+Mythical Island,66,Budding Expeditioner,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_066_EN.webp
+Mythical Island,67,Blue,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_067_EN.webp
+Mythical Island,68,Leaf,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_068_EN.webp
+Mythical Island,69,Exeggutor,Grass,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_069_EN.webp
+Mythical Island,70,Serperior,Grass,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_070_EN.webp
+Mythical Island,71,Salandit,Fire,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_071_EN.webp
+Mythical Island,72,Vaporeon,Water,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_072_EN.webp
+Mythical Island,73,Dedenne,Lightning,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_073_EN.webp
+Mythical Island,74,Marshadow,Fighting,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_074_EN.webp
+Mythical Island,75,Celebi ex,Grass,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_075_EN.webp
+Mythical Island,76,Gyarados ex,Water,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_076_EN.webp
+Mythical Island,77,Mew ex,Psychic,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_077_EN.webp
+Mythical Island,78,Aerodactyl ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_078_EN.webp
+Mythical Island,79,Pidgeot ex,Common,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_079_EN.webp
+Mythical Island,80,Budding Expeditioner,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_080_EN.webp
+Mythical Island,81,Blue,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_081_EN.webp
+Mythical Island,82,Leaf,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_082_EN.webp
+Mythical Island,83,Mew ex,Psychic,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_083_EN.webp
+Mythical Island,84,Aerodactyl ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_084_EN.webp
+Mythical Island,85,Celebi ex,Grass,Basic,☆☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_085_EN.webp
+Mythical Island,86,Mew ex,Psychic,Basic,Crown Rare,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A1a/A1a_086_EN.webp
+Space-Time Smackdown,1,Oddish,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_001_EN.webp
+Space-Time Smackdown,2,Gloom,Grass,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_002_EN.webp
+Space-Time Smackdown,3,Bellossom,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_003_EN.webp
+Space-Time Smackdown,4,Tangela,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_004_EN.webp
+Space-Time Smackdown,5,Tangrowth,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_005_EN.webp
+Space-Time Smackdown,6,Yanma,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_006_EN.webp
+Space-Time Smackdown,7,Yanmega ex,Grass,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_007_EN.webp
+Space-Time Smackdown,8,Roselia,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_008_EN.webp
+Space-Time Smackdown,9,Roserade,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_009_EN.webp
+Space-Time Smackdown,10,Turtwig,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_010_EN.webp
+Space-Time Smackdown,11,Grotle,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_011_EN.webp
+Space-Time Smackdown,12,Torterra,Grass,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_012_EN.webp
+Space-Time Smackdown,13,Kricketot,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_013_EN.webp
+Space-Time Smackdown,14,Kricketune,Grass,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_014_EN.webp
+Space-Time Smackdown,15,Burmy,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_015_EN.webp
+Space-Time Smackdown,16,Wormadam,Grass,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_016_EN.webp
+Space-Time Smackdown,17,Combee,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_017_EN.webp
+Space-Time Smackdown,18,Vespiquen,Grass,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_018_EN.webp
+Space-Time Smackdown,19,Carnivine,Grass,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_019_EN.webp
+Space-Time Smackdown,20,Leafeon,Grass,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_020_EN.webp
+Space-Time Smackdown,21,Mow Rotom,Grass,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_021_EN.webp
+Space-Time Smackdown,22,Shaymin,Grass,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_022_EN.webp
+Space-Time Smackdown,23,Magmar,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_023_EN.webp
+Space-Time Smackdown,24,Magmortar,Fire,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_024_EN.webp
+Space-Time Smackdown,25,Slugma,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_025_EN.webp
+Space-Time Smackdown,26,Magcargo,Fire,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_026_EN.webp
+Space-Time Smackdown,27,Chimchar,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_027_EN.webp
+Space-Time Smackdown,28,Monferno,Fire,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_028_EN.webp
+Space-Time Smackdown,29,Infernape ex,Fire,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_029_EN.webp
+Space-Time Smackdown,30,Heat Rotom,Fire,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_030_EN.webp
+Space-Time Smackdown,31,Swinub,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_031_EN.webp
+Space-Time Smackdown,32,Piloswine,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_032_EN.webp
+Space-Time Smackdown,33,Mamoswine,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_033_EN.webp
+Space-Time Smackdown,34,Regice,Water,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_034_EN.webp
+Space-Time Smackdown,35,Piplup,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_035_EN.webp
+Space-Time Smackdown,36,Prinplup,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_036_EN.webp
+Space-Time Smackdown,37,Empoleon,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_037_EN.webp
+Space-Time Smackdown,38,Buizel,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_038_EN.webp
+Space-Time Smackdown,39,Floatzel,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_039_EN.webp
+Space-Time Smackdown,40,Shellos,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_040_EN.webp
+Space-Time Smackdown,41,Gastrodon,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_041_EN.webp
+Space-Time Smackdown,42,Finneon,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_042_EN.webp
+Space-Time Smackdown,43,Lumineon,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_043_EN.webp
+Space-Time Smackdown,44,Snover,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_044_EN.webp
+Space-Time Smackdown,45,Abomasnow,Water,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_045_EN.webp
+Space-Time Smackdown,46,Glaceon,Water,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_046_EN.webp
+Space-Time Smackdown,47,Wash Rotom,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_047_EN.webp
+Space-Time Smackdown,48,Frost Rotom,Water,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_048_EN.webp
+Space-Time Smackdown,49,Palkia ex,Water,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_049_EN.webp
+Space-Time Smackdown,50,Manaphy,Water,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_050_EN.webp
+Space-Time Smackdown,51,Magnemite,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_051_EN.webp
+Space-Time Smackdown,52,Magneton,Lightning,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_052_EN.webp
+Space-Time Smackdown,53,Magnezone,Lightning,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_053_EN.webp
+Space-Time Smackdown,54,Voltorb,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_054_EN.webp
+Space-Time Smackdown,55,Electrode,Lightning,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_055_EN.webp
+Space-Time Smackdown,56,Electabuzz,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_056_EN.webp
+Space-Time Smackdown,57,Electivire,Lightning,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_057_EN.webp
+Space-Time Smackdown,58,Shinx,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_058_EN.webp
+Space-Time Smackdown,59,Luxio,Lightning,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_059_EN.webp
+Space-Time Smackdown,60,Luxray,Lightning,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_060_EN.webp
+Space-Time Smackdown,61,Pachirisu ex,Lightning,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_061_EN.webp
+Space-Time Smackdown,62,Rotom,Lightning,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_062_EN.webp
+Space-Time Smackdown,63,Togepi,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_063_EN.webp
+Space-Time Smackdown,64,Togetic,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_064_EN.webp
+Space-Time Smackdown,65,Togekiss,Psychic,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_065_EN.webp
+Space-Time Smackdown,66,Misdreavus,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_066_EN.webp
+Space-Time Smackdown,67,Mismagius ex,Psychic,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_067_EN.webp
+Space-Time Smackdown,68,Ralts,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_068_EN.webp
+Space-Time Smackdown,69,Kirlia,Psychic,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_069_EN.webp
+Space-Time Smackdown,70,Duskull,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_070_EN.webp
+Space-Time Smackdown,71,Dusclops,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_071_EN.webp
+Space-Time Smackdown,72,Dusknoir,Psychic,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_072_EN.webp
+Space-Time Smackdown,73,Drifloon,Psychic,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_073_EN.webp
+Space-Time Smackdown,74,Drifblim,Psychic,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_074_EN.webp
+Space-Time Smackdown,75,Uxie,Psychic,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_075_EN.webp
+Space-Time Smackdown,76,Mesprit,Psychic,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_076_EN.webp
+Space-Time Smackdown,77,Azelf,Psychic,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_077_EN.webp
+Space-Time Smackdown,78,Giratina,Psychic,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_078_EN.webp
+Space-Time Smackdown,79,Cresselia,Psychic,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_079_EN.webp
+Space-Time Smackdown,80,Rhyhorn,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_080_EN.webp
+Space-Time Smackdown,81,Rhydon,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_081_EN.webp
+Space-Time Smackdown,82,Rhyperior,Fighting,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_082_EN.webp
+Space-Time Smackdown,83,Gligar,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_083_EN.webp
+Space-Time Smackdown,84,Gliscor,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_084_EN.webp
+Space-Time Smackdown,85,Hitmontop,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_085_EN.webp
+Space-Time Smackdown,86,Nosepass,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_086_EN.webp
+Space-Time Smackdown,87,Regirock,Fighting,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_087_EN.webp
+Space-Time Smackdown,88,Cranidos,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_088_EN.webp
+Space-Time Smackdown,89,Rampardos,Fighting,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_089_EN.webp
+Space-Time Smackdown,90,Wormadam,Fighting,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_090_EN.webp
+Space-Time Smackdown,91,Riolu,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_091_EN.webp
+Space-Time Smackdown,92,Lucario,Fighting,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_092_EN.webp
+Space-Time Smackdown,93,Hippopotas,Fighting,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_093_EN.webp
+Space-Time Smackdown,94,Hippowdon,Fighting,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_094_EN.webp
+Space-Time Smackdown,95,Gallade ex,Fighting,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_095_EN.webp
+Space-Time Smackdown,96,Murkrow,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_096_EN.webp
+Space-Time Smackdown,97,Honchkrow,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_097_EN.webp
+Space-Time Smackdown,98,Sneasel,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_098_EN.webp
+Space-Time Smackdown,99,Weavile ex,Dark,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_099_EN.webp
+Space-Time Smackdown,100,Poochyena,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_100_EN.webp
+Space-Time Smackdown,101,Mightyena,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_101_EN.webp
+Space-Time Smackdown,102,Stunky,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_102_EN.webp
+Space-Time Smackdown,103,Skuntank,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_103_EN.webp
+Space-Time Smackdown,104,Spiritomb,Dark,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_104_EN.webp
+Space-Time Smackdown,105,Skorupi,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_105_EN.webp
+Space-Time Smackdown,106,Drapion,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_106_EN.webp
+Space-Time Smackdown,107,Croagunk,Dark,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_107_EN.webp
+Space-Time Smackdown,108,Toxicroak,Dark,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_108_EN.webp
+Space-Time Smackdown,109,Darkrai,Dark,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_109_EN.webp
+Space-Time Smackdown,110,Darkrai ex,Dark,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_110_EN.webp
+Space-Time Smackdown,111,Skarmory,Metal,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_111_EN.webp
+Space-Time Smackdown,112,Registeel,Metal,Basic,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_112_EN.webp
+Space-Time Smackdown,113,Shieldon,Metal,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_113_EN.webp
+Space-Time Smackdown,114,Bastiodon,Metal,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_114_EN.webp
+Space-Time Smackdown,115,Wormadam,Metal,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_115_EN.webp
+Space-Time Smackdown,116,Bronzor,Metal,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_116_EN.webp
+Space-Time Smackdown,117,Bronzong,Metal,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_117_EN.webp
+Space-Time Smackdown,118,Probopass,Metal,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_118_EN.webp
+Space-Time Smackdown,119,Dialga ex,Metal,Basic,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_119_EN.webp
+Space-Time Smackdown,120,Heatran,Metal,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_120_EN.webp
+Space-Time Smackdown,121,Gible,Dragon,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_121_EN.webp
+Space-Time Smackdown,122,Gabite,Dragon,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_122_EN.webp
+Space-Time Smackdown,123,Garchomp,Dragon,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_123_EN.webp
+Space-Time Smackdown,124,Lickitung,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_124_EN.webp
+Space-Time Smackdown,125,Lickilicky ex,Common,Stage,◊◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_125_EN.webp
+Space-Time Smackdown,126,Eevee,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_126_EN.webp
+Space-Time Smackdown,127,Porygon,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_127_EN.webp
+Space-Time Smackdown,128,Porygon2,Common,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_128_EN.webp
+Space-Time Smackdown,129,Porygon-Z,Common,Stage,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_129_EN.webp
+Space-Time Smackdown,130,Aipom,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_130_EN.webp
+Space-Time Smackdown,131,Ambipom,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_131_EN.webp
+Space-Time Smackdown,132,Starly,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_132_EN.webp
+Space-Time Smackdown,133,Staravia,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_133_EN.webp
+Space-Time Smackdown,134,Staraptor,Common,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_134_EN.webp
+Space-Time Smackdown,135,Bidoof,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_135_EN.webp
+Space-Time Smackdown,136,Bibarel,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_136_EN.webp
+Space-Time Smackdown,137,Buneary,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_137_EN.webp
+Space-Time Smackdown,138,Lopunny,Common,Stage,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_138_EN.webp
+Space-Time Smackdown,139,Glameow,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_139_EN.webp
+Space-Time Smackdown,140,Purugly,Common,Stage,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_140_EN.webp
+Space-Time Smackdown,141,Chatot,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_141_EN.webp
+Space-Time Smackdown,142,Fan Rotom,Common,Basic,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_142_EN.webp
+Space-Time Smackdown,143,Regigigas,Common,Basic,◊◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_143_EN.webp
+Space-Time Smackdown,144,Skull Fossil,,Item,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_144_EN.webp
+Space-Time Smackdown,145,Armor Fossil,,Item,◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_145_EN.webp
+Space-Time Smackdown,146,Pokémon Communication,,Item,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_146_EN.webp
+Space-Time Smackdown,147,Giant Cape,,Tool,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_147_EN.webp
+Space-Time Smackdown,148,Rocky Helmet,,Tool,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_148_EN.webp
+Space-Time Smackdown,149,Lum Berry,,Tool,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_149_EN.webp
+Space-Time Smackdown,150,Cyrus,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_150_EN.webp
+Space-Time Smackdown,151,Team Galactic Grunt,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_151_EN.webp
+Space-Time Smackdown,152,Cynthia,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_152_EN.webp
+Space-Time Smackdown,153,Volkner,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_153_EN.webp
+Space-Time Smackdown,154,Dawn,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_154_EN.webp
+Space-Time Smackdown,155,Mars,,Supporter,◊◊,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_155_EN.webp
+Space-Time Smackdown,156,Tangrowth,Grass,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_156_EN.webp
+Space-Time Smackdown,157,Combee,Grass,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_157_EN.webp
+Space-Time Smackdown,158,Carnivine,Grass,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_158_EN.webp
+Space-Time Smackdown,159,Shaymin,Grass,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_159_EN.webp
+Space-Time Smackdown,160,Mamoswine,Water,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_160_EN.webp
+Space-Time Smackdown,161,Gastrodon,Water,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_161_EN.webp
+Space-Time Smackdown,162,Manaphy,Water,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_162_EN.webp
+Space-Time Smackdown,163,Shinx,Lightning,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_163_EN.webp
+Space-Time Smackdown,164,Rotom,Lightning,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_164_EN.webp
+Space-Time Smackdown,165,Drifloon,Psychic,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_165_EN.webp
+Space-Time Smackdown,166,Mesprit,Psychic,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_166_EN.webp
+Space-Time Smackdown,167,Giratina,Psychic,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_167_EN.webp
+Space-Time Smackdown,168,Cresselia,Psychic,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_168_EN.webp
+Space-Time Smackdown,169,Rhyperior,Fighting,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_169_EN.webp
+Space-Time Smackdown,170,Lucario,Fighting,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_170_EN.webp
+Space-Time Smackdown,171,Hippopotas,Fighting,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_171_EN.webp
+Space-Time Smackdown,172,Spiritomb,Dark,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_172_EN.webp
+Space-Time Smackdown,173,Croagunk,Dark,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_173_EN.webp
+Space-Time Smackdown,174,Heatran,Metal,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_174_EN.webp
+Space-Time Smackdown,175,Garchomp,Dragon,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_175_EN.webp
+Space-Time Smackdown,176,Staraptor,Common,Stage,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_176_EN.webp
+Space-Time Smackdown,177,Bidoof,Common,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_177_EN.webp
+Space-Time Smackdown,178,Glameow,Common,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_178_EN.webp
+Space-Time Smackdown,179,Regigigas,Common,Basic,☆,TRUE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_179_EN.webp
+Space-Time Smackdown,180,Yanmega ex,Grass,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_180_EN.webp
+Space-Time Smackdown,181,Infernape ex,Fire,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_181_EN.webp
+Space-Time Smackdown,182,Palkia ex,Water,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_182_EN.webp
+Space-Time Smackdown,183,Pachirisu ex,Lightning,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_183_EN.webp
+Space-Time Smackdown,184,Mismagius ex,Psychic,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_184_EN.webp
+Space-Time Smackdown,185,Gallade ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_185_EN.webp
+Space-Time Smackdown,186,Weavile ex,Dark,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_186_EN.webp
+Space-Time Smackdown,187,Darkrai ex,Dark,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_187_EN.webp
+Space-Time Smackdown,188,Dialga ex,Metal,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_188_EN.webp
+Space-Time Smackdown,189,Lickilicky ex,Common,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_189_EN.webp
+Space-Time Smackdown,190,Cyrus,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_190_EN.webp
+Space-Time Smackdown,191,Team Galactic Grunt,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_191_EN.webp
+Space-Time Smackdown,192,Cynthia,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_192_EN.webp
+Space-Time Smackdown,193,Volkner,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_193_EN.webp
+Space-Time Smackdown,194,Dawn,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_194_EN.webp
+Space-Time Smackdown,195,Mars,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_195_EN.webp
+Space-Time Smackdown,196,Yanmega ex,Grass,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_196_EN.webp
+Space-Time Smackdown,197,Infernape ex,Fire,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_197_EN.webp
+Space-Time Smackdown,198,Pachirisu ex,Lightning,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_198_EN.webp
+Space-Time Smackdown,199,Mismagius ex,Psychic,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_199_EN.webp
+Space-Time Smackdown,200,Gallade ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_200_EN.webp
+Space-Time Smackdown,201,Weavile ex,Dark,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_201_EN.webp
+Space-Time Smackdown,202,Darkrai ex,Dark,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_202_EN.webp
+Space-Time Smackdown,203,Lickilicky ex,Common,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_203_EN.webp
+Space-Time Smackdown,204,Palkia ex,Water,Basic,☆☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_204_EN.webp
+Space-Time Smackdown,205,Dialga ex,Metal,Basic,☆☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_205_EN.webp
+Space-Time Smackdown,206,Palkia ex,Water,Basic,Crown Rare,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_206_EN.webp
+Space-Time Smackdown,207,Dialga ex,Metal,Basic,Crown Rare,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2/A2_207_EN.webp
+Triumphant Light,1,Heracross,Grass,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_001_EN.webp
+Triumphant Light,2,Burmy,Grass,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_002_EN.webp
+Triumphant Light,3,Mothim,Grass,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_003_EN.webp
+Triumphant Light,4,Combee,Grass,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_004_EN.webp
+Triumphant Light,5,Vespiquen,Grass,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_005_EN.webp
+Triumphant Light,6,Cherubi,Grass,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_006_EN.webp
+Triumphant Light,7,Cherrim,Grass,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_007_EN.webp
+Triumphant Light,8,Cherrim,Grass,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_008_EN.webp
+Triumphant Light,9,Carnivine,Grass,Basic,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_009_EN.webp
+Triumphant Light,10,Leafeon ex,Grass,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_010_EN.webp
+Triumphant Light,11,Houndour,Fire,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_011_EN.webp
+Triumphant Light,12,Houndoom,Fire,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_012_EN.webp
+Triumphant Light,13,Heatran,Fire,Basic,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_013_EN.webp
+Triumphant Light,14,Marill,Water,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_014_EN.webp
+Triumphant Light,15,Azumarill,Water,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_015_EN.webp
+Triumphant Light,16,Barboach,Water,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_016_EN.webp
+Triumphant Light,17,Whiscash,Water,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_017_EN.webp
+Triumphant Light,18,Snorunt,Water,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_018_EN.webp
+Triumphant Light,19,Froslass,Water,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_019_EN.webp
+Triumphant Light,20,Snover,Water,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_020_EN.webp
+Triumphant Light,21,Abomasnow,Water,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_021_EN.webp
+Triumphant Light,22,Glaceon ex,Water,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_022_EN.webp
+Triumphant Light,23,Origin Forme Palkia,Water,Basic,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_023_EN.webp
+Triumphant Light,24,Phione,Water,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_024_EN.webp
+Triumphant Light,25,Pikachu,Lightning,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_025_EN.webp
+Triumphant Light,26,Raichu,Lightning,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_026_EN.webp
+Triumphant Light,27,Electrike,Lightning,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_027_EN.webp
+Triumphant Light,28,Manectric,Lightning,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_028_EN.webp
+Triumphant Light,29,Clefairy,Psychic,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_029_EN.webp
+Triumphant Light,30,Clefable,Psychic,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_030_EN.webp
+Triumphant Light,31,Gastly,Psychic,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_031_EN.webp
+Triumphant Light,32,Haunter,Psychic,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_032_EN.webp
+Triumphant Light,33,Gengar,Psychic,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_033_EN.webp
+Triumphant Light,34,Unown,Psychic,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_034_EN.webp
+Triumphant Light,35,Rotom,Psychic,Basic,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_035_EN.webp
+Triumphant Light,36,Sudowoodo,Fighting,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_036_EN.webp
+Triumphant Light,37,Phanpy,Fighting,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_037_EN.webp
+Triumphant Light,38,Donphan,Fighting,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_038_EN.webp
+Triumphant Light,39,Larvitar,Fighting,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_039_EN.webp
+Triumphant Light,40,Pupitar,Fighting,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_040_EN.webp
+Triumphant Light,41,Tyranitar,Fighting,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_041_EN.webp
+Triumphant Light,42,Nosepass,Fighting,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_042_EN.webp
+Triumphant Light,43,Meditite,Fighting,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_043_EN.webp
+Triumphant Light,44,Medicham,Fighting,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_044_EN.webp
+Triumphant Light,45,Gible,Fighting,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_045_EN.webp
+Triumphant Light,46,Gabite,Fighting,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_046_EN.webp
+Triumphant Light,47,Garchomp ex,Fighting,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_047_EN.webp
+Triumphant Light,48,Zubat,Dark,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_048_EN.webp
+Triumphant Light,49,Golbat,Dark,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_049_EN.webp
+Triumphant Light,50,Crobat,Dark,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_050_EN.webp
+Triumphant Light,51,Croagunk,Dark,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_051_EN.webp
+Triumphant Light,52,Toxicroak,Dark,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_052_EN.webp
+Triumphant Light,53,Magnemite,Metal,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_053_EN.webp
+Triumphant Light,54,Magneton,Metal,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_054_EN.webp
+Triumphant Light,55,Magnezone,Metal,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_055_EN.webp
+Triumphant Light,56,Mawile,Metal,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_056_EN.webp
+Triumphant Light,57,Probopass ex,Metal,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_057_EN.webp
+Triumphant Light,58,Bronzor,Metal,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_058_EN.webp
+Triumphant Light,59,Bronzong,Metal,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_059_EN.webp
+Triumphant Light,60,Origin Forme Dialga,Metal,Basic,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_060_EN.webp
+Triumphant Light,61,Giratina,Dragon,Basic,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_061_EN.webp
+Triumphant Light,62,Eevee,Common,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_062_EN.webp
+Triumphant Light,63,Snorlax,Common,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_063_EN.webp
+Triumphant Light,64,Hoothoot,Common,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_064_EN.webp
+Triumphant Light,65,Noctowl,Common,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_065_EN.webp
+Triumphant Light,66,Starly,Common,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_066_EN.webp
+Triumphant Light,67,Staravia,Common,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_067_EN.webp
+Triumphant Light,68,Staraptor,Common,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_068_EN.webp
+Triumphant Light,69,Shaymin,Common,Basic,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_069_EN.webp
+Triumphant Light,70,Arceus,Common,Basic,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_070_EN.webp
+Triumphant Light,71,Arceus ex,Common,Basic,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_071_EN.webp
+Triumphant Light,72,Irida,,Supporter,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_072_EN.webp
+Triumphant Light,73,Celestic Town Elder,,Supporter,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_073_EN.webp
+Triumphant Light,74,Barry,,Supporter,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_074_EN.webp
+Triumphant Light,75,Adaman,,Supporter,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_075_EN.webp
+Triumphant Light,76,Houndoom,Fire,Stage,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_076_EN.webp
+Triumphant Light,77,Marill,Water,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_077_EN.webp
+Triumphant Light,78,Unown,Psychic,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_078_EN.webp
+Triumphant Light,79,Sudowoodo,Fighting,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_079_EN.webp
+Triumphant Light,80,Magnemite,Metal,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_080_EN.webp
+Triumphant Light,81,Shaymin,Common,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_081_EN.webp
+Triumphant Light,82,Leafeon ex,Grass,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_082_EN.webp
+Triumphant Light,83,Glaceon ex,Water,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_083_EN.webp
+Triumphant Light,84,Garchomp ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_084_EN.webp
+Triumphant Light,85,Probopass ex,Metal,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_085_EN.webp
+Triumphant Light,86,Arceus ex,Common,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_086_EN.webp
+Triumphant Light,87,Irida,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_087_EN.webp
+Triumphant Light,88,Celestic Town Elder,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_088_EN.webp
+Triumphant Light,89,Barry,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_089_EN.webp
+Triumphant Light,90,Adaman,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_090_EN.webp
+Triumphant Light,91,Leafeon ex,Grass,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_091_EN.webp
+Triumphant Light,92,Glaceon ex,Water,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_092_EN.webp
+Triumphant Light,93,Garchomp ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_093_EN.webp
+Triumphant Light,94,Probopass ex,Metal,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_094_EN.webp
+Triumphant Light,95,Arceus ex,Common,Basic,☆☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_095_EN.webp
+Triumphant Light,96,Arceus ex,Common,Basic,Crown Rare,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2a/A2a_096_EN.webp
+Promo A,1,Potion,,Item,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_001_EN.webp
+Promo A,2,X Speed,,Item,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_002_EN.webp
+Promo A,3,Hand Scope,,Item,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_003_EN.webp
+Promo A,4,Pokédex,,Item,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_004_EN.webp
+Promo A,5,Poké Ball,,Item,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_005_EN.webp
+Promo A,6,Red Card,,Item,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_006_EN.webp
+Promo A,7,Professor's Research,,Supporter,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_007_EN.webp
+Promo A,8,Pokédex,,Item,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_008_EN.webp
+Promo A,9,Pikachu,Lightning,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_009_EN.webp
+Promo A,10,Mewtwo,Psychic,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_010_EN.webp
+Promo A,11,Chansey,Common,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_011_EN.webp
+Promo A,12,Meowth,Common,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_012_EN.webp
+Promo A,13,Butterfree,Grass,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_013_EN.webp
+Promo A,14,Lapras ex,Water,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_014_EN.webp
+Promo A,15,Pikachu,Lightning,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_015_EN.webp
+Promo A,16,Clefairy,Psychic,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_016_EN.webp
+Promo A,17,Mankey,Fighting,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_017_EN.webp
+Promo A,18,Venusaur,Grass,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_018_EN.webp
+Promo A,19,Greninja,Water,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_019_EN.webp
+Promo A,20,Haunter,Psychic,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_020_EN.webp
+Promo A,21,Onix,Fighting,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_021_EN.webp
+Promo A,22,Jigglypuff,Common,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_022_EN.webp
+Promo A,23,Bulbasaur,Grass,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_023_EN.webp
+Promo A,24,Magnemite,Lightning,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_024_EN.webp
+Promo A,25,Moltres ex,Fire,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_025_EN.webp
+Promo A,26,Pikachu,Lightning,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_026_EN.webp
+Promo A,27,Snivy,Grass,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_027_EN.webp
+Promo A,28,Volcarona,Fire,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_028_EN.webp
+Promo A,29,Blastoise,Water,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_029_EN.webp
+Promo A,30,Eevee,Common,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_030_EN.webp
+Promo A,31,Cinccino,Common,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_031_EN.webp
+Promo A,32,Charmander,Fire,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_032_EN.webp
+Promo A,33,Squirtle,Water,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_033_EN.webp
+Promo A,34,Piplup,Water,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_034_EN.webp
+Promo A,35,Turtwig,Grass,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_035_EN.webp
+Promo A,36,Electivire,Lightning,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_036_EN.webp
+Promo A,37,Cresselia ex,Psychic,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_037_EN.webp
+Promo A,38,Misdreavus,Psychic,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_038_EN.webp
+Promo A,39,Skarmory,Metal,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_039_EN.webp
+Promo A,40,Chimchar,Fire,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_040_EN.webp
+Promo A,41,Togepi,Psychic,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_041_EN.webp
+Promo A,42,Darkrai ex,Dark,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_042_EN.webp
+Promo A,43,Cherrim,Grass,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_043_EN.webp
+Promo A,44,Raichu,Lightning,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_044_EN.webp
+Promo A,45,Nosepass,Fighting,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_045_EN.webp
+Promo A,46,Gible,Fighting,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_046_EN.webp
+Promo A,47,Staraptor,Common,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_047_EN.webp
+Promo A,48,Manaphy,Water,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_048_EN.webp
+Promo A,49,Snorlax,Common,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_049_EN.webp
+Promo A,50,Mewtwo ex,Psychic,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_050_EN.webp
+Promo A,51,Cyclizar,Common,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_051_EN.webp
+Promo A,52,Sprigatito,Grass,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_052_EN.webp
+Promo A,53,Floatzel,Water,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_053_EN.webp
+Promo A,54,Pawmot,Lightning,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_054_EN.webp
+Promo A,55,Machamp,Fighting,Stage,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_055_EN.webp
+Promo A,56,Ekans,Dark,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_056_EN.webp
+Promo A,57,Bidoof,Common,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_057_EN.webp
+Promo A,58,Pachirisu,Lightning,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_058_EN.webp
+Promo A,59,Riolu,Fighting,Basic,Promo,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/P-A/P-A_059_EN.webp
+Shining Revelry,1,Weedle,Grass,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_001_EN.webp
+Shining Revelry,2,Kakuna,Grass,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_002_EN.webp
+Shining Revelry,3,Beedrill ex,Grass,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_003_EN.webp
+Shining Revelry,4,Pinsir,Grass,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_004_EN.webp
+Shining Revelry,5,Sprigatito,Grass,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_005_EN.webp
+Shining Revelry,6,Floragato,Grass,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_006_EN.webp
+Shining Revelry,7,Meowscarada,Grass,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_007_EN.webp
+Shining Revelry,8,Charmander,Fire,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_008_EN.webp
+Shining Revelry,9,Charmeleon,Fire,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_009_EN.webp
+Shining Revelry,10,Charizard ex,Fire,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_010_EN.webp
+Shining Revelry,11,Magmar,Fire,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_011_EN.webp
+Shining Revelry,12,Magmortar,Fire,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_012_EN.webp
+Shining Revelry,13,Paldean Tauros,Fire,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_013_EN.webp
+Shining Revelry,14,Tentacool,Water,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_014_EN.webp
+Shining Revelry,15,Tentacruel,Water,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_015_EN.webp
+Shining Revelry,16,Buizel,Water,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_016_EN.webp
+Shining Revelry,17,Floatzel,Water,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_017_EN.webp
+Shining Revelry,18,Wiglett,Water,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_018_EN.webp
+Shining Revelry,19,Wugtrio ex,Water,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_019_EN.webp
+Shining Revelry,20,Dondozo,Water,Basic,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_020_EN.webp
+Shining Revelry,21,Tatsugiri,Water,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_021_EN.webp
+Shining Revelry,22,Pikachu ex,Lightning,Basic,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_022_EN.webp
+Shining Revelry,23,Voltorb,Lightning,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_023_EN.webp
+Shining Revelry,24,Electrode,Lightning,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_024_EN.webp
+Shining Revelry,25,Pachirisu,Lightning,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_025_EN.webp
+Shining Revelry,26,Pawmi,Lightning,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_026_EN.webp
+Shining Revelry,27,Pawmo,Lightning,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_027_EN.webp
+Shining Revelry,28,Pawmot,Lightning,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_028_EN.webp
+Shining Revelry,29,Abra,Psychic,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_029_EN.webp
+Shining Revelry,30,Kadabra,Psychic,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_030_EN.webp
+Shining Revelry,31,Alakazam,Psychic,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_031_EN.webp
+Shining Revelry,32,Mr. Mime,Psychic,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_032_EN.webp
+Shining Revelry,33,Drifloon,Psychic,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_033_EN.webp
+Shining Revelry,34,Drifblim,Psychic,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_034_EN.webp
+Shining Revelry,35,Giratina ex,Psychic,Basic,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_035_EN.webp
+Shining Revelry,36,Gimmighoul,Psychic,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_036_EN.webp
+Shining Revelry,37,Machop,Fighting,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_037_EN.webp
+Shining Revelry,38,Machoke,Fighting,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_038_EN.webp
+Shining Revelry,39,Machamp,Fighting,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_039_EN.webp
+Shining Revelry,40,Hitmonlee,Fighting,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_040_EN.webp
+Shining Revelry,41,Hitmonchan,Fighting,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_041_EN.webp
+Shining Revelry,42,Riolu,Fighting,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_042_EN.webp
+Shining Revelry,43,Lucario ex,Fighting,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_043_EN.webp
+Shining Revelry,44,Flamigo,Fighting,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_044_EN.webp
+Shining Revelry,45,Ekans,Dark,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_045_EN.webp
+Shining Revelry,46,Arbok,Dark,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_046_EN.webp
+Shining Revelry,47,Paldean Wooper,Dark,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_047_EN.webp
+Shining Revelry,48,Paldean Clodsire ex,Dark,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_048_EN.webp
+Shining Revelry,49,Spiritomb,Dark,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_049_EN.webp
+Shining Revelry,50,Shroodle,Dark,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_050_EN.webp
+Shining Revelry,51,Grafaiai,Dark,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_051_EN.webp
+Shining Revelry,52,Tinkatink,Metal,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_052_EN.webp
+Shining Revelry,53,Tinkatuff,Metal,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_053_EN.webp
+Shining Revelry,54,Tinkaton ex,Metal,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_054_EN.webp
+Shining Revelry,55,Varoom,Metal,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_055_EN.webp
+Shining Revelry,56,Revavroom,Metal,Stage,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_056_EN.webp
+Shining Revelry,57,Gholdengo,Metal,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_057_EN.webp
+Shining Revelry,58,Rattata,Common,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_058_EN.webp
+Shining Revelry,59,Raticate,Common,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_059_EN.webp
+Shining Revelry,60,Jigglypuff,Common,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_060_EN.webp
+Shining Revelry,61,Wigglytuff,Common,Stage,◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_061_EN.webp
+Shining Revelry,62,Lickitung,Common,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_062_EN.webp
+Shining Revelry,63,Lickilicky,Common,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_063_EN.webp
+Shining Revelry,64,Bidoof,Common,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_064_EN.webp
+Shining Revelry,65,Bibarel ex,Common,Stage,◊◊◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_065_EN.webp
+Shining Revelry,66,Buneary,Common,Basic,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_066_EN.webp
+Shining Revelry,67,Lopunny,Common,Stage,◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_067_EN.webp
+Shining Revelry,68,Cyclizar,Common,Basic,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_068_EN.webp
+Shining Revelry,69,Iono,,Supporter,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_069_EN.webp
+Shining Revelry,70,Pokémon Center Lady,,Supporter,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_070_EN.webp
+Shining Revelry,71,Red,,Supporter,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_071_EN.webp
+Shining Revelry,72,Team Rocket Grunt,,Supporter,◊◊,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_072_EN.webp
+Shining Revelry,73,Meowscarada,Grass,Stage,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_073_EN.webp
+Shining Revelry,74,Buizel,Water,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_074_EN.webp
+Shining Revelry,75,Tatsugiri,Water,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_075_EN.webp
+Shining Revelry,76,Grafaiai,Dark,Stage,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_076_EN.webp
+Shining Revelry,77,Gholdengo,Metal,Stage,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_077_EN.webp
+Shining Revelry,78,Wigglytuff,Common,Stage,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_078_EN.webp
+Shining Revelry,79,Beedrill ex,Grass,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_079_EN.webp
+Shining Revelry,80,Charizard ex,Fire,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_080_EN.webp
+Shining Revelry,81,Wugtrio ex,Water,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_081_EN.webp
+Shining Revelry,82,Pikachu ex,Lightning,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_082_EN.webp
+Shining Revelry,83,Giratina ex,Psychic,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_083_EN.webp
+Shining Revelry,84,Lucario ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_084_EN.webp
+Shining Revelry,85,Paldean Clodsire ex,Dark,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_085_EN.webp
+Shining Revelry,86,Tinkaton ex,Metal,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_086_EN.webp
+Shining Revelry,87,Bibarel ex,Common,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_087_EN.webp
+Shining Revelry,88,Iono,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_088_EN.webp
+Shining Revelry,89,Pokémon Center Lady,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_089_EN.webp
+Shining Revelry,90,Red,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_090_EN.webp
+Shining Revelry,91,Team Rocket Grunt,,Supporter,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_091_EN.webp
+Shining Revelry,92,Pikachu ex,Lightning,Basic,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_092_EN.webp
+Shining Revelry,93,Paldean Clodsire ex,Dark,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_093_EN.webp
+Shining Revelry,94,Tinkaton ex,Metal,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_094_EN.webp
+Shining Revelry,95,Bibarel ex,Common,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_095_EN.webp
+Shining Revelry,96,Giratina ex,Psychic,Basic,☆☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_096_EN.webp
+Shining Revelry,97,Weedle,Grass,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_097_EN.webp
+Shining Revelry,98,Kakuna,Grass,Stage,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_098_EN.webp
+Shining Revelry,99,Charmander,Fire,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_099_EN.webp
+Shining Revelry,100,Charmeleon,Fire,Stage,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_100_EN.webp
+Shining Revelry,101,Wiglett,Water,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_101_EN.webp
+Shining Revelry,102,Dondozo,Water,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_102_EN.webp
+Shining Revelry,103,Pachirisu,Lightning,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_103_EN.webp
+Shining Revelry,104,Riolu,Fighting,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_104_EN.webp
+Shining Revelry,105,Varoom,Metal,Basic,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_105_EN.webp
+Shining Revelry,106,Revavroom,Metal,Stage,☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_106_EN.webp
+Shining Revelry,107,Beedrill ex,Grass,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_107_EN.webp
+Shining Revelry,108,Charizard ex,Fire,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_108_EN.webp
+Shining Revelry,109,Wugtrio ex,Water,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_109_EN.webp
+Shining Revelry,110,Lucario ex,Fighting,Stage,☆☆,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_110_EN.webp
+Shining Revelry,111,Poké Ball,,Item,Crown Rare,FALSE,https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket/A2b/A2b_111_EN.webp

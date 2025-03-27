@@ -64,3 +64,7 @@ out/
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.* 
+*.sql
+supabase_migration_troubleshooting.md
+uuid_migration_readme.md
+uuid_migration_summary.md

@@ -76,13 +76,15 @@ create table public.users (
 ### Cards Table
 ```sql
 create table public.cards (
-  id serial not null,
+  id uuid not null default gen_random_uuid(),
   pack text not null,
   card_number text not null,
   card_name text not null,
   card_type text not null,
   card_rarity text not null,
   tradeable boolean null default true,
+  image_url text null,
+  card_element text null,
   constraint cards_pkey primary key (id),
   constraint cards_pack_card_number_key unique (pack, card_number)
 );
@@ -93,7 +95,7 @@ create table public.cards (
 create table public.trades (
   id serial not null,
   user_id uuid not null,
-  card_id integer not null,
+  card_id uuid not null,
   offered_by uuid null,
   requested_date timestamp with time zone null default now(),
   constraint trades_pkey primary key (id),
@@ -103,6 +105,16 @@ create table public.trades (
   constraint trades_user_id_fkey foreign KEY (user_id) references users (id) on delete CASCADE
 );
 ```
+
+## UUID Migration
+
+As of version 2.0, the application has migrated card IDs from integers to UUIDs for better scalability and uniqueness. If you're upgrading from a previous version, follow these steps:
+
+1. Backup your database before applying any changes
+2. Run the migration script found in `cards_id_to_uuid_migration.sql`
+3. Update your application code to use the latest version
+
+For detailed migration instructions, see `uuid_migration_readme.md`.
 
 ## Row Level Security (RLS) Policies
 

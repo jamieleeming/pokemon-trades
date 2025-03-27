@@ -1,21 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL!;
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY!;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-// Create Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-  },
-});
-
-// Database interface types
+// Database Types
 export interface User {
   id: string;
   email: string;
@@ -44,4 +27,22 @@ export interface Trade {
   user_id: string;
   offered_by: string | null;
   requested_date: string;
+  cards?: Card;
+  users?: User;
+  offerers?: User | null;
+}
+
+// Auth Types
+export interface UserData {
+  name: string;
+  username: string;
+  friend_code?: string;
+}
+
+// Component Props Types
+export interface NotificationProps {
+  message: string;
+  type: 'success' | 'error';
+  isVisible: boolean;
+  onClose: () => void;
 } 

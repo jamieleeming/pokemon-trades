@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import NotificationCenter from './NotificationCenter';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,6 +64,9 @@ const Navigation = () => {
                 >
                   Cards
                 </Link>
+                <div className="inline-flex items-center border-b-2 border-transparent pt-1">
+                  <NotificationCenter />
+                </div>
                 <button
                   onClick={handleSignOut}
                   className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700"
@@ -82,6 +86,11 @@ const Navigation = () => {
 
           {/* Mobile menu button */}
           <div className="flex md:hidden">
+            {user && (
+              <div className="mr-2 flex items-center">
+                <NotificationCenter />
+              </div>
+            )}
             <button
               type="button"
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"

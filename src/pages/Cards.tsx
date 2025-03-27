@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { Card } from '../lib/supabase';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase, Card as CardType } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
 
+// Constants
+const CARDS_STORAGE_KEY = 'pokemon_trades_cards_cache';
+const CARDS_TIMESTAMP_KEY = 'pokemon_trades_cards_timestamp';
+const CACHE_VALIDITY_MS = 30 * 60 * 1000; // 30 minutes
+
 const Cards = () => {
-  const [cards, setCards] = useState<any[]>([]);
-  const [selectedCards, setSelectedCards] = useState<number[]>([]);
+  const [cards, setCards] = useState<CardType[]>([]);
+  const [selectedCards, setSelectedCards] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -26,182 +31,173 @@ const Cards = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [packFilter, setPackFilter] = useState('');
   const [rarityFilter, setRarityFilter] = useState('');
+  const [elementFilter, setElementFilter] = useState('');
   const [tradeableOnly, setTradeableOnly] = useState(false);
   
   // Filter options
   const [packs, setPacks] = useState<string[]>([]);
   const [rarities, setRarities] = useState<string[]>([]);
+  const [elements, setElements] = useState<string[]>([]);
   
   const { user } = useAuth();
+  const navigate = useNavigate();
+  
+  // Track if component is mounted
+  const isMountedRef = useRef(true);
 
   // Helper to show notifications
-  const showNotification = (message: string, type: 'success' | 'error') => {
+  const showNotification = useCallback((message: string, type: 'success' | 'error') => {
     setNotification({
       message,
       type,
       isVisible: true,
     });
-  };
+  }, []);
 
   // Close notification
-  const hideNotification = () => {
+  const hideNotification = useCallback(() => {
     setNotification(prev => ({
       ...prev,
       isVisible: false,
     }));
-  };
+  }, []);
 
-  // Fetch cards and user's selected cards
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return;
-      
-      try {
-        setLoading(true);
-        setError(null);
-        
-        // First check if the cards table exists
-        const { data: tableInfo, error: tableError } = await supabase
-          .from('cards')
-          .select('*', { count: 'exact', head: true });
-        
-        if (tableError) {
-          setError(`Database error: ${tableError.message}`);
-          return;
-        }
-        
-        // Fetch available packs for filters
-        const { data: packsData } = await supabase
-          .from('cards')
-          .select('pack')
-          .order('pack');
-        
-        const { data: raritiesData } = await supabase
-          .from('cards')
-          .select('card_rarity')
-          .order('card_rarity');
-        
-        if (packsData) {
-          // Filter unique values client-side
-          const uniquePacks = Array.from(new Set(packsData.map(item => item.pack)));
-          
-          // Custom sort to ensure "Promo A" appears last
-          uniquePacks.sort((a, b) => {
-            // If "Promo A" is being compared, it should always be placed last
-            if (a === 'Promo A') return 1;
-            if (b === 'Promo A') return -1;
-            // Otherwise, use standard alphabetical sorting
-            return a.localeCompare(b);
-          });
-          
-          setPacks(uniquePacks);
-        }
-        
-        if (raritiesData) {
-          // Filter unique values client-side
-          const uniqueRarities = Array.from(new Set(raritiesData.map(item => item.card_rarity)));
-          setRarities(uniqueRarities);
-        }
-        
-        // Fetch all cards
-        const { data: cardsData, error: cardsError } = await supabase
-          .from('cards')
-          .select('*')
-          .order('pack')
-          .order('card_number');
-        
-        if (cardsError) throw cardsError;
-        
-        if (cardsData) {
-          setCards(cardsData);
-          
-          // Fetch user's selected cards (trades)
-          const { data: userTrades, error: tradesError } = await supabase
-            .from('trades')
-            .select('card_id')
-            .eq('user_id', user.id);
-          
-          if (tradesError) throw tradesError;
-          
-          if (userTrades) {
-            setSelectedCards(userTrades.map(trade => trade.card_id));
-          }
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An error occurred while fetching cards');
-        }
-      } finally {
+  // Load cards data
+  const loadData = useCallback(async () => {
+    if (!user || !isMountedRef.current) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // First get user's trades to mark cards as traded
+      const { data: tradesData, error: tradesError } = await supabase
+        .from('trades')
+        .select('card_id')
+        .eq('user_id', user.id);
+
+      if (tradesError) throw tradesError;
+
+      const tradedCardIds = new Set(tradesData?.map(trade => trade.card_id) || []);
+
+      // Then get all cards
+      const { data: cardsData, error: cardsError } = await supabase
+        .from('cards')
+        .select('*')
+        .order('pack')
+        .order('card_number');
+
+      if (cardsError) throw cardsError;
+
+      if (cardsData) {
+        // Process cards data
+        const processedCards = cardsData.map(card => ({
+          ...card,
+          traded: tradedCardIds.has(card.id)
+        })) as CardType[];
+
+        // Update state
+        setCards(processedCards);
+        setSelectedCards(Array.from(tradedCardIds));
+
+        // Update filter options
+        const uniquePacks = Array.from(new Set(cardsData.map(card => card.pack))).filter(Boolean);
+        const uniqueRarities = Array.from(new Set(cardsData.map(card => card.card_rarity))).filter(Boolean);
+        const uniqueElements = Array.from(new Set(cardsData.map(card => card.card_element))).filter(Boolean);
+
+        setPacks(uniquePacks);
+        setRarities(uniqueRarities);
+        setElements(uniqueElements);
+      }
+    } catch (err) {
+      console.error('Error loading cards:', err);
+      setError('Failed to load cards. Please try again.');
+    } finally {
+      if (isMountedRef.current) {
         setLoading(false);
       }
-    };
-    
-    fetchData();
+    }
   }, [user]);
 
-  // Toggle card selection
-  const toggleCardSelection = async (cardId: number) => {
-    if (!user) return;
+  // Initialize component
+  useEffect(() => {
+    isMountedRef.current = true;
     
+    if (user) {
+      loadData();
+    }
+    
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [user, loadData]);
+
+  // Handle card selection
+  const handleCardSelect = useCallback(async (cardId: string) => {
+    if (!user) return;
+
     try {
       if (selectedCards.includes(cardId)) {
-        // User wants to remove the card
+        // Remove trade
         const { error } = await supabase
           .from('trades')
           .delete()
-          .eq('user_id', user.id)
-          .eq('card_id', cardId);
-        
+          .eq('card_id', cardId)
+          .eq('user_id', user.id);
+
         if (error) throw error;
-        
-        // Update local state
+
         setSelectedCards(prev => prev.filter(id => id !== cardId));
-        
-        // Show success notification
-        showNotification('Card removed from your want list', 'success');
+        setCards(prev => prev.map(card => 
+          card.id === cardId ? { ...card, traded: false } : card
+        ));
+
+        showNotification('Card removed from trades', 'success');
       } else {
-        // User wants to add the card
+        // Add trade
         const { error } = await supabase
           .from('trades')
-          .insert([{ user_id: user.id, card_id: cardId }]);
-        
-        if (error) throw error;
-        
-        // Update local state
-        setSelectedCards(prev => [...prev, cardId]);
-        
-        // Show success notification
-        showNotification('Card added to your want list', 'success');
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        showNotification(error.message, 'error');
-      } else {
-        showNotification('An error occurred while updating your selection', 'error');
-      }
-    }
-  };
+          .insert({
+            card_id: cardId,
+            user_id: user.id,
+            requested_date: new Date().toISOString()
+          });
 
-  // Filter cards based on search and filters
-  const filteredCards = cards.filter(card => {
-    // Search query filter
-    const matchesSearch = searchQuery === '' || 
-      card.card_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      String(card.card_number).includes(searchQuery);
-    
-    // Pack filter
-    const matchesPack = packFilter === '' || card.pack === packFilter;
-    
-    // Rarity filter
-    const matchesRarity = rarityFilter === '' || card.card_rarity === rarityFilter;
-    
-    // Tradeable filter
-    const matchesTradeable = !tradeableOnly || card.tradeable;
-    
-    return matchesSearch && matchesPack && matchesRarity && matchesTradeable;
-  });
+        if (error) throw error;
+
+        setSelectedCards(prev => [...prev, cardId]);
+        setCards(prev => prev.map(card => 
+          card.id === cardId ? { ...card, traded: true } : card
+        ));
+
+        showNotification('Card added to trades', 'success');
+      }
+    } catch (err) {
+      console.error('Error updating trade:', err);
+      showNotification('Failed to update trade', 'error');
+    }
+  }, [user, selectedCards, showNotification]);
+
+  // Memoize filtered cards
+  const filteredCards = useMemo(() => {
+    return cards.filter(card => {
+      const matchesSearch = searchQuery === '' || 
+        card.card_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        String(card.card_number).includes(searchQuery);
+      
+      const matchesPack = packFilter === '' || card.pack === packFilter;
+      const matchesRarity = rarityFilter === '' || card.card_rarity === rarityFilter;
+      const matchesElement = elementFilter === '' || card.card_element === elementFilter;
+      const matchesTradeable = !tradeableOnly || card.tradeable === true;
+      
+      return matchesSearch && matchesPack && matchesRarity && matchesElement && matchesTradeable;
+    });
+  }, [cards, searchQuery, packFilter, rarityFilter, elementFilter, tradeableOnly]);
+
+  // Show database setup guide if there's a database error
+  if (error?.includes('relation') || error?.includes('does not exist')) {
+    return <DbSetupGuide error={error} />;
+  }
 
   // Group cards by pack
   const cardsByPack = filteredCards.reduce((acc, card) => {
@@ -210,35 +206,16 @@ const Cards = () => {
     }
     acc[card.pack].push(card);
     return acc;
-  }, {} as Record<string, any[]>);
-
-  // Sort cards within each pack by card_number (now an integer)
-  Object.keys(cardsByPack).forEach(pack => {
-    cardsByPack[pack].sort((a: any, b: any) => {
-      return a.card_number - b.card_number;
-    });
-  });
-
-  // Determine if the error is likely a database setup issue
-  const isDbSetupIssue = error && (
-    error.includes('Database error') || 
-    error.includes('relation') || 
-    error.includes('does not exist') ||
-    error.includes('Failed to fetch')
-  );
+  }, {} as Record<string, CardType[]>);
 
   return (
     <div className="container py-8">
       <h1 className="mb-8 text-3xl font-bold">Select Cards You Want</h1>
       
       {error && (
-        isDbSetupIssue ? (
-          <DbSetupGuide error={error} />
-        ) : (
-          <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">
-            {error}
-          </div>
-        )
+        <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">
+          {error}
+        </div>
       )}
       
       {/* Filters */}
@@ -300,8 +277,28 @@ const Cards = () => {
             </select>
           </div>
           
+          {/* Element filter */}
+          <div>
+            <label htmlFor="element" className="mb-1 block text-sm font-medium text-gray-700">
+              Element
+            </label>
+            <select
+              id="element"
+              value={elementFilter}
+              onChange={(e) => setElementFilter(e.target.value)}
+              className="form-input"
+            >
+              <option value="">All Elements</option>
+              {elements.map((element) => (
+                <option key={element} value={element}>
+                  {element}
+                </option>
+              ))}
+            </select>
+          </div>
+          
           {/* Tradeable filter */}
-          <div className="flex items-end">
+          <div className="flex items-end lg:col-span-4">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -316,65 +313,55 @@ const Cards = () => {
       </div>
       
       {/* Cards grid */}
-      {loading ? (
+      {loading && cards.length === 0 ? (
         <div className="text-center text-gray-600">Loading cards...</div>
-      ) : Object.keys(cardsByPack).length === 0 ? (
-        <div className="rounded-lg bg-white p-8 text-center shadow-md">
-          <p className="text-lg text-gray-600">No cards found matching your criteria</p>
-        </div>
       ) : (
-        // Use type assertion to handle the unknown type issue
-        // Sort the packs so Promo A appears last
-        Object.entries(cardsByPack as Record<string, any[]>)
-          .sort(([packA], [packB]) => {
-            if (packA === 'Promo A') return 1;
-            if (packB === 'Promo A') return -1;
-            return packA.localeCompare(packB);
-          })
+        Object.entries(cardsByPack)
+          .sort(([packA], [packB]) => packA.localeCompare(packB))
           .map(([pack, packCards]) => (
-          <div key={pack} className="mb-8">
-            <h2 className="mb-4 text-2xl font-bold text-gray-800">{pack}</h2>
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {packCards.map((card) => (
-                <div
-                  key={card.id}
-                  onClick={() => toggleCardSelection(card.id)}
-                  className={`cursor-pointer rounded-lg border-2 p-4 transition-all hover:shadow-md ${
-                    selectedCards.includes(card.id)
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 bg-white'
-                  }`}
-                >
-                  <div className="mb-2 text-lg font-semibold text-gray-900">{card.card_name}</div>
-                  <div className="mb-2 text-sm text-gray-500">
-                    #{String(card.card_number).padStart(3, '0')} · {card.card_type}
-                  </div>
-                  <div className={`text-sm font-medium ${
-                    card.card_rarity === 'Common' ? 'text-gray-600' :
-                    card.card_rarity === 'Uncommon' ? 'text-green-600' :
-                    card.card_rarity === 'Rare' ? 'text-blue-600' :
-                    'text-purple-600'
-                  }`}>
-                    {card.card_rarity}
-                  </div>
-                  {!card.tradeable && (
-                    <div className="mt-2 rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-800">
-                      Not Tradeable
+            <div key={pack} className="mb-8">
+              <h2 className="mb-4 text-2xl font-bold text-gray-800">{pack}</h2>
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {packCards.map((card) => {
+                  // Skip cards with missing IDs
+                  if (!card || !card.id) {
+                    console.warn('Skipping card with missing ID:', card);
+                    return null;
+                  }
+                  
+                  // Convert card.id to string to ensure consistent comparison
+                  const cardIdString = String(card.id);
+                  // Use card.traded property as the primary indicator, fallback to selectedCards
+                  const isSelected = card.traded || selectedCards.includes(cardIdString);
+                  
+                  return (
+                    <div
+                      key={card.id}
+                      className={`relative cursor-pointer rounded-lg bg-white p-4 shadow-md transition-all hover:shadow-lg ${
+                        isSelected ? 'ring-2 ring-blue-500' : ''
+                      }`}
+                      onClick={() => handleCardSelect(cardIdString)}
+                    >
+                      <div className="aspect-w-3 aspect-h-4 mb-4">
+                        <img
+                          src={card.image_url}
+                          alt={card.card_name}
+                          className="rounded-md object-cover"
+                        />
+                      </div>
+                      <h3 className="mb-1 text-lg font-semibold">{card.card_name}</h3>
+                      <p className="text-sm text-gray-600">#{card.card_number}</p>
+                      <p className="text-sm text-gray-600">{card.card_rarity}</p>
+                      <p className="text-sm text-gray-600">{card.card_element}</p>
                     </div>
-                  )}
-                  {selectedCards.includes(card.id) && (
-                    <div className="mt-2 rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800">
-                      Selected
-                    </div>
-                  )}
-                </div>
-              ))}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))
+          ))
       )}
-      
-      {/* Notification component */}
+
+      {/* Notification */}
       <Notification
         message={notification.message}
         type={notification.type}
@@ -385,4 +372,4 @@ const Cards = () => {
   );
 };
 
-export default Cards; 
+export default Cards;
