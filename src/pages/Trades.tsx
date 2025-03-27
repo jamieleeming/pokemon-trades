@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
 import NotificationCenter from '../components/NotificationCenter';
+import CollapsibleFilters from '../components/CollapsibleFilters';
 import { logWithTimestamp } from '../lib/logging';
 
 // Cache duration in milliseconds (5 minutes)
@@ -313,8 +314,7 @@ const Trades = () => {
         )
       )}
       
-      <div className="mb-6 rounded-lg bg-white p-4 shadow-md">
-        <h2 className="mb-4 text-xl font-semibold">Filters</h2>
+      <CollapsibleFilters title="Trade Filters">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <label htmlFor="search" className="mb-1 block text-sm font-medium text-gray-700">
@@ -399,7 +399,7 @@ const Trades = () => {
             </label>
           </div>
         </div>
-      </div>
+      </CollapsibleFilters>
       
       {loading && filteredTrades.length === 0 ? (
         <div className="text-center text-gray-600">Loading trades...</div>

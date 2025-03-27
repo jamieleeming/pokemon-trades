@@ -4,6 +4,7 @@ import { supabase, Card as CardType } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
+import CollapsibleFilters from '../components/CollapsibleFilters';
 
 // Constants
 const CARDS_STORAGE_KEY = 'pokemon_trades_cards_cache';
@@ -219,8 +220,7 @@ const Cards = () => {
       )}
       
       {/* Filters */}
-      <div className="mb-6 rounded-lg bg-white p-4 shadow-md">
-        <h2 className="mb-4 text-xl font-semibold">Filters</h2>
+      <CollapsibleFilters title="Card Filters">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {/* Search */}
           <div>
@@ -310,7 +310,7 @@ const Cards = () => {
             </label>
           </div>
         </div>
-      </div>
+      </CollapsibleFilters>
       
       {/* Cards grid */}
       {loading && cards.length === 0 ? (
