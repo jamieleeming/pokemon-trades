@@ -49,6 +49,10 @@ jobs:
           cp public/sitemap.xml build/ || true
           cp public/_redirects build/ || true
           cp public/github-pages-test.html build/ || true
+          cp public/debug.html build/ || true
+          cp public/index-direct.html build/direct.html || true
+          # Also create a simple entrypoint
+          echo '<meta http-equiv="refresh" content="0;url=/#/login">' > build/home.html
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
