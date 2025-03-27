@@ -1,14 +1,26 @@
 import React, { useEffect, useRef } from 'react';
 import { Trade } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 
 interface TradeDetailsModalProps {
   trade: Trade | null;
   isOpen: boolean;
   onClose: () => void;
+  onOfferTrade?: (tradeId: number) => Promise<void>;
+  isProcessing?: boolean;
+  processingTradeId?: number | null;
 }
 
-const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({ trade, isOpen, onClose }) => {
+const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
+  trade,
+  isOpen,
+  onClose,
+  onOfferTrade,
+  isProcessing = false,
+  processingTradeId = null
+}) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
 
   // Handle click outside to close
   useEffect(() => {
@@ -43,6 +55,19 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({ trade, isOpen, on
       document.removeEventListener('keydown', handleEscapeKey);
     };
   }, [isOpen, onClose]);
+
+  const canOfferTrade = trade && 
+    !trade.offered_by && 
+    user && 
+    trade.users?.id !== user.id &&
+    onOfferTrade;
+
+  const handleOfferClick = async () => {
+    if (trade && onOfferTrade) {
+      await onOfferTrade(trade.id);
+      onClose();
+    }
+  };
 
   if (!isOpen || !trade) return null;
 
@@ -156,7 +181,16 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({ trade, isOpen, on
           </div>
           
           {/* Close button on mobile */}
-          <div className="mt-4 sm:hidden">
+          <div className="mt-4 flex flex-col space-y-3">
+            {canOfferTrade && (
+              <button
+                onClick={handleOfferClick}
+                disabled={isProcessing && processingTradeId === trade.id}
+                className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition-colors disabled:opacity-50"
+              >
+                {isProcessing && processingTradeId === trade.id ? 'Processing...' : 'Offer Trade'}
+              </button>
+            )}
             <button
               onClick={onClose}
               className="w-full py-2 px-4 bg-gray-200 hover:bg-gray-300 rounded-md text-gray-800 font-medium transition-colors"
