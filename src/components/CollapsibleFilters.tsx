@@ -18,8 +18,10 @@ const CollapsibleFilters: React.FC<CollapsibleFiltersProps> = ({
     setIsExpanded(window.innerWidth >= 768);
     
     const handleResize = () => {
-      // Automatically expand on desktop sizes
-      if (window.innerWidth >= 768 && !isExpanded) {
+      const isMobile = window.innerWidth < 768;
+      
+      // Only auto-expand when transitioning from mobile to desktop
+      if (!isMobile) {
         setIsExpanded(true);
       }
     };
@@ -28,13 +30,17 @@ const CollapsibleFilters: React.FC<CollapsibleFiltersProps> = ({
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [isExpanded]);
+  }, []); // Empty dependency array - only run on mount
+
+  const toggleExpanded = () => {
+    setIsExpanded(prev => !prev);
+  };
 
   return (
     <div className="mb-6 rounded-lg bg-white p-4 shadow-md">
       <div 
         className="flex items-center justify-between cursor-pointer"
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={toggleExpanded}
       >
         <h2 className="text-xl font-semibold">{title}</h2>
         <button 
