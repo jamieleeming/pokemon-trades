@@ -47,6 +47,8 @@ jobs:
           cp public/404.html build/ || true
           cp public/robots.txt build/ || true
           cp public/sitemap.xml build/ || true
+          cp public/_redirects build/ || true
+          cp public/github-pages-test.html build/ || true
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
