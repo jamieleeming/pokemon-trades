@@ -1,4 +1,4 @@
-name: Direct Deploy
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -50,6 +50,8 @@ jobs:
           cp public/_redirects build/ || true
           cp public/github-pages-test.html build/ || true
           cp public/debug.html build/ || true
+          cp public/index-direct.html build/ || true
+          # Rename index-direct.html to direct.html
           cp public/index-direct.html build/direct.html || true
           # Also create a simple entrypoint
           echo '<meta http-equiv="refresh" content="0;url=/#/login">' > build/home.html
