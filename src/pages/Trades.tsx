@@ -1,36 +1,64 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../lib/supabase';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { supabase, checkConnection, fetchWithErrorHandling } from '../lib/supabase';
 import { Card, Trade, User } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
+import NotificationCenter from '../components/NotificationCenter';
+import { logWithTimestamp } from '../lib/logging';
+
+// Cache duration in milliseconds (5 minutes)
+const CACHE_DURATION = 5 * 60 * 1000;
 
 // Define specific types for the trade details we need for notifications
 interface TradeDetailsForNotification {
-  card_name: string;
-  username: string;
+  id: number;
+  card_id: string;
+  user_id: string;
+  offered_by: string | null;
+  card: {
+    card_name: string;
+    card_element?: string | null;
+  };
+  user: {
+    username: string;
+    friend_code?: string;
+  };
+}
+
+// Define the extended Trade type with joined card, user and offerer information
+interface TradeWithRelations extends Omit<Trade, 'card' | 'user'> {
+  card: Card;
+  user: User;
+  offerer?: User | null;
 }
 
 const Trades = () => {
-  const { user } = useAuth();
   const [trades, setTrades] = useState<Trade[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [actionLoading, setActionLoading] = useState(false);
-  const [processingTradeId, setProcessingTradeId] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [packs, setPacks] = useState<string[]>([]);
+  const [rarities, setRarities] = useState<string[]>([]);
+  const [elements, setElements] = useState<string[]>([]);
   
-  // Filters state
   const [searchQuery, setSearchQuery] = useState('');
   const [packFilter, setPackFilter] = useState('');
   const [rarityFilter, setRarityFilter] = useState('');
   const [elementFilter, setElementFilter] = useState('');
   const [tradeableOnly, setTradeableOnly] = useState(false);
   
-  // Filter options
-  const [packs, setPacks] = useState<string[]>([]);
-  const [rarities, setRarities] = useState<string[]>([]);
-  const [elements, setElements] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [processingTradeId, setProcessingTradeId] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshButtonVisible, setRefreshButtonVisible] = useState(false);
+  
+  const { user, refreshSession } = useAuth();
 
+  // Refs to track data loading state and cache
+  const dataLoadedRef = useRef(false);
+  const lastDataLoadTimeRef = useRef(0);
+  const pendingLoadRef = useRef(false);
+  
+  // Create notification state
   const [notification, setNotification] = useState<{
     message: string;
     type: 'success' | 'error';
@@ -41,7 +69,6 @@ const Trades = () => {
     isVisible: false,
   });
 
-  // Helper to show notifications
   const showNotification = useCallback((message: string, type: 'success' | 'error') => {
     setNotification({
       message,
@@ -50,47 +77,48 @@ const Trades = () => {
     });
   }, []);
 
-  // Close notification
   const hideNotification = useCallback(() => {
-    setNotification(prev => ({
-      ...prev,
-      isVisible: false,
-    }));
+    setNotification(prev => ({ ...prev, isVisible: false }));
   }, []);
 
-  // Load filter data
-  const loadFilterData = useCallback(async () => {
+  // Check if data needs to be reloaded
+  const needsReload = useCallback(() => {
+    if (!dataLoadedRef.current) return true;
+    const now = Date.now();
+    const timeSinceLastLoad = now - lastDataLoadTimeRef.current;
+    return timeSinceLastLoad > CACHE_DURATION;
+  }, []);
+  
+  // Load data with caching
+  const loadData = useCallback(async (forceReload = false) => {
+    // Return immediately if we're already loading
+    if (pendingLoadRef.current) {
+      logWithTimestamp('Skipping duplicate load request - already loading');
+      return;
+    }
+    
+    // Skip loading if we've loaded recently unless force reload
+    if (!forceReload && !needsReload()) {
+      logWithTimestamp('Using cached trades data', { 
+        age: Date.now() - lastDataLoadTimeRef.current 
+      });
+      return;
+    }
+    
     if (!user) return;
     
     try {
-      const { data: cardsData, error } = await supabase
-        .from('cards')
-        .select('pack, card_rarity, card_element');
+      pendingLoadRef.current = true;
+      setLoading(true);
+      setError(null);
+      setRefreshButtonVisible(false);
       
-      if (error) throw error;
+      // Check if we need to refresh session
+      logWithTimestamp('Starting data load, checking authentication');
+      await refreshSession();
       
-      if (cardsData) {
-        const uniquePacks = Array.from(new Set(cardsData.map(card => card.pack))).filter(Boolean);
-        const uniqueRarities = Array.from(new Set(cardsData.map(card => card.card_rarity))).filter(Boolean);
-        const uniqueElements = Array.from(new Set(cardsData.map(card => card.card_element))).filter(Boolean);
-        
-        setPacks(uniquePacks);
-        setRarities(uniqueRarities);
-        setElements(uniqueElements);
-      }
-    } catch (err) {
-      console.error('Error loading filter data:', err);
-    }
-  }, [user]);
-
-  // Load trades data
-  const loadData = useCallback(async () => {
-    if (!user) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
+      // Simple try-catch for trades loading
+      logWithTimestamp('Loading trades data');
       const { data: tradesData, error: tradesError } = await supabase
         .from('trades')
         .select(`
@@ -101,91 +129,156 @@ const Trades = () => {
         `)
         .order('requested_date', { ascending: false });
 
-      if (tradesError) throw tradesError;
+      if (tradesError) {
+        throw tradesError;
+      }
 
-      // Filter out trades with missing required data
-      const validTrades = (tradesData || []).filter(trade => 
+      // Process trades data - filter out invalid trades
+      const validTrades = (tradesData || []).filter((trade) => 
         trade && trade.cards && trade.users
       );
-
       setTrades(validTrades);
-      loadFilterData();
+      logWithTimestamp('Trades data loaded', { count: validTrades.length });
+
+      // Load filter data
+      const { data: cardsData, error: cardsError } = await supabase
+        .from('cards')
+        .select('pack, card_rarity, card_element');
+
+      if (cardsError) throw cardsError;
+      
+      // Process filter data
+      if (cardsData) {
+        setPacks(Array.from(new Set(cardsData.map(card => card.pack))).filter(Boolean) as string[]);
+        setRarities(Array.from(new Set(cardsData.map(card => card.card_rarity))).filter(Boolean) as string[]);
+        setElements(Array.from(new Set(cardsData.map(card => card.card_element))).filter(Boolean) as string[]);
+      }
+      
+      // Update cache time
+      lastDataLoadTimeRef.current = Date.now();
+      dataLoadedRef.current = true;
     } catch (err) {
-      console.error('Error loading trades:', err);
-      setError('Failed to load trades. Please try again.');
+      console.error('Error loading data:', err);
+      setError('Failed to load data. Please try again.');
+      setRefreshButtonVisible(true);
     } finally {
       setLoading(false);
+      pendingLoadRef.current = false;
     }
-  }, [user, loadFilterData]);
+  }, [user, needsReload, refreshSession]);
 
-  // Initialize component
+  // Handle manual refresh button click
+  const handleRefresh = useCallback(async () => {
+    // Check session validity first
+    await refreshSession();
+    // Force reload data
+    loadData(true);
+  }, [loadData, refreshSession]);
+
+  // Load data on mount and when user changes
   useEffect(() => {
-    if (user) {
-      loadData();
-    }
-  }, [user, loadData]);
+    let mounted = true;
+    
+    const initData = async () => {
+      if (!user || !mounted) return;
+      
+      // Check if we need to load data
+      if (needsReload()) {
+        await loadData();
+      }
+    };
+    
+    initData();
+    
+    return () => {
+      mounted = false;
+    };
+  }, [user, loadData, needsReload]);
+
+  // Add visibility change handler
+  useEffect(() => {
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === 'visible' && user) {
+        // No longer logging visibility changes
+        
+        // Check if data is stale when tab becomes visible
+        if (needsReload()) {
+          // Don't reload automatically, just show refresh button
+          setRefreshButtonVisible(true);
+        }
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [user, needsReload]);
 
   // Handle offering a trade
   const handleOfferTrade = async (tradeId: number) => {
     if (!user) return;
-
+    
     try {
       setProcessingTradeId(tradeId);
       setActionLoading(true);
-
+      
       const { error } = await supabase
         .from('trades')
         .update({ offered_by: user.id })
         .eq('id', tradeId);
-
+      
       if (error) throw error;
-
-      showNotification('Trade offer sent successfully!', 'success');
-      loadData();
+      
+      // Force reload data after action
+      await loadData(true);
+      showNotification('Trade offered successfully!', 'success');
     } catch (err) {
       console.error('Error offering trade:', err);
       showNotification('Failed to offer trade', 'error');
     } finally {
-      setProcessingTradeId(null);
       setActionLoading(false);
+      setProcessingTradeId(null);
     }
   };
 
-  // Handle rescinding a trade offer
+  // Handle rescinding an offer
   const handleRescindOffer = async (tradeId: number) => {
     if (!user) return;
-
+    
     try {
       setProcessingTradeId(tradeId);
       setActionLoading(true);
-
+      
       const { error } = await supabase
         .from('trades')
         .update({ offered_by: null })
         .eq('id', tradeId)
         .eq('offered_by', user.id);
-
+      
       if (error) throw error;
-
-      showNotification('Trade offer rescinded successfully!', 'success');
-      loadData();
+      
+      // Force reload data after action
+      await loadData(true);
+      showNotification('Trade offer cancelled successfully', 'success');
     } catch (err) {
-      console.error('Error rescinding trade:', err);
-      showNotification('Failed to rescind trade offer', 'error');
+      console.error('Error cancelling offer:', err);
+      showNotification('Failed to cancel offer', 'error');
     } finally {
-      setProcessingTradeId(null);
       setActionLoading(false);
+      setProcessingTradeId(null);
     }
   };
 
-  // Memoize filtered trades
+  // Filter trades
   const filteredTrades = useMemo(() => {
     return trades.filter(trade => {
       if (!trade.cards) return false;
       
       const matchesSearch = searchQuery === '' || 
-        trade.cards.card_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        String(trade.cards.card_number).includes(searchQuery);
+        (trade.cards.card_name && trade.cards.card_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (trade.cards.card_number && String(trade.cards.card_number).includes(searchQuery));
       
       const matchesPack = packFilter === '' || trade.cards.pack === packFilter;
       const matchesRarity = rarityFilter === '' || trade.cards.card_rarity === rarityFilter;
@@ -196,23 +289,30 @@ const Trades = () => {
     });
   }, [trades, searchQuery, packFilter, rarityFilter, elementFilter, tradeableOnly]);
 
-  // Show database setup guide if there's a database error
-  if (error?.includes('relation') || error?.includes('does not exist')) {
-    return <DbSetupGuide error={error} />;
-  }
+  // Determine if the error is likely a database setup issue
+  const isDbSetupIssue = error && (
+    error.includes('Database error') || 
+    error.includes('relation') || 
+    error.includes('does not exist') ||
+    error.includes('Failed to fetch')
+  );
 
   return (
     <div className="container py-8">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Community Trades</h1>
       </div>
-
+      
       {error && (
-        <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">
-          {error}
-        </div>
+        isDbSetupIssue ? (
+          <DbSetupGuide error={error} />
+        ) : (
+          <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">
+            {error}
+          </div>
+        )
       )}
-
+      
       <div className="mb-6 rounded-lg bg-white p-4 shadow-md">
         <h2 className="mb-4 text-xl font-semibold">Filters</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -300,65 +400,71 @@ const Trades = () => {
           </div>
         </div>
       </div>
-
-      <div className="overflow-hidden rounded-lg bg-white shadow-md">
-        {loading && (
-          <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-10">
-            <div className="text-center">
-              <svg className="animate-spin h-8 w-8 mx-auto text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <p className="mt-2 text-blue-600 font-medium">Loading trades...</p>
+      
+      {loading && filteredTrades.length === 0 ? (
+        <div className="text-center text-gray-600">Loading trades...</div>
+      ) : filteredTrades.length === 0 ? (
+        <div className="rounded-lg bg-white p-8 text-center shadow-md">
+          <p className="text-lg text-gray-600">No trades found matching your criteria</p>
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-lg bg-white shadow-md relative">
+          {/* Loading overlay */}
+          {loading && (
+            <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-10">
+              <div className="text-center">
+                <svg className="animate-spin h-8 w-8 mx-auto text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p className="mt-2 text-blue-600 font-medium">Loading trades...</p>
+              </div>
             </div>
-          </div>
-        )}
-        <table className="w-full table-auto">
-          <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-700">
-            <tr>
-              <th className="px-6 py-3">Card</th>
-              <th className="px-6 py-3">Pack</th>
-              <th className="px-6 py-3">Rarity</th>
-              <th className="px-6 py-3">User</th>
-              <th className="px-6 py-3">Date Requested</th>
-              <th className="px-6 py-3">Status</th>
-              <th className="px-6 py-3">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredTrades.map((trade) => {
-              if (!trade.cards || !trade.users) return null;
-
-              return (
+          )}
+          <table className="w-full table-auto">
+            <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-700">
+              <tr>
+                <th className="px-6 py-3">Card</th>
+                <th className="px-6 py-3">Pack</th>
+                <th className="px-6 py-3">Rarity</th>
+                <th className="px-6 py-3">User</th>
+                <th className="px-6 py-3">Date Requested</th>
+                <th className="px-6 py-3">Status</th>
+                <th className="px-6 py-3">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {filteredTrades.map((trade) => (
                 <tr key={trade.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
-                      {trade.cards.image_url && (
+                      {trade.cards?.image_url && (
                         <div className="mb-2">
-                          <img
-                            src={trade.cards.image_url}
-                            alt={trade.cards.card_name}
+                          <img 
+                            src={trade.cards.image_url} 
+                            alt={trade.cards.card_name || 'Card'}
                             className="h-16 w-auto object-contain rounded"
                             onError={(e) => {
+                              // Hide image on error
                               e.currentTarget.style.display = 'none';
                             }}
                           />
                         </div>
                       )}
-                      <div className="font-medium text-gray-900">{trade.cards.card_name}</div>
+                    <div className="font-medium text-gray-900">{trade.cards?.card_name || 'Unknown Card'}</div>
                       <div className="text-sm text-gray-500">
-                        #{String(trade.cards.card_number).padStart(3, '0')}
-                        {trade.cards.card_element && (
+                        #{String(trade.cards?.card_number || '000').padStart(3, '0')}
+                        {trade.cards?.card_element && (
                           <span className="ml-1">· {trade.cards.card_element}</span>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">{trade.cards.pack}</td>
-                  <td className="px-6 py-4">{trade.cards.card_rarity}</td>
+                  <td className="px-6 py-4">{trade.cards?.pack || 'Unknown Pack'}</td>
+                  <td className="px-6 py-4">{trade.cards?.card_rarity || 'Unknown Rarity'}</td>
                   <td className="px-6 py-4">
-                    <div className="font-medium text-gray-900">{trade.users.username}</div>
-                    <div className="text-sm text-gray-500">{trade.users.friend_code || 'No friend code'}</div>
+                    <div className="font-medium text-gray-900">{trade.users?.username || 'Unknown User'}</div>
+                    <div className="text-sm text-gray-500">{trade.users?.friend_code || 'No friend code'}</div>
                   </td>
                   <td className="px-6 py-4">
                     {new Date(trade.requested_date).toLocaleDateString()}
@@ -375,7 +481,7 @@ const Trades = () => {
                     )}
                   </td>
                   <td className="px-6 py-4">
-                    {!trade.offered_by && trade.user_id !== user?.id && (
+                    {!trade.offered_by && trade.users?.id !== user?.id && (
                       <button
                         onClick={() => handleOfferTrade(trade.id)}
                         className="btn btn-primary text-xs"
@@ -388,42 +494,33 @@ const Trades = () => {
                         )}
                       </button>
                     )}
-                    {trade.offered_by === user?.id && (
-                      <button
-                        onClick={() => handleRescindOffer(trade.id)}
-                        className="btn btn-secondary text-xs"
-                        disabled={actionLoading && processingTradeId === trade.id}
-                      >
-                        {actionLoading && processingTradeId === trade.id ? (
-                          <span>Processing...</span>
-                        ) : (
-                          <span>Cancel Offer</span>
-                        )}
-                      </button>
-                    )}
-                    {trade.user_id === user?.id && trade.offered_by && trade.offerers && (
+                    {trade.users?.id === user?.id && trade.offered_by && (
                       <div>
                         <span className="text-sm font-medium text-green-600">
-                          Offered by {trade.offerers.username}
+                          {trade.offerers ? (
+                            <>Offered by {trade.offerers.username || 'Unknown User'}</>
+                          ) : (
+                            <>Offered by Unknown User</>
+                          )}
                         </span>
-                        {trade.offerers.friend_code && (
+                        {trade.offerers?.friend_code && (
                           <div className="mt-1 text-xs text-gray-500">
                             Friend Code: {trade.offerers.friend_code}
                           </div>
                         )}
                       </div>
                     )}
-                    {trade.user_id === user?.id && !trade.offered_by && (
+                    {trade.users?.id === user?.id && !trade.offered_by && (
                       <span className="text-sm font-medium text-gray-500">Your request</span>
                     )}
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      
       <Notification
         message={notification.message}
         type={notification.type}
@@ -434,4 +531,4 @@ const Trades = () => {
   );
 };
 
-export default Trades;
+export default Trades; 

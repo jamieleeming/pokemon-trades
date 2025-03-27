@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+When making any changes to the way authentication is handled, always use Supabases standard in-built mechanisms. Do not try to fabricate new ways of handling authentication.
