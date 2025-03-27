@@ -6,6 +6,7 @@ import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
 import NotificationCenter from '../components/NotificationCenter';
 import CollapsibleFilters from '../components/CollapsibleFilters';
+import TradeDetailsModal from '../components/TradeDetailsModal';
 import { logWithTimestamp } from '../lib/logging';
 
 // Cache duration in milliseconds (5 minutes)
@@ -69,6 +70,10 @@ const Trades = () => {
     type: 'success',
     isVisible: false,
   });
+
+  // Add new state for modal
+  const [selectedTrade, setSelectedTrade] = useState<Trade | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showNotification = useCallback((message: string, type: 'success' | 'error') => {
     setNotification({
@@ -298,10 +303,22 @@ const Trades = () => {
     error.includes('Failed to fetch')
   );
 
+  // Handle opening the modal with trade details
+  const handleOpenTradeDetails = (trade: Trade) => {
+    setSelectedTrade(trade);
+    setIsModalOpen(true);
+  };
+
+  // Handle closing the modal
+  const handleCloseTradeDetails = () => {
+    setIsModalOpen(false);
+    setSelectedTrade(null);
+  };
+
   return (
     <div className="container py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Community Trades</h1>
+        <h1 className="text-3xl font-bold">Available Trades</h1>
       </div>
       
       {error && (
@@ -314,7 +331,7 @@ const Trades = () => {
         )
       )}
       
-      <CollapsibleFilters title="Trade Filters">
+      <CollapsibleFilters title="Filters">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <label htmlFor="search" className="mb-1 block text-sm font-medium text-gray-700">
@@ -421,105 +438,198 @@ const Trades = () => {
               </div>
             </div>
           )}
-          <table className="w-full table-auto">
-            <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-700">
-              <tr>
-                <th className="px-6 py-3">Card</th>
-                <th className="px-6 py-3">Pack</th>
-                <th className="px-6 py-3">Rarity</th>
-                <th className="px-6 py-3">User</th>
-                <th className="px-6 py-3">Date Requested</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {filteredTrades.map((trade) => (
-                <tr key={trade.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex flex-col">
-                      {trade.cards?.image_url && (
-                        <div className="mb-2">
-                          <img 
-                            src={trade.cards.image_url} 
-                            alt={trade.cards.card_name || 'Card'}
-                            className="h-16 w-auto object-contain rounded"
-                            onError={(e) => {
-                              // Hide image on error
-                              e.currentTarget.style.display = 'none';
-                            }}
-                          />
+          
+          {/* Desktop version - hidden on small screens */}
+          <div className="hidden md:block">
+            <table className="w-full table-auto">
+              <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-700">
+                <tr>
+                  <th className="px-6 py-3">Card</th>
+                  <th className="px-6 py-3">Pack</th>
+                  <th className="px-6 py-3">Rarity</th>
+                  <th className="px-6 py-3">User</th>
+                  <th className="px-6 py-3">Date Requested</th>
+                  <th className="px-6 py-3">Status</th>
+                  <th className="px-6 py-3">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {filteredTrades.map((trade) => (
+                  <tr key={trade.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col">
+                        {trade.cards?.image_url && (
+                          <div className="mb-2">
+                            <img 
+                              src={trade.cards.image_url} 
+                              alt={trade.cards.card_name || 'Card'}
+                              className="h-16 w-auto object-contain rounded"
+                              onError={(e) => {
+                                // Hide image on error
+                                e.currentTarget.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        )}
+                        <div className="font-medium text-gray-900">{trade.cards?.card_name || 'Unknown Card'}</div>
+                        <div className="text-sm text-gray-500">
+                          #{String(trade.cards?.card_number || '000').padStart(3, '0')}
+                          {trade.cards?.card_element && (
+                            <span className="ml-1">· {trade.cards.card_element}</span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">{trade.cards?.pack || 'Unknown Pack'}</td>
+                    <td className="px-6 py-4">{trade.cards?.card_rarity || 'Unknown Rarity'}</td>
+                    <td className="px-6 py-4">
+                      <div className="font-medium text-gray-900">{trade.users?.username || 'Unknown User'}</div>
+                      <div className="text-sm text-gray-500">{trade.users?.friend_code || 'No friend code'}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {new Date(trade.requested_date).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4">
+                      {trade.offered_by ? (
+                        <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">
+                          Offer Available
+                        </span>
+                      ) : (
+                        <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800">
+                          Searching
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      {!trade.offered_by && trade.users?.id !== user?.id && (
+                        <button
+                          onClick={() => handleOfferTrade(trade.id)}
+                          className="btn btn-primary text-xs px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                          disabled={actionLoading && processingTradeId === trade.id}
+                        >
+                          {actionLoading && processingTradeId === trade.id ? (
+                            <span>Processing...</span>
+                          ) : (
+                            <span>Offer Trade</span>
+                          )}
+                        </button>
+                      )}
+                      {trade.users?.id === user?.id && trade.offered_by && (
+                        <div>
+                          <span className="text-sm font-medium text-green-600">
+                            {trade.offerers ? (
+                              <>Offered by {trade.offerers.username || 'Unknown User'}</>
+                            ) : (
+                              <>Offered by Unknown User</>
+                            )}
+                          </span>
+                          {trade.offerers?.friend_code && (
+                            <div className="mt-1 text-xs text-gray-500">
+                              Friend Code: {trade.offerers.friend_code}
+                            </div>
+                          )}
                         </div>
                       )}
-                    <div className="font-medium text-gray-900">{trade.cards?.card_name || 'Unknown Card'}</div>
-                      <div className="text-sm text-gray-500">
-                        #{String(trade.cards?.card_number || '000').padStart(3, '0')}
-                        {trade.cards?.card_element && (
-                          <span className="ml-1">· {trade.cards.card_element}</span>
-                        )}
-                      </div>
+                      {trade.users?.id === user?.id && !trade.offered_by && (
+                        <span className="text-sm font-medium text-gray-500">Your request</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          {/* Mobile version - visible only on small screens */}
+          <div className="md:hidden divide-y divide-gray-200">
+            {filteredTrades.map((trade) => (
+              <div key={trade.id} className="p-4 hover:bg-gray-50">
+                <div className="flex items-start space-x-3">
+                  {/* Card thumbnail */}
+                  {trade.cards?.image_url && (
+                    <div className="flex-shrink-0">
+                      <img 
+                        src={trade.cards.image_url} 
+                        alt={trade.cards.card_name || 'Card'}
+                        className="h-14 w-auto object-contain rounded"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
                     </div>
-                  </td>
-                  <td className="px-6 py-4">{trade.cards?.pack || 'Unknown Pack'}</td>
-                  <td className="px-6 py-4">{trade.cards?.card_rarity || 'Unknown Rarity'}</td>
-                  <td className="px-6 py-4">
-                    <div className="font-medium text-gray-900">{trade.users?.username || 'Unknown User'}</div>
-                    <div className="text-sm text-gray-500">{trade.users?.friend_code || 'No friend code'}</div>
-                  </td>
-                  <td className="px-6 py-4">
-                    {new Date(trade.requested_date).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4">
-                    {trade.offered_by ? (
-                      <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">
-                        Offer Available
-                      </span>
-                    ) : (
-                      <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800">
-                        Searching
-                      </span>
+                  )}
+                  
+                  {/* Card info */}
+                  <div className="flex-grow">
+                    <div className="font-medium text-gray-900">{trade.cards?.card_name || 'Unknown Card'}</div>
+                    <div className="text-xs text-gray-500">
+                      #{String(trade.cards?.card_number || '000').padStart(3, '0')}
+                      {trade.offered_by ? (
+                        <span className="ml-2 inline-block rounded-full bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-800">
+                          Offer Available
+                        </span>
+                      ) : (
+                        <span className="ml-2 inline-block rounded-full bg-yellow-100 px-1.5 py-0.5 text-xs font-semibold text-yellow-800">
+                          Searching
+                        </span>
+                      )}
+                    </div>
+                    {/* Show user info */}
+                    {trade.users?.id !== user?.id && (
+                      <div className="text-xs text-gray-500 mt-1">
+                        By: {trade.users?.username || 'Unknown User'}
+                      </div>
                     )}
-                  </td>
-                  <td className="px-6 py-4">
+                    {/* Show "Your request" for own trades */}
+                    {trade.users?.id === user?.id && (
+                      <div className="text-xs text-gray-500 mt-1 italic">
+                        Your request
+                      </div>
+                    )}
+                    {/* Show offer info */}
+                    {trade.users?.id === user?.id && trade.offered_by && trade.offerers && (
+                      <div className="text-xs text-green-600 mt-1">
+                        Offered by: {trade.offerers.username || 'Unknown User'}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Actions */}
+                  <div className="flex-shrink-0 flex flex-col space-y-2">
                     {!trade.offered_by && trade.users?.id !== user?.id && (
                       <button
                         onClick={() => handleOfferTrade(trade.id)}
-                        className="btn btn-primary text-xs"
+                        className="btn btn-primary text-xs px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors w-20 text-center"
                         disabled={actionLoading && processingTradeId === trade.id}
                       >
                         {actionLoading && processingTradeId === trade.id ? (
-                          <span>Processing...</span>
+                          <span>...</span>
                         ) : (
-                          <span>Offer Trade</span>
+                          <span>Offer</span>
                         )}
                       </button>
                     )}
-                    {trade.users?.id === user?.id && trade.offered_by && (
-                      <div>
-                        <span className="text-sm font-medium text-green-600">
-                          {trade.offerers ? (
-                            <>Offered by {trade.offerers.username || 'Unknown User'}</>
-                          ) : (
-                            <>Offered by Unknown User</>
-                          )}
-                        </span>
-                        {trade.offerers?.friend_code && (
-                          <div className="mt-1 text-xs text-gray-500">
-                            Friend Code: {trade.offerers.friend_code}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    {trade.users?.id === user?.id && !trade.offered_by && (
-                      <span className="text-sm font-medium text-gray-500">Your request</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    
+                    <button
+                      onClick={() => handleOpenTradeDetails(trade)}
+                      className="text-xs px-2 py-1 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors w-20 text-center"
+                    >
+                      See More
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
+      
+      {/* Trade details modal */}
+      <TradeDetailsModal
+        trade={selectedTrade}
+        isOpen={isModalOpen}
+        onClose={handleCloseTradeDetails}
+      />
       
       <Notification
         message={notification.message}
