@@ -6,7 +6,7 @@ const Login = () => {
   const navigate = useNavigate();
   
   // Auth state from context
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, resetPassword } = useAuth();
   
   // Form state
   const [email, setEmail] = useState('');
@@ -15,16 +15,28 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [friendCode, setFriendCode] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccessMessage(null);
     setLoading(true);
 
     try {
-      if (isSignUp) {
+      if (isForgotPassword) {
+        const { error } = await resetPassword(email);
+        
+        if (error) {
+          setError(error.message);
+        } else {
+          setSuccessMessage('Password reset instructions have been sent to your email address.');
+          setIsForgotPassword(false);
+        }
+      } else if (isSignUp) {
         const { error } = await signUp(email, password, {
           name,
           username,
@@ -52,15 +64,33 @@ const Login = () => {
     }
   };
 
+  const toggleForgotPassword = () => {
+    setIsForgotPassword(!isForgotPassword);
+    setIsSignUp(false);
+    setError(null);
+    setSuccessMessage(null);
+  };
+
+  const toggleSignUp = () => {
+    setIsSignUp(!isSignUp);
+    setIsForgotPassword(false);
+    setError(null);
+    setSuccessMessage(null);
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900">
-            {isSignUp ? 'Create your account' : 'Welcome back'}
+            {isForgotPassword 
+              ? 'Reset your password' 
+              : (isSignUp ? 'Create your account' : 'Welcome back')}
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            {isSignUp ? 'Start your trading journey' : 'Sign in to continue trading'}
+            {isForgotPassword 
+              ? 'Enter your email to receive reset instructions'
+              : (isSignUp ? 'Start your trading journey' : 'Sign in to continue trading')}
           </p>
         </div>
 
@@ -132,26 +162,34 @@ const Login = () => {
                 </>
               )}
               
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  placeholder="••••••••"
-                />
-              </div>
+              {!isForgotPassword && (
+                <div>
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                    Password
+                  </label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="••••••••"
+                  />
+                </div>
+              )}
             </div>
 
             {error && (
               <div className="rounded-lg bg-red-50 p-4">
                 <div className="text-sm text-red-700">{error}</div>
+              </div>
+            )}
+
+            {successMessage && (
+              <div className="rounded-lg bg-green-50 p-4">
+                <div className="text-sm text-green-700">{successMessage}</div>
               </div>
             )}
 
@@ -162,18 +200,34 @@ const Login = () => {
                 loading ? 'cursor-not-allowed opacity-50' : ''
               }`}
             >
-              {loading ? 'Processing...' : (isSignUp ? 'Create account' : 'Sign in')}
+              {loading ? 'Processing...' : (
+                isForgotPassword 
+                  ? 'Send reset instructions'
+                  : (isSignUp ? 'Create account' : 'Sign in')
+              )}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <button
-              type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
-            >
-              {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
-            </button>
+            {!isForgotPassword && (
+              <button
+                type="button"
+                onClick={toggleSignUp}
+                className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
+              >
+                {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+              </button>
+            )}
+            
+            {!isSignUp && (
+              <button
+                type="button"
+                onClick={toggleForgotPassword}
+                className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors ml-4"
+              >
+                {isForgotPassword ? 'Back to sign in' : 'Forgot your password?'}
+              </button>
+            )}
           </div>
         </div>
       </div>

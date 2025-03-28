@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Login from './pages/Login';
+import ResetPassword from './pages/ResetPassword';
 import Trades from './pages/Trades';
 import Cards from './pages/Cards';
 import { useAuth } from './contexts/AuthContext';
@@ -63,6 +64,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           {/* Public routes */}
           <Route path="login" element={<LoginRoute />} />
+          <Route path="reset-password" element={<ResetPassword />} />
           
           {/* Protected routes */}
           <Route path="/" element={<ProtectedRoute element={<Navigate to="/trades" replace />} />} />
