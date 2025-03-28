@@ -25,7 +25,7 @@ export enum TRADE_STATUS {
   OPEN = "open",
   OFFERED = "offered",
   ACCEPTED = "accepted",
-  COMPLETE = "completed"
+  COMPLETE = "complete"
 }
 
 export interface Trade {

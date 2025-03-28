@@ -13,23 +13,42 @@ const ResetPassword = () => {
 
   // Check if there's a hash fragment in the URL which indicates we're in a valid reset flow
   useEffect(() => {
-    // Supabase automatically handles the hash fragment and auth state
-    // Just check if we're in an appropriate context for password reset
     const checkResetContext = async () => {
-      // Check current session - if we have one with access_token but no refresh_token
-      // it could be a recovery session 
-      const { data } = await supabase.auth.getSession();
-      
-      if (data.session?.access_token && !data.session?.refresh_token) {
-        setIsResetMode(true);
-      } else {
-        // Not in reset mode
-        setMessage('Invalid or expired password reset link. Please request a new password reset.');
+      try {
+        const hash = window.location.hash;
+        const accessToken = new URLSearchParams(hash.replace('#', '')).get('access_token');
+        const type = new URLSearchParams(hash.replace('#', '')).get('type');
+        
+        if (accessToken && type === 'recovery') {
+          // Set the access token in Supabase client
+          const { error } = await supabase.auth.getSession();
+          if (error) {
+            throw error;
+          }
+          setIsResetMode(true);
+        } else {
+          // Try to get session as fallback
+          const { data } = await supabase.auth.getSession();
+          if (data.session) {
+            setIsResetMode(true);
+          } else {
+            setMessage('Invalid or expired password reset link. Please request a new password reset.');
+            setTimeout(() => {
+              navigate('/login');
+            }, 3000);
+          }
+        }
+      } catch (err) {
+        console.error('Error checking reset context:', err);
+        setMessage('An error occurred. Please try again or request a new password reset.');
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000);
       }
     };
     
     checkResetContext();
-  }, []);
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
