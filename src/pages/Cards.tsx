@@ -211,7 +211,8 @@ const Cards = () => {
 
   return (
     <div className="container py-8">
-      <h1 className="mb-8 text-3xl font-bold">Select Cards You Want</h1>
+      <h1 className="mb-2 text-3xl font-bold">Cards</h1>
+      <p className="mb-6 text-gray-600">Select the cards you are currently missing</p>
       
       {error && (
         <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">
@@ -220,7 +221,7 @@ const Cards = () => {
       )}
       
       {/* Filters */}
-      <CollapsibleFilters title="Card Filters">
+      <CollapsibleFilters title="Filters">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {/* Search */}
           <div>
@@ -319,9 +320,9 @@ const Cards = () => {
         Object.entries(cardsByPack)
           .sort(([packA], [packB]) => packA.localeCompare(packB))
           .map(([pack, packCards]) => (
-            <div key={pack} className="mb-8">
-              <h2 className="mb-4 text-2xl font-bold text-gray-800">{pack}</h2>
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div key={pack} className="mb-6">
+              <h2 className="mb-2 text-xl sm:text-2xl font-bold text-gray-800 sticky top-0 bg-gray-100 p-2 rounded-lg z-10">{pack}</h2>
+              <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                 {packCards.map((card) => {
                   // Skip cards with missing IDs
                   if (!card || !card.id) {
@@ -337,22 +338,33 @@ const Cards = () => {
                   return (
                     <div
                       key={card.id}
-                      className={`relative cursor-pointer rounded-lg bg-white p-4 shadow-md transition-all hover:shadow-lg ${
+                      className={`relative cursor-pointer rounded-lg bg-white p-2 shadow-md transition-all hover:shadow-lg ${
                         isSelected ? 'ring-2 ring-blue-500' : ''
                       }`}
                       onClick={() => handleCardSelect(cardIdString)}
                     >
-                      <div className="aspect-w-3 aspect-h-4 mb-4">
+                      {isSelected && (
+                        <div className="absolute top-1 right-1 z-10 rounded-full bg-blue-500 p-1 shadow-sm">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      )}
+                      <div className="aspect-w-3 aspect-h-4 mb-1">
                         <img
                           src={card.image_url}
                           alt={card.card_name}
-                          className="rounded-md object-cover"
+                          className="rounded-md object-contain h-full w-full"
                         />
                       </div>
-                      <h3 className="mb-1 text-lg font-semibold">{card.card_name}</h3>
-                      <p className="text-sm text-gray-600">#{card.card_number}</p>
-                      <p className="text-sm text-gray-600">{card.card_rarity}</p>
-                      <p className="text-sm text-gray-600">{card.card_element}</p>
+                      <div className="text-center">
+                        <h3 className="text-xs font-semibold truncate" title={card.card_name}>{card.card_name}</h3>
+                        <div className="flex flex-wrap justify-center text-xs text-gray-600 gap-1">
+                          <span>#{card.card_number}</span>
+                          <span className="hidden sm:inline">•</span>
+                          <span className="hidden sm:inline">{card.card_rarity}</span>
+                        </div>
+                      </div>
                     </div>
                   );
                 })}
