@@ -21,12 +21,20 @@ export interface Card {
   traded?: boolean;
 }
 
+export enum TRADE_STATUS {
+  OPEN = "open",
+  OFFERED = "offered",
+  ACCEPTED = "accepted",
+  COMPLETE = "completed"
+}
+
 export interface Trade {
   id: number;
   card_id: string;
   user_id: string;
   offered_by: string | null;
   requested_date: string;
+  status: TRADE_STATUS;
   cards?: Card;
   users?: User;
   offerers?: User | null;

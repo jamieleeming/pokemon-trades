@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Trade } from '../types';
+import { Trade, TRADE_STATUS } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 
 interface TradeDetailsModalProps {
@@ -57,7 +57,7 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
   }, [isOpen, onClose]);
 
   const canOfferTrade = trade && 
-    !trade.offered_by && 
+    trade.status === TRADE_STATUS.OPEN && 
     user && 
     trade.users?.id !== user.id &&
     onOfferTrade;
@@ -158,19 +158,11 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
                   </p>
                   <p className="mb-1 text-sm">
                     <span className="font-medium">Status:</span>{' '}
-                    {trade.offered_by ? (
-                      <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800 ml-1">
-                        Offer Available
-                      </span>
-                    ) : (
-                      <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800 ml-1">
-                        Searching
-                      </span>
-                    )}
+                    {renderTradeStatus(trade)}
                   </p>
                 </div>
 
-                {trade.offered_by && trade.offerers && (
+                {trade.offered_by && trade.status === TRADE_STATUS.OFFERED && trade.offerers && (
                   <div className="mt-2 p-3 bg-green-50 rounded-lg">
                     <p className="font-medium text-sm">Offered by: {trade.offerers.username || 'Unknown User'}</p>
                     {trade.offerers.friend_code && (
@@ -204,6 +196,42 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
       </div>
     </div>
   );
+};
+
+// Helper function to render trade status
+const renderTradeStatus = (trade: Trade) => {
+  switch (trade.status) {
+    case TRADE_STATUS.OPEN:
+      return (
+        <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800 ml-1">
+          Open
+        </span>
+      );
+    case TRADE_STATUS.OFFERED:
+      return (
+        <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800 ml-1">
+          Offered
+        </span>
+      );
+    case TRADE_STATUS.ACCEPTED:
+      return (
+        <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800 ml-1">
+          Accepted
+        </span>
+      );
+    case TRADE_STATUS.COMPLETE:
+      return (
+        <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800 ml-1">
+          Complete
+        </span>
+      );
+    default:
+      return (
+        <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800 ml-1">
+          Unknown
+        </span>
+      );
+  }
 };
 
 export default TradeDetailsModal; 
