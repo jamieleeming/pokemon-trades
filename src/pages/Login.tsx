@@ -40,7 +40,7 @@ const Login = () => {
         const { error, success } = await signUp(email, password, {
           name,
           username,
-          friend_code: friendCode || undefined
+          friend_code: friendCode
         });
         
         if (error) {
@@ -153,16 +153,17 @@ const Login = () => {
                   </div>
                   <div>
                     <label htmlFor="friendCode" className="block text-sm font-medium text-gray-700 mb-1">
-                      Friend Code
+                      Pokemon TCG Pocket Friend Code
                     </label>
                     <input
                       id="friendCode"
                       name="friendCode"
                       type="text"
+                      required
                       value={friendCode}
                       onChange={(e) => setFriendCode(e.target.value)}
                       className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      placeholder="Optional"
+                      placeholder="Enter your friend code"
                     />
                   </div>
                 </>
