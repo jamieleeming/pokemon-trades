@@ -9,6 +9,7 @@ interface TradeDetailsModalProps {
   onOfferTrade?: (tradeId: number) => Promise<void>;
   onRescindOffer?: (tradeId: number) => Promise<void>;
   onRejectOffer?: (tradeId: number) => Promise<void>;
+  onAcceptOffer?: (tradeId: number) => Promise<void>;
   onDeleteTrade?: (tradeId: number) => Promise<void>;
   isProcessing?: boolean;
   processingTradeId?: number | null;
@@ -21,6 +22,7 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
   onOfferTrade,
   onRescindOffer,
   onRejectOffer,
+  onAcceptOffer,
   onDeleteTrade,
   isProcessing = false,
   processingTradeId = null
@@ -75,6 +77,13 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
     trade.offered_by === user.id &&
     onRescindOffer;
 
+  const canAcceptOffer = trade && 
+    trade.status === TRADE_STATUS.OFFERED && 
+    user && 
+    trade.users?.id === user.id && 
+    trade.offered_by &&
+    onAcceptOffer;
+
   const canRejectOffer = trade && 
     trade.status === TRADE_STATUS.OFFERED && 
     user && 
@@ -100,6 +109,13 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
   const handleCancelOfferClick = async () => {
     if (trade && onRescindOffer) {
       await onRescindOffer(trade.id);
+      onClose();
+    }
+  };
+
+  const handleAcceptOfferClick = async () => {
+    if (trade && onAcceptOffer) {
+      await onAcceptOffer(trade.id);
       onClose();
     }
   };
@@ -243,6 +259,17 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
                 className="w-full py-2 px-4 bg-gray-500 hover:bg-gray-600 text-white rounded-md font-medium transition-colors disabled:opacity-50"
               >
                 {isProcessing && processingTradeId === trade.id ? 'Processing...' : 'Cancel Offer'}
+              </button>
+            )}
+
+            {/* Accept offer button */}
+            {canAcceptOffer && (
+              <button
+                onClick={handleAcceptOfferClick}
+                disabled={isProcessing && processingTradeId === trade.id}
+                className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition-colors disabled:opacity-50"
+              >
+                {isProcessing && processingTradeId === trade.id ? 'Processing...' : 'Accept Offer'}
               </button>
             )}
 

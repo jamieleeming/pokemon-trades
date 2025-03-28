@@ -283,6 +283,36 @@ const Trades = () => {
     }
   };
 
+  // Handle accepting an offer
+  const handleAcceptOffer = async (tradeId: number) => {
+    if (!user) return;
+    
+    try {
+      setProcessingTradeId(tradeId);
+      setActionLoading(true);
+      
+      const { error } = await supabase
+        .from('trades')
+        .update({ 
+          status: TRADE_STATUS.ACCEPTED
+        })
+        .eq('id', tradeId)
+        .eq('user_id', user.id); // Only the trade owner can accept offers
+      
+      if (error) throw error;
+      
+      // Force reload data after action
+      await loadData(true);
+      showNotification('Trade offer accepted successfully', 'success');
+    } catch (err) {
+      console.error('Error accepting offer:', err);
+      showNotification('Failed to accept offer', 'error');
+    } finally {
+      setActionLoading(false);
+      setProcessingTradeId(null);
+    }
+  };
+
   // Handle rejecting an offer
   const handleRejectOffer = async (tradeId: number) => {
     if (!user) return;
@@ -668,7 +698,7 @@ const Trades = () => {
                       {/* Trade owner actions */}
                       {trade.users?.id === user?.id && (
                         <div className="flex flex-col space-y-2">
-                          {/* Reject offer button (for owners when trade has an offer) */}
+                          {/* Accept/Reject offer buttons (for owners when trade has an offer) */}
                           {trade.status === TRADE_STATUS.OFFERED && trade.offered_by && (
                             <>
                               <div>
@@ -685,17 +715,30 @@ const Trades = () => {
                                   </div>
                                 )}
                               </div>
-                              <button
-                                onClick={() => handleRejectOffer(trade.id)}
-                                className="btn btn-secondary text-xs px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors w-28 text-center"
-                                disabled={actionLoading && processingTradeId === trade.id}
-                              >
-                                {actionLoading && processingTradeId === trade.id ? (
-                                  <span>Processing...</span>
-                                ) : (
-                                  <span>Reject Offer</span>
-                                )}
-                              </button>
+                              <div className="flex space-x-2">
+                                <button
+                                  onClick={() => handleAcceptOffer(trade.id)}
+                                  className="btn btn-primary text-xs px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors w-28 text-center"
+                                  disabled={actionLoading && processingTradeId === trade.id}
+                                >
+                                  {actionLoading && processingTradeId === trade.id ? (
+                                    <span>Processing...</span>
+                                  ) : (
+                                    <span>Accept Offer</span>
+                                  )}
+                                </button>
+                                <button
+                                  onClick={() => handleRejectOffer(trade.id)}
+                                  className="btn btn-secondary text-xs px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors w-28 text-center"
+                                  disabled={actionLoading && processingTradeId === trade.id}
+                                >
+                                  {actionLoading && processingTradeId === trade.id ? (
+                                    <span>Processing...</span>
+                                  ) : (
+                                    <span>Reject Offer</span>
+                                  )}
+                                </button>
+                              </div>
                             </>
                           )}
                           
@@ -817,19 +860,34 @@ const Trades = () => {
                     {/* Trade owner actions */}
                     {trade.users?.id === user?.id && (
                       <>
-                        {/* Reject offer button (for owners when trade has an offer) */}
+                        {/* Accept offer button (for owners when trade has an offer) */}
                         {trade.status === TRADE_STATUS.OFFERED && trade.offered_by && (
-                          <button
-                            onClick={() => handleRejectOffer(trade.id)}
-                            className="btn btn-secondary text-xs px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors w-20 text-center"
-                            disabled={actionLoading && processingTradeId === trade.id}
-                          >
-                            {actionLoading && processingTradeId === trade.id ? (
-                              <span>...</span>
-                            ) : (
-                              <span>Reject</span>
-                            )}
-                          </button>
+                          <div className="flex flex-col space-y-2">
+                            <button
+                              onClick={() => handleAcceptOffer(trade.id)}
+                              className="btn btn-primary text-xs px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors w-20 text-center"
+                              disabled={actionLoading && processingTradeId === trade.id}
+                            >
+                              {actionLoading && processingTradeId === trade.id ? (
+                                <span>...</span>
+                              ) : (
+                                <span>Accept</span>
+                              )}
+                            </button>
+                          
+                            {/* Reject offer button */}
+                            <button
+                              onClick={() => handleRejectOffer(trade.id)}
+                              className="btn btn-secondary text-xs px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors w-20 text-center"
+                              disabled={actionLoading && processingTradeId === trade.id}
+                            >
+                              {actionLoading && processingTradeId === trade.id ? (
+                                <span>...</span>
+                              ) : (
+                                <span>Reject</span>
+                              )}
+                            </button>
+                          </div>
                         )}
                         
                         {/* Delete trade button (for owners when trade has no offer) */}
@@ -872,6 +930,7 @@ const Trades = () => {
         onOfferTrade={handleOfferTrade}
         onRescindOffer={handleRescindOffer}
         onRejectOffer={handleRejectOffer}
+        onAcceptOffer={handleAcceptOffer}
         onDeleteTrade={handleDeleteTrade}
         isProcessing={actionLoading}
         processingTradeId={processingTradeId}
