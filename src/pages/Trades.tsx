@@ -584,7 +584,7 @@ const Trades = () => {
                     <div className="mt-1 text-xs">
                       {trade.users?.id !== user?.id ? (
                         <span className="text-gray-600">
-                          By: {trade.users?.username || 'Unknown User'}
+                          Requested by: {trade.users?.username || 'Unknown User'}
                         </span>
                       ) : (
                         <span className="text-gray-600 italic">
