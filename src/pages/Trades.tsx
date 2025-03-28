@@ -745,7 +745,6 @@ const Trades = () => {
                           {/* Delete trade button (for owners when trade has no offer) */}
                           {trade.status === TRADE_STATUS.OPEN && !trade.offered_by && (
                             <>
-                              <span className="text-sm font-medium text-gray-500 mb-2">Your request</span>
                               <button
                                 onClick={() => handleDeleteTrade(trade.id)}
                                 className="btn btn-danger text-xs px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors w-28 text-center"
