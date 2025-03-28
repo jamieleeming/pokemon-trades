@@ -79,9 +79,9 @@ const Login = () => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="w-full max-w-md px-4 max-h-screen overflow-auto">
-        <div className="mb-4 text-center">
+    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+      <div className="w-full max-w-md flex flex-col">
+        <div className="mb-3 text-center">
           <h2 className="text-2xl font-bold tracking-tight text-gray-900">
             {isForgotPassword 
               ? 'Reset your password' 
@@ -95,7 +95,7 @@ const Login = () => {
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-3" onSubmit={handleSubmit}>
             <div className="space-y-3">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -208,7 +208,7 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="mt-4 text-center">
+          <div className="mt-3 text-center pb-1">
             {!isForgotPassword && (
               <button
                 type="button"
