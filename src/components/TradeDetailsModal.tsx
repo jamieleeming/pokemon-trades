@@ -140,9 +140,8 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
         </div>
 
         <div className="p-5">
-          {/* Card Information */}
+          {/* Card Information - header removed */}
           <div className="mb-6">
-            <h4 className="text-lg font-medium text-gray-800 mb-3">Card Information</h4>
             <div className="bg-gray-50 p-4 rounded-lg">
               <div className="flex flex-row items-start">
                 {/* Card image - now always on the left */}

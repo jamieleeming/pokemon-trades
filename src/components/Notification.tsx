@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface NotificationProps {
   message: string;
   type: 'success' | 'error';
   isVisible: boolean;
   onClose: () => void;
+  autoHideDuration?: number; // Optional duration in milliseconds
 }
 
-const Notification: React.FC<NotificationProps> = ({ message, type, isVisible, onClose }) => {
+const Notification: React.FC<NotificationProps> = ({ 
+  message, 
+  type, 
+  isVisible, 
+  onClose,
+  autoHideDuration = 3000 // Default to 3 seconds
+}) => {
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    
+    if (isVisible && autoHideDuration > 0) {
+      timer = setTimeout(() => {
+        onClose();
+      }, autoHideDuration);
+    }
+    
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isVisible, autoHideDuration, onClose]);
+  
   if (!isVisible) return null;
   
   return (
