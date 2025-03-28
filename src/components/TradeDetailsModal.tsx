@@ -95,9 +95,10 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
           <div className="mb-6">
             <h4 className="text-lg font-medium text-gray-800 mb-3">Card Information</h4>
             <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:space-x-4">
+              <div className="flex flex-row items-start">
+                {/* Card image - now always on the left */}
                 {trade.cards?.image_url && (
-                  <div className="mb-4 sm:mb-0 mx-auto sm:mx-0">
+                  <div className="mr-4 flex-shrink-0">
                     <img 
                       src={trade.cards.image_url} 
                       alt={trade.cards.card_name || 'Card'} 
@@ -108,9 +109,10 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
                     />
                   </div>
                 )}
+                {/* Card details - now always on the right */}
                 <div className="flex-grow">
                   <p className="font-semibold text-lg mb-2">{trade.cards?.card_name || 'Unknown Card'}</p>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <p className="text-sm text-gray-600">
                       <span className="font-medium">Card #:</span> {String(trade.cards?.card_number || '000').padStart(3, '0')}
                     </p>
