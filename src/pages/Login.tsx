@@ -79,9 +79,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
-        <div className="mb-10 text-center">
+        <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900">
             {isForgotPassword 
               ? 'Reset your password' 
@@ -94,7 +94,7 @@ const Login = () => {
           </p>
         </div>
 
-        <div className="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-200">
+        <div className="rounded-xl bg-white p-8 shadow-lg ring-1 ring-gray-200">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
