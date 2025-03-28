@@ -218,9 +218,7 @@ const NotificationCenter: React.FC = () => {
           </div>
           
           <div className="divide-y divide-gray-200 max-h-96 overflow-y-auto">
-            {loading && !notifications.length ? (
-              <div className="p-4 text-center text-gray-500">Loading notifications...</div>
-            ) : error && !notifications.length ? (
+            {error && !notifications.length ? (
               <div className="p-4 text-center text-red-500">{error}</div>
             ) : notifications.length === 0 ? (
               <div className="p-4 text-center text-gray-500">No notifications yet</div>
@@ -246,9 +244,6 @@ const NotificationCenter: React.FC = () => {
                   </div>
                 </div>
               ))
-            )}
-            {loading && notifications.length > 0 && (
-              <div className="p-2 text-center text-xs text-gray-500">Refreshing...</div>
             )}
           </div>
         </div>
