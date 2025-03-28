@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Pokemon Trades!</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #eaeaea;
+    }
+    .header img {
+      max-width: 200px;
+    }
+    .content {
+      padding: 30px 20px;
+    }
+    .button {
+      display: inline-block;
+      background-color: #4f46e5;
+      color: white;
+      text-decoration: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      font-weight: 600;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .button:hover {
+      background-color: #4338ca;
+    }
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #6b7280;
+      font-size: 0.9em;
+      border-top: 1px solid #eaeaea;
+    }
+    .tips {
+      background-color: #f3f4f6;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+    .tips h3 {
+      margin-top: 0;
+      color: #4f46e5;
+    }
+    @media only screen and (max-width: 620px) {
+      .container {
+        width: 100%;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 style="color: #4f46e5;">Pokemon Trades</h1>
+    </div>
+    
+    <div class="content">
+      <h2>Welcome to Pokemon Trades!</h2>
+      
+      <p>Hi {{username}},</p>
+      
+      <p>Thanks for joining Pokemon Trades! We're excited to have you as part of our community of collectors and traders.</p>
+      
+      <p>With your new account, you can:</p>
+      <ul>
+        <li>Create trade listings for your Pokemon cards</li>
+        <li>Browse and search for cards other collectors are offering</li>
+        <li>Make and receive trade offers</li>
+        <li>Build your collection through smart trading</li>
+      </ul>
+      
+      <div style="text-align: center;">
+        <a href="{{login_url}}" class="button">Log In to Your Account</a>
+      </div>
+      
+      <div class="tips">
+        <h3>Quick Tips to Get Started</h3>
+        <ol>
+          <li>Add your personal Friend Code to make connecting easier</li>
+          <li>Create your first trade listing</li>
+          <li>Browse available trades to find cards for your collection</li>
+        </ol>
+      </div>
+      
+      <p>If you have any questions or need assistance, don't hesitate to contact our support team.</p>
+      
+      <p>Happy trading!</p>
+      <p>The Pokemon Trades Team</p>
+    </div>
+    
+    <div class="footer">
+      <p>&copy; 2023 Pokemon Trades. All rights reserved.</p>
+      <p>
+        <small>This email was sent to {{email}}. If you didn't create an account, please disregard this email.</small>
+      </p>
+    </div>
+  </div>
+</body>
+</html> 

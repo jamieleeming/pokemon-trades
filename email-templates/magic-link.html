@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Pokemon Trades Login Link</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #eaeaea;
+    }
+    .header img {
+      max-width: 200px;
+    }
+    .content {
+      padding: 30px 20px;
+    }
+    .button {
+      display: inline-block;
+      background-color: #4f46e5;
+      color: white;
+      text-decoration: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      font-weight: 600;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .button:hover {
+      background-color: #4338ca;
+    }
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #6b7280;
+      font-size: 0.9em;
+      border-top: 1px solid #eaeaea;
+    }
+    .security {
+      background-color: #f3f4f6;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      font-size: 0.9em;
+    }
+    .expiry {
+      font-style: italic;
+      color: #6b7280;
+    }
+    @media only screen and (max-width: 620px) {
+      .container {
+        width: 100%;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 style="color: #4f46e5;">Pokemon Trades</h1>
+    </div>
+    
+    <div class="content">
+      <h2>Your Login Link</h2>
+      
+      <p>Hello,</p>
+      
+      <p>Use the button below to securely log in to your Pokemon Trades account. No password required!</p>
+      
+      <div style="text-align: center;">
+        <a href="{{magic_link_url}}" class="button">Log In to Pokemon Trades</a>
+      </div>
+      
+      <p class="expiry">This link will expire in 10 minutes and can only be used once.</p>
+      
+      <div class="security">
+        <strong>Security Tip:</strong> For your protection, we recommend closing your browser after logging in if you're using a shared or public computer.
+      </div>
+      
+      <p>If you didn't request this login link, please ignore this email.</p>
+      
+      <p>Happy trading!</p>
+      <p>The Pokemon Trades Team</p>
+    </div>
+    
+    <div class="footer">
+      <p>&copy; 2023 Pokemon Trades. All rights reserved.</p>
+      <p>
+        <small>This email was sent to {{email}} regarding your Pokemon Trades account.</small>
+      </p>
+    </div>
+  </div>
+</body>
+</html> 
