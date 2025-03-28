@@ -37,7 +37,7 @@ const Login = () => {
           setIsForgotPassword(false);
         }
       } else if (isSignUp) {
-        const { error } = await signUp(email, password, {
+        const { error, success } = await signUp(email, password, {
           name,
           username,
           friend_code: friendCode || undefined
@@ -45,8 +45,14 @@ const Login = () => {
         
         if (error) {
           setError(error.message);
-        } else {
-          navigate('/trades');
+        } else if (success) {
+          setSuccessMessage(`Your account has been created! Please check your email (${email}) to confirm your account before signing in.`);
+          // Reset the form and switch back to sign-in mode
+          setName('');
+          setUsername('');
+          setFriendCode('');
+          setPassword('');
+          setIsSignUp(false);
         }
       } else {
         const { error } = await signIn(email, password);
@@ -182,14 +188,14 @@ const Login = () => {
             </div>
 
             {error && (
-              <div className="rounded-lg bg-red-50 p-2">
-                <div className="text-xs text-red-700">{error}</div>
+              <div className="rounded-lg bg-red-50 p-3 border border-red-200">
+                <div className="text-sm text-red-800">{error}</div>
               </div>
             )}
 
             {successMessage && (
-              <div className="rounded-lg bg-green-50 p-2">
-                <div className="text-xs text-green-700">{successMessage}</div>
+              <div className="rounded-lg bg-green-50 p-3 border border-green-200">
+                <div className="text-sm text-green-800">{successMessage}</div>
               </div>
             )}
 
