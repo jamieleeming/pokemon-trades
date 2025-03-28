@@ -7,6 +7,9 @@ interface TradeDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOfferTrade?: (tradeId: number) => Promise<void>;
+  onRescindOffer?: (tradeId: number) => Promise<void>;
+  onRejectOffer?: (tradeId: number) => Promise<void>;
+  onDeleteTrade?: (tradeId: number) => Promise<void>;
   isProcessing?: boolean;
   processingTradeId?: number | null;
 }
@@ -16,6 +19,9 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
   isOpen,
   onClose,
   onOfferTrade,
+  onRescindOffer,
+  onRejectOffer,
+  onDeleteTrade,
   isProcessing = false,
   processingTradeId = null
 }) => {
@@ -56,15 +62,58 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
     };
   }, [isOpen, onClose]);
 
+  // Check permissions for each action
   const canOfferTrade = trade && 
     trade.status === TRADE_STATUS.OPEN && 
     user && 
     trade.users?.id !== user.id &&
     onOfferTrade;
 
+  const canCancelOffer = trade && 
+    trade.status === TRADE_STATUS.OFFERED && 
+    user && 
+    trade.offered_by === user.id &&
+    onRescindOffer;
+
+  const canRejectOffer = trade && 
+    trade.status === TRADE_STATUS.OFFERED && 
+    user && 
+    trade.users?.id === user.id && 
+    trade.offered_by &&
+    onRejectOffer;
+
+  const canDeleteTrade = trade && 
+    trade.status === TRADE_STATUS.OPEN && 
+    user && 
+    trade.users?.id === user.id && 
+    !trade.offered_by &&
+    onDeleteTrade;
+
+  // Handle actions
   const handleOfferClick = async () => {
     if (trade && onOfferTrade) {
       await onOfferTrade(trade.id);
+      onClose();
+    }
+  };
+
+  const handleCancelOfferClick = async () => {
+    if (trade && onRescindOffer) {
+      await onRescindOffer(trade.id);
+      onClose();
+    }
+  };
+
+  const handleRejectOfferClick = async () => {
+    if (trade && onRejectOffer) {
+      await onRejectOffer(trade.id);
+      onClose();
+    }
+  };
+
+  const handleDeleteTradeClick = async () => {
+    if (trade && onDeleteTrade) {
+      await onDeleteTrade(trade.id);
       onClose();
     }
   };
@@ -174,8 +223,9 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
             </div>
           </div>
           
-          {/* Close button on mobile */}
+          {/* Action buttons */}
           <div className="mt-4 flex flex-col space-y-3">
+            {/* Offer trade button */}
             {canOfferTrade && (
               <button
                 onClick={handleOfferClick}
@@ -185,6 +235,41 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
                 {isProcessing && processingTradeId === trade.id ? 'Processing...' : 'Offer Trade'}
               </button>
             )}
+
+            {/* Cancel offer button */}
+            {canCancelOffer && (
+              <button
+                onClick={handleCancelOfferClick}
+                disabled={isProcessing && processingTradeId === trade.id}
+                className="w-full py-2 px-4 bg-gray-500 hover:bg-gray-600 text-white rounded-md font-medium transition-colors disabled:opacity-50"
+              >
+                {isProcessing && processingTradeId === trade.id ? 'Processing...' : 'Cancel Offer'}
+              </button>
+            )}
+
+            {/* Reject offer button */}
+            {canRejectOffer && (
+              <button
+                onClick={handleRejectOfferClick}
+                disabled={isProcessing && processingTradeId === trade.id}
+                className="w-full py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-md font-medium transition-colors disabled:opacity-50"
+              >
+                {isProcessing && processingTradeId === trade.id ? 'Processing...' : 'Reject Offer'}
+              </button>
+            )}
+
+            {/* Delete trade button */}
+            {canDeleteTrade && (
+              <button
+                onClick={handleDeleteTradeClick}
+                disabled={isProcessing && processingTradeId === trade.id}
+                className="w-full py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-md font-medium transition-colors disabled:opacity-50"
+              >
+                {isProcessing && processingTradeId === trade.id ? 'Processing...' : 'Delete Trade'}
+              </button>
+            )}
+
+            {/* Close button - always visible */}
             <button
               onClick={onClose}
               className="w-full py-2 px-4 bg-gray-200 hover:bg-gray-300 rounded-md text-gray-800 font-medium transition-colors"
@@ -203,25 +288,25 @@ const renderTradeStatus = (trade: Trade) => {
   switch (trade.status) {
     case TRADE_STATUS.OPEN:
       return (
-        <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800 ml-1">
+        <span className="rounded-full bg-white border border-gray-300 px-2 py-1 text-xs font-semibold text-gray-800 ml-1">
           Open
         </span>
       );
     case TRADE_STATUS.OFFERED:
       return (
-        <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800 ml-1">
+        <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800 ml-1">
           Offered
         </span>
       );
     case TRADE_STATUS.ACCEPTED:
       return (
-        <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800 ml-1">
+        <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800 ml-1">
           Accepted
         </span>
       );
     case TRADE_STATUS.COMPLETE:
       return (
-        <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800 ml-1">
+        <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800 ml-1">
           Complete
         </span>
       );

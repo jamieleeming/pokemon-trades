@@ -283,6 +283,65 @@ const Trades = () => {
     }
   };
 
+  // Handle rejecting an offer
+  const handleRejectOffer = async (tradeId: number) => {
+    if (!user) return;
+    
+    try {
+      setProcessingTradeId(tradeId);
+      setActionLoading(true);
+      
+      const { error } = await supabase
+        .from('trades')
+        .update({ 
+          offered_by: null,
+          status: TRADE_STATUS.OPEN
+        })
+        .eq('id', tradeId)
+        .eq('user_id', user.id); // Only the trade owner can reject offers
+      
+      if (error) throw error;
+      
+      // Force reload data after action
+      await loadData(true);
+      showNotification('Trade offer rejected successfully', 'success');
+    } catch (err) {
+      console.error('Error rejecting offer:', err);
+      showNotification('Failed to reject offer', 'error');
+    } finally {
+      setActionLoading(false);
+      setProcessingTradeId(null);
+    }
+  };
+
+  // Handle deleting a trade
+  const handleDeleteTrade = async (tradeId: number) => {
+    if (!user) return;
+    
+    try {
+      setProcessingTradeId(tradeId);
+      setActionLoading(true);
+      
+      const { error } = await supabase
+        .from('trades')
+        .delete()
+        .eq('id', tradeId)
+        .eq('user_id', user.id); // Only the trade owner can delete their trades
+      
+      if (error) throw error;
+      
+      // Force reload data after action
+      await loadData(true);
+      showNotification('Trade deleted successfully', 'success');
+    } catch (err) {
+      console.error('Error deleting trade:', err);
+      showNotification('Failed to delete trade', 'error');
+    } finally {
+      setActionLoading(false);
+      setProcessingTradeId(null);
+    }
+  };
+
   // Filter trades
   const filteredTrades = useMemo(() => {
     return trades.filter(trade => {
@@ -314,25 +373,25 @@ const Trades = () => {
     switch (trade.status) {
       case TRADE_STATUS.OPEN:
         return (
-          <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800">
+          <span className="rounded-full bg-white border border-gray-300 px-2 py-1 text-xs font-semibold text-gray-800">
             Open
           </span>
         );
       case TRADE_STATUS.OFFERED:
         return (
-          <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">
+          <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800">
             Offered
           </span>
         );
       case TRADE_STATUS.ACCEPTED:
         return (
-          <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800">
+          <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">
             Accepted
           </span>
         );
       case TRADE_STATUS.COMPLETE:
         return (
-          <span className="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800">
+          <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800">
             Complete
           </span>
         );
@@ -350,25 +409,25 @@ const Trades = () => {
     switch (trade.status) {
       case TRADE_STATUS.OPEN:
         return (
-          <span className="inline-block rounded-full bg-yellow-100 px-1.5 py-0.5 text-xs font-semibold text-yellow-800">
+          <span className="inline-block rounded-full bg-white border border-gray-300 px-1.5 py-0.5 text-xs font-semibold text-gray-800">
             Open
           </span>
         );
       case TRADE_STATUS.OFFERED:
         return (
-          <span className="inline-block rounded-full bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-800">
+          <span className="inline-block rounded-full bg-yellow-100 px-1.5 py-0.5 text-xs font-semibold text-yellow-800">
             Offered
           </span>
         );
       case TRADE_STATUS.ACCEPTED:
         return (
-          <span className="inline-block rounded-full bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-800">
+          <span className="inline-block rounded-full bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-800">
             Accepted
           </span>
         );
       case TRADE_STATUS.COMPLETE:
         return (
-          <span className="inline-block rounded-full bg-gray-100 px-1.5 py-0.5 text-xs font-semibold text-gray-800">
+          <span className="inline-block rounded-full bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-800">
             Complete
           </span>
         );
@@ -571,37 +630,93 @@ const Trades = () => {
                       {renderTradeStatus(trade)}
                     </td>
                     <td className="px-6 py-4">
-                      {!trade.offered_by && trade.status === TRADE_STATUS.OPEN && trade.users?.id !== user?.id && (
-                        <button
-                          onClick={() => handleOfferTrade(trade.id)}
-                          className="btn btn-primary text-xs px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                          disabled={actionLoading && processingTradeId === trade.id}
-                        >
-                          {actionLoading && processingTradeId === trade.id ? (
-                            <span>Processing...</span>
-                          ) : (
-                            <span>Offer Trade</span>
+                      {/* Non-owner actions */}
+                      {trade.users?.id !== user?.id && (
+                        <>
+                          {/* Offer trade button (for non-owners when trade is open) */}
+                          {!trade.offered_by && trade.status === TRADE_STATUS.OPEN && (
+                            <button
+                              onClick={() => handleOfferTrade(trade.id)}
+                              className="btn btn-primary text-xs px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                              disabled={actionLoading && processingTradeId === trade.id}
+                            >
+                              {actionLoading && processingTradeId === trade.id ? (
+                                <span>Processing...</span>
+                              ) : (
+                                <span>Offer Trade</span>
+                              )}
+                            </button>
                           )}
-                        </button>
+                          
+                          {/* Cancel offer button (for users who have made an offer) */}
+                          {trade.offered_by === user?.id && trade.status === TRADE_STATUS.OFFERED && (
+                            <button
+                              onClick={() => handleRescindOffer(trade.id)}
+                              className="btn btn-secondary text-xs px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                              disabled={actionLoading && processingTradeId === trade.id}
+                            >
+                              {actionLoading && processingTradeId === trade.id ? (
+                                <span>Processing...</span>
+                              ) : (
+                                <span>Cancel Offer</span>
+                              )}
+                            </button>
+                          )}
+                        </>
                       )}
-                      {trade.users?.id === user?.id && trade.status === TRADE_STATUS.OFFERED && trade.offered_by && (
-                        <div>
-                          <span className="text-sm font-medium text-green-600">
-                            {trade.offerers ? (
-                              <>Offered by {trade.offerers.username || 'Unknown User'}</>
-                            ) : (
-                              <>Offered by Unknown User</>
-                            )}
-                          </span>
-                          {trade.offerers?.friend_code && (
-                            <div className="mt-1 text-xs text-gray-500">
-                              Friend Code: {trade.offerers.friend_code}
-                            </div>
+                      
+                      {/* Trade owner actions */}
+                      {trade.users?.id === user?.id && (
+                        <div className="flex flex-col space-y-2">
+                          {/* Reject offer button (for owners when trade has an offer) */}
+                          {trade.status === TRADE_STATUS.OFFERED && trade.offered_by && (
+                            <>
+                              <div>
+                                <span className="text-sm font-medium text-green-600">
+                                  {trade.offerers ? (
+                                    <>Offered by {trade.offerers.username || 'Unknown User'}</>
+                                  ) : (
+                                    <>Offered by Unknown User</>
+                                  )}
+                                </span>
+                                {trade.offerers?.friend_code && (
+                                  <div className="mt-1 text-xs text-gray-500">
+                                    Friend Code: {trade.offerers.friend_code}
+                                  </div>
+                                )}
+                              </div>
+                              <button
+                                onClick={() => handleRejectOffer(trade.id)}
+                                className="btn btn-secondary text-xs px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                                disabled={actionLoading && processingTradeId === trade.id}
+                              >
+                                {actionLoading && processingTradeId === trade.id ? (
+                                  <span>Processing...</span>
+                                ) : (
+                                  <span>Reject Offer</span>
+                                )}
+                              </button>
+                            </>
+                          )}
+                          
+                          {/* Delete trade button (for owners when trade has no offer) */}
+                          {trade.status === TRADE_STATUS.OPEN && !trade.offered_by && (
+                            <>
+                              <span className="text-sm font-medium text-gray-500 mb-2">Your request</span>
+                              <button
+                                onClick={() => handleDeleteTrade(trade.id)}
+                                className="btn btn-danger text-xs px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                                disabled={actionLoading && processingTradeId === trade.id}
+                              >
+                                {actionLoading && processingTradeId === trade.id ? (
+                                  <span>Processing...</span>
+                                ) : (
+                                  <span>Delete Trade</span>
+                                )}
+                              </button>
+                            </>
                           )}
                         </div>
-                      )}
-                      {trade.users?.id === user?.id && trade.status === TRADE_STATUS.OPEN && !trade.offered_by && (
-                        <span className="text-sm font-medium text-gray-500">Your request</span>
                       )}
                     </td>
                   </tr>
@@ -664,20 +779,77 @@ const Trades = () => {
                   
                   {/* Actions */}
                   <div className="flex-shrink-0 flex flex-col items-center justify-center space-y-2">
-                    {!trade.offered_by && trade.status === TRADE_STATUS.OPEN && trade.users?.id !== user?.id && (
-                      <button
-                        onClick={() => handleOfferTrade(trade.id)}
-                        className="btn btn-primary text-xs px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors w-20 text-center"
-                        disabled={actionLoading && processingTradeId === trade.id}
-                      >
-                        {actionLoading && processingTradeId === trade.id ? (
-                          <span>...</span>
-                        ) : (
-                          <span>Offer</span>
+                    {/* Non-owner actions */}
+                    {trade.users?.id !== user?.id && (
+                      <>
+                        {/* Offer trade button (for non-owners when trade is open) */}
+                        {!trade.offered_by && trade.status === TRADE_STATUS.OPEN && (
+                          <button
+                            onClick={() => handleOfferTrade(trade.id)}
+                            className="btn btn-primary text-xs px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors w-20 text-center"
+                            disabled={actionLoading && processingTradeId === trade.id}
+                          >
+                            {actionLoading && processingTradeId === trade.id ? (
+                              <span>...</span>
+                            ) : (
+                              <span>Offer</span>
+                            )}
+                          </button>
                         )}
-                      </button>
+                        
+                        {/* Cancel offer button (for users who have made an offer) */}
+                        {trade.offered_by === user?.id && trade.status === TRADE_STATUS.OFFERED && (
+                          <button
+                            onClick={() => handleRescindOffer(trade.id)}
+                            className="btn btn-secondary text-xs px-3 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors w-20 text-center"
+                            disabled={actionLoading && processingTradeId === trade.id}
+                          >
+                            {actionLoading && processingTradeId === trade.id ? (
+                              <span>...</span>
+                            ) : (
+                              <span>Cancel</span>
+                            )}
+                          </button>
+                        )}
+                      </>
                     )}
                     
+                    {/* Trade owner actions */}
+                    {trade.users?.id === user?.id && (
+                      <>
+                        {/* Reject offer button (for owners when trade has an offer) */}
+                        {trade.status === TRADE_STATUS.OFFERED && trade.offered_by && (
+                          <button
+                            onClick={() => handleRejectOffer(trade.id)}
+                            className="btn btn-secondary text-xs px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors w-20 text-center"
+                            disabled={actionLoading && processingTradeId === trade.id}
+                          >
+                            {actionLoading && processingTradeId === trade.id ? (
+                              <span>...</span>
+                            ) : (
+                              <span>Reject</span>
+                            )}
+                          </button>
+                        )}
+                        
+                        {/* Delete trade button (for owners when trade has no offer) */}
+                        {trade.status === TRADE_STATUS.OPEN && !trade.offered_by && (
+                          <button
+                            onClick={() => handleDeleteTrade(trade.id)}
+                            className="btn btn-danger text-xs px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors w-20 text-center"
+                            disabled={actionLoading && processingTradeId === trade.id}
+                          >
+                            {actionLoading && processingTradeId === trade.id ? (
+                              <span>...</span>
+                            ) : (
+                              <span>Delete</span>
+                            )}
+                          </button>
+                        )}
+                      </>
+                    )}
+                    
+                    {/* Details button always visible */}
                     <button
                       onClick={() => handleOpenTradeDetails(trade)}
                       className="text-xs font-medium px-3 py-1.5 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors w-20 text-center"
@@ -698,6 +870,9 @@ const Trades = () => {
         isOpen={isModalOpen}
         onClose={handleCloseTradeDetails}
         onOfferTrade={handleOfferTrade}
+        onRescindOffer={handleRescindOffer}
+        onRejectOffer={handleRejectOffer}
+        onDeleteTrade={handleDeleteTrade}
         isProcessing={actionLoading}
         processingTradeId={processingTradeId}
       />
