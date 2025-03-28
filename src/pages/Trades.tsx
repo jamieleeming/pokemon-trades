@@ -87,6 +87,27 @@ const Trades = () => {
     setNotification(prev => ({ ...prev, isVisible: false }));
   }, []);
 
+  // Helper to create database notifications for users
+  const createDbNotification = useCallback(async (targetUserId: string, message: string) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .insert({
+          user_id: targetUserId,
+          message: message,
+          viewed: false
+        });
+      
+      if (error) {
+        console.error('Error creating notification:', error);
+      }
+    } catch (err) {
+      console.error('Failed to create notification:', err);
+    }
+  }, [user]);
+
   // Check if data needs to be reloaded
   const needsReload = useCallback(() => {
     if (!dataLoadedRef.current) return true;
@@ -230,6 +251,17 @@ const Trades = () => {
       setProcessingTradeId(tradeId);
       setActionLoading(true);
       
+      // Get the trade details before updating
+      const { data: tradeDetails } = await supabase
+        .from('trades')
+        .select(`
+          *,
+          cards:card_id (*),
+          users:user_id (*)
+        `)
+        .eq('id', tradeId)
+        .single();
+      
       const { error } = await supabase
         .from('trades')
         .update({ 
@@ -239,6 +271,12 @@ const Trades = () => {
         .eq('id', tradeId);
       
       if (error) throw error;
+      
+      // Create notification for the trade owner
+      if (tradeDetails && tradeDetails.users && tradeDetails.cards) {
+        const message = `${user.user_metadata.username || 'A user'} has offered to trade you their ${tradeDetails.cards.card_name} (${tradeDetails.cards.pack})`;
+        await createDbNotification(tradeDetails.users.id, message);
+      }
       
       // Force reload data after action
       await loadData(true);
@@ -291,6 +329,18 @@ const Trades = () => {
       setProcessingTradeId(tradeId);
       setActionLoading(true);
       
+      // Get the trade details before updating
+      const { data: tradeDetails } = await supabase
+        .from('trades')
+        .select(`
+          *,
+          cards:card_id (*),
+          users:user_id (*),
+          offerers:offered_by (*)
+        `)
+        .eq('id', tradeId)
+        .single();
+      
       const { error } = await supabase
         .from('trades')
         .update({ 
@@ -300,6 +350,12 @@ const Trades = () => {
         .eq('user_id', user.id); // Only the trade owner can accept offers
       
       if (error) throw error;
+      
+      // Create notification for the trade offerer
+      if (tradeDetails && tradeDetails.cards && tradeDetails.offered_by && tradeDetails.offerers) {
+        const message = `${user.user_metadata.username || 'A user'} has accepted your offer for ${tradeDetails.cards.card_name} (${tradeDetails.cards.pack})`;
+        await createDbNotification(tradeDetails.offered_by, message);
+      }
       
       // Force reload data after action
       await loadData(true);
@@ -321,6 +377,18 @@ const Trades = () => {
       setProcessingTradeId(tradeId);
       setActionLoading(true);
       
+      // Get the trade details before updating
+      const { data: tradeDetails } = await supabase
+        .from('trades')
+        .select(`
+          *,
+          cards:card_id (*),
+          users:user_id (*),
+          offerers:offered_by (*)
+        `)
+        .eq('id', tradeId)
+        .single();
+      
       const { error } = await supabase
         .from('trades')
         .update({ 
@@ -331,6 +399,12 @@ const Trades = () => {
         .eq('user_id', user.id); // Only the trade owner can reject offers
       
       if (error) throw error;
+      
+      // Create notification for the trade offerer
+      if (tradeDetails && tradeDetails.cards && tradeDetails.offered_by && tradeDetails.offerers) {
+        const message = `${user.user_metadata.username || 'A user'} has rejected your offer for ${tradeDetails.cards.card_name} (${tradeDetails.cards.pack})`;
+        await createDbNotification(tradeDetails.offered_by, message);
+      }
       
       // Force reload data after action
       await loadData(true);
