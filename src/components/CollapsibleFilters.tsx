@@ -37,14 +37,14 @@ const CollapsibleFilters: React.FC<CollapsibleFiltersProps> = ({
   };
 
   return (
-    <div className="mb-6 rounded-lg bg-white shadow-md">
+    <div className="mb-6 rounded-lg bg-white p-4 shadow-md">
       <div 
-        className={`flex items-center justify-between cursor-pointer ${isExpanded ? 'p-4 pb-0' : 'py-4 px-4'}`}
+        className="flex items-center justify-between cursor-pointer py-1"
         onClick={toggleExpanded}
       >
         <h2 className="text-xl font-semibold">{title}</h2>
         <button 
-          className="text-gray-500 hover:text-gray-700 focus:outline-none md:hidden"
+          className="text-gray-500 hover:text-gray-700 focus:outline-none md:hidden flex items-center justify-center h-8 w-8"
           aria-expanded={isExpanded}
           aria-label={isExpanded ? "Collapse filters" : "Expand filters"}
         >
@@ -62,8 +62,8 @@ const CollapsibleFilters: React.FC<CollapsibleFiltersProps> = ({
       
       {/* Filter content - collapsible on mobile */}
       <div 
-        className={`transition-all duration-300 ease-in-out overflow-hidden ${
-          isExpanded ? 'max-h-96 opacity-100 p-4 pt-4' : 'max-h-0 opacity-0 md:max-h-96 md:opacity-100 md:p-4'
+        className={`mt-4 transition-all duration-300 ease-in-out overflow-hidden ${
+          isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 md:max-h-96 md:opacity-100'
         }`}
       >
         {children}
