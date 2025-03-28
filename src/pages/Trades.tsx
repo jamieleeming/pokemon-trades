@@ -637,7 +637,7 @@ const Trades = () => {
                           {!trade.offered_by && trade.status === TRADE_STATUS.OPEN && (
                             <button
                               onClick={() => handleOfferTrade(trade.id)}
-                              className="btn btn-primary text-xs px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                              className="btn btn-primary text-xs px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors w-28 text-center"
                               disabled={actionLoading && processingTradeId === trade.id}
                             >
                               {actionLoading && processingTradeId === trade.id ? (
@@ -652,7 +652,7 @@ const Trades = () => {
                           {trade.offered_by === user?.id && trade.status === TRADE_STATUS.OFFERED && (
                             <button
                               onClick={() => handleRescindOffer(trade.id)}
-                              className="btn btn-secondary text-xs px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                              className="btn btn-secondary text-xs px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors w-28 text-center"
                               disabled={actionLoading && processingTradeId === trade.id}
                             >
                               {actionLoading && processingTradeId === trade.id ? (
@@ -687,7 +687,7 @@ const Trades = () => {
                               </div>
                               <button
                                 onClick={() => handleRejectOffer(trade.id)}
-                                className="btn btn-secondary text-xs px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                                className="btn btn-secondary text-xs px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors w-28 text-center"
                                 disabled={actionLoading && processingTradeId === trade.id}
                               >
                                 {actionLoading && processingTradeId === trade.id ? (
@@ -705,7 +705,7 @@ const Trades = () => {
                               <span className="text-sm font-medium text-gray-500 mb-2">Your request</span>
                               <button
                                 onClick={() => handleDeleteTrade(trade.id)}
-                                className="btn btn-danger text-xs px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                                className="btn btn-danger text-xs px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors w-28 text-center"
                                 disabled={actionLoading && processingTradeId === trade.id}
                               >
                                 {actionLoading && processingTradeId === trade.id ? (
