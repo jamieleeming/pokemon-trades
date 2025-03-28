@@ -45,7 +45,9 @@ const Trades = () => {
   const [packFilter, setPackFilter] = useState('');
   const [rarityFilter, setRarityFilter] = useState('');
   const [elementFilter, setElementFilter] = useState('');
-  const [tradeableOnly, setTradeableOnly] = useState(false);
+  const [tradeableOnly, setTradeableOnly] = useState(true);
+  const [myTradesOnly, setMyTradesOnly] = useState(false);
+  const [hideMyTrades, setHideMyTrades] = useState(false);
   
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
@@ -459,10 +461,16 @@ const Trades = () => {
       const matchesRarity = rarityFilter === '' || trade.cards.card_rarity === rarityFilter;
       const matchesElement = elementFilter === '' || trade.cards.card_element === elementFilter;
       const matchesTradeable = !tradeableOnly || trade.cards.tradeable === true;
+      const matchesMyTrades = !myTradesOnly || (
+        trade.user_id === user?.id || 
+        trade.offered_by === user?.id
+      );
+      const matchesHideMyTrades = !hideMyTrades || trade.user_id !== user?.id;
       
-      return matchesSearch && matchesPack && matchesRarity && matchesElement && matchesTradeable;
+      return matchesSearch && matchesPack && matchesRarity && matchesElement && 
+             matchesTradeable && matchesMyTrades && matchesHideMyTrades;
     });
-  }, [trades, searchQuery, packFilter, rarityFilter, elementFilter, tradeableOnly]);
+  }, [trades, searchQuery, packFilter, rarityFilter, elementFilter, tradeableOnly, myTradesOnly, hideMyTrades, user]);
 
   // Determine if the error is likely a database setup issue
   const isDbSetupIssue = error && (
@@ -645,7 +653,7 @@ const Trades = () => {
             </select>
           </div>
           
-          <div className="flex items-end lg:col-span-4">
+          <div className="flex items-end lg:col-span-4 space-x-6">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -654,6 +662,24 @@ const Trades = () => {
                 className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <span className="text-sm font-medium text-gray-700">Tradeable Only</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={myTradesOnly}
+                onChange={(e) => setMyTradesOnly(e.target.checked)}
+                className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm font-medium text-gray-700">My Trades</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={hideMyTrades}
+                onChange={(e) => setHideMyTrades(e.target.checked)}
+                className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm font-medium text-gray-700">Hide My Trades</span>
             </label>
           </div>
         </div>

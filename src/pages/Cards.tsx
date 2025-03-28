@@ -34,6 +34,7 @@ const Cards = () => {
   const [rarityFilter, setRarityFilter] = useState('');
   const [elementFilter, setElementFilter] = useState('');
   const [tradeableOnly, setTradeableOnly] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('All');
   
   // Filter options
   const [packs, setPacks] = useState<string[]>([]);
@@ -179,7 +180,7 @@ const Cards = () => {
     }
   }, [user, selectedCards, showNotification]);
 
-  // Memoize filtered cards
+  // Filter trades
   const filteredCards = useMemo(() => {
     return cards.filter(card => {
       const matchesSearch = searchQuery === '' || 
@@ -190,10 +191,13 @@ const Cards = () => {
       const matchesRarity = rarityFilter === '' || card.card_rarity === rarityFilter;
       const matchesElement = elementFilter === '' || card.card_element === elementFilter;
       const matchesTradeable = !tradeableOnly || card.tradeable === true;
+      const matchesStatus = statusFilter === 'All' || 
+        (statusFilter === 'Selected' && selectedCards.includes(card.id)) ||
+        (statusFilter === 'Not Selected' && !selectedCards.includes(card.id));
       
-      return matchesSearch && matchesPack && matchesRarity && matchesElement && matchesTradeable;
+      return matchesSearch && matchesPack && matchesRarity && matchesElement && matchesTradeable && matchesStatus;
     });
-  }, [cards, searchQuery, packFilter, rarityFilter, elementFilter, tradeableOnly]);
+  }, [cards, searchQuery, packFilter, rarityFilter, elementFilter, tradeableOnly, statusFilter, selectedCards]);
 
   // Show database setup guide if there's a database error
   if (error?.includes('relation') || error?.includes('does not exist')) {
@@ -295,6 +299,23 @@ const Cards = () => {
                   {element}
                 </option>
               ))}
+            </select>
+          </div>
+          
+          {/* Status filter */}
+          <div>
+            <label htmlFor="status" className="mb-1 block text-sm font-medium text-gray-700">
+              Status
+            </label>
+            <select
+              id="status"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="form-input"
+            >
+              <option value="All">All</option>
+              <option value="Selected">Selected</option>
+              <option value="Not Selected">Not Selected</option>
             </select>
           </div>
           

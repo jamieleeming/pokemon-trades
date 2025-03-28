@@ -156,11 +156,10 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
         </div>
 
         <div className="p-5">
-          {/* Card Information - header removed */}
+          {/* Card Information */}
           <div className="mb-6">
             <div className="bg-gray-50 p-4 rounded-lg">
               <div className="flex flex-row items-start">
-                {/* Card image - now always on the left */}
                 {trade.cards?.image_url && (
                   <div className="mr-4 flex-shrink-0">
                     <img 
@@ -173,7 +172,6 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
                     />
                   </div>
                 )}
-                {/* Card details - now always on the right */}
                 <div className="flex-grow">
                   <p className="font-semibold text-lg mb-2">{trade.cards?.card_name || 'Unknown Card'}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -197,43 +195,53 @@ const TradeDetailsModal: React.FC<TradeDetailsModalProps> = ({
             </div>
           </div>
 
-          {/* Trade Information */}
+          {/* Trade Details - Combined Section */}
           <div className="mb-6">
-            <h4 className="text-lg font-medium text-gray-800 mb-3">Trade Information</h4>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="grid gap-3">
-                <div>
-                  <p className="mb-1 text-sm">
-                    <span className="font-medium">Requested by:</span>{' '}
-                    {trade.users?.username || 'Unknown User'}
+            <h4 className="text-lg font-medium text-gray-800 mb-3">Information</h4>
+            <div className="bg-gray-50 rounded-lg divide-y divide-gray-200">
+              {/* Trade Owner Information */}
+              <div className="p-4">
+                <p className="text-sm font-medium text-gray-700 mb-2">Trade Owner</p>
+                <p className="text-sm">
+                  <span className="font-medium">Username:</span>{' '}
+                  {trade.users?.username || 'Unknown User'}
+                </p>
+                {trade.users?.friend_code && (
+                  <p className="text-sm mt-2">
+                    <span className="font-medium">Friend Code:</span>{' '}
+                    {trade.users.friend_code}
                   </p>
-                  {trade.users?.friend_code && (
-                    <p className="mb-1 text-sm">
+                )}
+              </div>
+
+              {/* Offerer Information - show if there's an offer or if trade is accepted */}
+              {(trade.offered_by || trade.status === TRADE_STATUS.ACCEPTED) && trade.offerers && (
+                <div className="p-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">Trade Offerer</p>
+                  <p className="text-sm">
+                    <span className="font-medium">Username:</span>{' '}
+                    {trade.offerers.username || 'Unknown User'}
+                  </p>
+                  {trade.offerers.friend_code && (
+                    <p className="text-sm mt-2">
                       <span className="font-medium">Friend Code:</span>{' '}
-                      {trade.users.friend_code}
+                      {trade.offerers.friend_code}
                     </p>
                   )}
                 </div>
+              )}
 
-                <div>
-                  <p className="mb-1 text-sm">
-                    <span className="font-medium">Date Requested:</span>{' '}
-                    {new Date(trade.requested_date).toLocaleDateString()}
-                  </p>
-                  <p className="mb-1 text-sm">
-                    <span className="font-medium">Status:</span>{' '}
-                    {renderTradeStatus(trade)}
-                  </p>
-                </div>
-
-                {trade.offered_by && trade.status === TRADE_STATUS.OFFERED && trade.offerers && (
-                  <div className="mt-2 p-3 bg-green-50 rounded-lg">
-                    <p className="font-medium text-sm">Offered by: {trade.offerers.username || 'Unknown User'}</p>
-                    {trade.offerers.friend_code && (
-                      <p className="text-sm text-gray-700 mt-1">Friend Code: {trade.offerers.friend_code}</p>
-                    )}
-                  </div>
-                )}
+              {/* Trade Status Information */}
+              <div className="p-4">
+                <p className="text-sm font-medium text-gray-700 mb-2">Status Information</p>
+                <p className="text-sm">
+                  <span className="font-medium">Date Requested:</span>{' '}
+                  {new Date(trade.requested_date).toLocaleDateString()}
+                </p>
+                <p className="text-sm mt-2">
+                  <span className="font-medium">Status:</span>{' '}
+                  {renderTradeStatus(trade)}
+                </p>
               </div>
             </div>
           </div>
