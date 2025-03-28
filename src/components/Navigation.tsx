@@ -30,7 +30,7 @@ const Navigation = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -140,7 +140,7 @@ const Navigation = () => {
 
       {/* Mobile menu, show/hide based on menu state */}
       {isMenuOpen && (
-        <div className="md:hidden">
+        <div className="md:hidden absolute w-full bg-white shadow-lg">
           <div className="pt-2 pb-3 space-y-1">
             {user ? (
               <>

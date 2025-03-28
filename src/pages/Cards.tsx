@@ -321,7 +321,7 @@ const Cards = () => {
           .sort(([packA], [packB]) => packA.localeCompare(packB))
           .map(([pack, packCards]) => (
             <div key={pack} className="mb-6">
-              <h2 className="mb-2 text-xl sm:text-2xl font-bold text-gray-800 sticky top-0 bg-gray-100 p-2 rounded-lg z-10">{pack}</h2>
+              <h2 className="mb-2 text-xl sm:text-2xl font-bold text-gray-800 sticky top-16 bg-gray-100 p-2 rounded-lg z-10">{pack}</h2>
               <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                 {packCards.map((card) => {
                   // Skip cards with missing IDs

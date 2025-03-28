@@ -8,7 +8,7 @@ const Layout = () => {
     <AuthProvider>
       <div className="flex min-h-screen flex-col bg-gray-50">
         <Navigation />
-        <main className="flex-grow">
+        <main className="flex-grow pt-2">
           <Outlet />
         </main>
         <footer className="border-t border-gray-200 bg-white py-6">
