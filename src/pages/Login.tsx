@@ -79,24 +79,24 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="w-full max-w-md px-4 max-h-screen overflow-auto">
+        <div className="mb-4 text-center">
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
             {isForgotPassword 
               ? 'Reset your password' 
               : (isSignUp ? 'Create your account' : 'Welcome back')}
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-gray-600">
             {isForgotPassword 
               ? 'Enter your email to receive reset instructions'
               : (isSignUp ? 'Start your trading journey' : 'Sign in to continue trading')}
           </p>
         </div>
 
-        <div className="rounded-xl bg-white p-8 shadow-lg ring-1 ring-gray-200">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-4">
+        <div className="rounded-xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="space-y-3">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                   Email
@@ -182,21 +182,21 @@ const Login = () => {
             </div>
 
             {error && (
-              <div className="rounded-lg bg-red-50 p-4">
-                <div className="text-sm text-red-700">{error}</div>
+              <div className="rounded-lg bg-red-50 p-2">
+                <div className="text-xs text-red-700">{error}</div>
               </div>
             )}
 
             {successMessage && (
-              <div className="rounded-lg bg-green-50 p-4">
-                <div className="text-sm text-green-700">{successMessage}</div>
+              <div className="rounded-lg bg-green-50 p-2">
+                <div className="text-xs text-green-700">{successMessage}</div>
               </div>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className={`flex w-full justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors ${
+              className={`flex w-full justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors ${
                 loading ? 'cursor-not-allowed opacity-50' : ''
               }`}
             >
@@ -208,7 +208,7 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-4 text-center">
             {!isForgotPassword && (
               <button
                 type="button"
