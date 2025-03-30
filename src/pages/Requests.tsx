@@ -493,16 +493,19 @@ const Requests = () => {
           <p className="text-lg text-gray-600">No requests found matching your criteria</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg bg-white shadow-md">
+        <div className="overflow-x-auto rounded-lg bg-white shadow-md">
           <table className="w-full table-auto">
             <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-700">
               <tr>
-                <th className="px-6 py-3">Card</th>
-                <th className="px-6 py-3">Pack</th>
-                <th className="px-6 py-3">Rarity</th>
-                <th className="px-6 py-3">User</th>
-                <th className="px-6 py-3">Date Added</th>
-                <th className="px-6 py-3">Actions</th>
+                <th className="px-3 sm:px-6 py-3 sm:hidden">Card</th>
+                <th className="hidden sm:table-cell px-6 py-3">Image</th>
+                <th className="hidden sm:table-cell px-6 py-3">Name</th>
+                <th className="hidden sm:table-cell px-6 py-3">Number</th>
+                <th className="hidden sm:table-cell px-6 py-3">Pack</th>
+                <th className="hidden md:table-cell px-6 py-3">Rarity</th>
+                <th className="px-3 sm:px-6 py-3">Player</th>
+                <th className="hidden sm:table-cell px-6 py-3">Requested</th>
+                <th className="px-3 sm:px-6 py-3">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -513,49 +516,67 @@ const Requests = () => {
 
                 return (
                   <tr key={item.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
+                    <td className="px-3 sm:hidden py-4">
                       <div className="flex flex-col">
                         {item.cards?.image_url && (
                           <div className="mb-2">
                             <img 
                               src={item.cards.image_url} 
                               alt={item.cards.card_name || 'Card'}
-                              className="h-16 w-auto object-contain rounded"
+                              className="h-12 w-auto object-contain rounded"
                               onError={(e) => {
                                 e.currentTarget.style.display = 'none';
                               }}
                             />
                           </div>
                         )}
-                        <div className="font-medium text-gray-900">{item.cards?.card_name || 'Unknown Card'}</div>
-                        <div className="text-sm text-gray-500">
+                        <div className="font-medium text-gray-900 text-sm">{item.cards?.card_name || 'Unknown Card'}</div>
+                        <div className="text-xs text-gray-500">
                           #{String(item.cards?.card_number || '000').padStart(3, '0')}
-                          {item.cards?.card_element && (
-                            <span className="ml-1">· {item.cards.card_element}</span>
-                          )}
+                          <span className="ml-1">
+                            · {item.cards?.pack || 'Unknown Pack'}
+                          </span>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">{item.cards?.pack || 'Unknown Pack'}</td>
-                    <td className="px-6 py-4">{item.cards?.card_rarity || 'Unknown Rarity'}</td>
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{item.users?.username || 'Unknown User'}</div>
-                      <div className="text-sm text-gray-500">{item.users?.friend_code || 'No friend code'}</div>
+                    <td className="hidden sm:table-cell px-6 py-4">
+                      {item.cards?.image_url && (
+                        <img 
+                          src={item.cards.image_url} 
+                          alt={item.cards.card_name || 'Card'}
+                          className="h-16 w-auto object-contain rounded"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      )}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="hidden sm:table-cell px-6 py-4">
+                      <div className="font-medium text-gray-900">{item.cards?.card_name || 'Unknown Card'}</div>
+                    </td>
+                    <td className="hidden sm:table-cell px-6 py-4 text-gray-500">
+                      #{String(item.cards?.card_number || '000').padStart(3, '0')}
+                    </td>
+                    <td className="hidden sm:table-cell px-6 py-4">{item.cards?.pack || 'Unknown Pack'}</td>
+                    <td className="hidden md:table-cell px-6 py-4">{item.cards?.card_rarity || 'Unknown Rarity'}</td>
+                    <td className="px-3 sm:px-6 py-4">
+                      <div className="font-medium text-gray-900 text-sm sm:text-base">{item.users?.username || 'Unknown User'}</div>
+                      <div className="text-xs sm:text-sm text-gray-500">{item.users?.friend_code || 'No friend code'}</div>
+                    </td>
+                    <td className="hidden sm:table-cell px-6 py-4">
                       {new Date(item.created_at).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 sm:px-6 py-4">
                       <button
                         onClick={() => handleMakeOffer(item.id)}
                         disabled={isDisabled}
-                        className={`btn text-xs px-3 py-1 rounded-md transition-colors w-28 ${
+                        className={`btn text-xs px-2 sm:px-3 py-1 rounded-md transition-colors w-20 sm:w-28 ${
                           isDisabled
                             ? 'bg-gray-400 cursor-not-allowed'
                             : 'bg-blue-600 hover:bg-blue-700 text-white'
                         }`}
                       >
-                        {hasOffered ? 'Offered' : 'Make Offer'}
+                        {hasOffered ? 'Offered' : 'Offer'}
                       </button>
                     </td>
                   </tr>
