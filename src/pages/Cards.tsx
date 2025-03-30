@@ -389,7 +389,7 @@ const Cards = () => {
                       onClick={() => handleCardSelect(cardIdString)}
                     >
                       {isSelected && (
-                        <div className="absolute top-1 right-1 z-10 rounded-full bg-blue-500 p-1 shadow-sm">
+                        <div className="absolute top-1 right-1 z-20 rounded-full bg-blue-500 p-1 shadow-sm">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                           </svg>
@@ -406,8 +406,14 @@ const Cards = () => {
                         <h3 className="text-xs font-semibold truncate" title={card.card_name}>{card.card_name}</h3>
                         <div className="flex flex-wrap justify-center text-xs text-gray-600 gap-1">
                           <span>#{card.card_number}</span>
-                          <span className="hidden sm:inline">•</span>
-                          <span className="hidden sm:inline">{card.card_rarity}</span>
+                          <span>•</span>
+                          <span>{card.card_rarity}</span>
+                          {!card.tradeable && (
+                            <>
+                              <span>•</span>
+                              <span className="text-red-600">Not Tradeable</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
