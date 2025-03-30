@@ -364,7 +364,7 @@ const Requests = () => {
             The table below shows which cards players need to fill up their TCG Pocket dex.
           </p>
           <p className="mb-4">
-            Click Make Offer to let them know you can send them what they need. Then head over to the{' '}
+            Click "Offer" to let them know you can send them what they need. Then head over to the{' '}
             <a href="/offers" className="text-blue-600 hover:text-blue-800">
               Offers
             </a>{' '}
