@@ -45,6 +45,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
   // Function to update the user profile or create it if needed
   const ensureUserProfile = useCallback(async (user: User) => {
@@ -74,6 +75,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Function to handle session updates
   const handleSessionChange = useCallback((newSession: Session | null) => {
     setSession(newSession);
+    setUser(newSession?.user ?? null);
     
     // Ensure user profile exists if we have a session
     if (newSession?.user) {
@@ -81,85 +83,66 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, [ensureUserProfile]);
 
-  // Function to manually refresh the session
-  const refreshSession = async (): Promise<boolean> => {
+  // Function to refresh the session
+  const refreshSession = useCallback(async (): Promise<boolean> => {
     try {
-      logWithTimestamp('Manually refreshing session');
-      
-      // Use Supabase's built-in refresh mechanism
-      const { data, error } = await supabase.auth.refreshSession();
-      
-      if (error) {
-        logWithTimestamp('Session refresh failed', { error: error.message });
-        return false;
-      }
-      
-      if (data.session) {
-        handleSessionChange(data.session);
-        return true;
-      }
-      
-      return false;
-    } catch (err) {
-      logWithTimestamp('Session refresh error', { error: err });
+      const { data: { session: newSession } } = await supabase.auth.getSession();
+      handleSessionChange(newSession);
+      return true;
+    } catch (error) {
+      console.error('Error refreshing session:', error);
       return false;
     }
-  };
+  }, [handleSessionChange]);
 
   // Initialize auth state on component mount
   useEffect(() => {
-    // Get initial session
     const initializeAuth = async () => {
       try {
-        logWithTimestamp('Initializing auth state');
-        const { data } = await supabase.auth.getSession();
-        handleSessionChange(data.session);
-      } catch (err) {
-        console.error('Error getting initial session:', err);
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        handleSessionChange(initialSession);
       } finally {
         setLoading(false);
       }
     };
-    
+
     initializeAuth();
-    
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      // No longer logging every auth state change
-      handleSessionChange(newSession);
+  }, [handleSessionChange, refreshSession]);
+
+  // Set up auth state listener
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN') {
+        setUser(session?.user ?? null);
+        await refreshSession();
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null);
+      }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [handleSessionChange]);
+  }, [refreshSession]);
 
   // Add tab visibility handler
   useEffect(() => {
     const handleVisibilityChange = async () => {
-      if (document.visibilityState === 'visible' && session) {
-        // No longer logging visibility changes
-        
-        // Simply check if our current session is still valid
-        const { data } = await supabase.auth.getSession();
-        
-        if (!data.session && session) {
-          // Our stored session doesn't match Supabase's session
-          await refreshSession();
-        }
+      if (document.visibilityState === 'visible') {
+        await refreshSession();
       }
     };
-    
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    
+
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [session]);
+  }, [refreshSession]);
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       return { error, success: !error };
     } catch (error) {
       return { error, success: false };
@@ -211,7 +194,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const value = {
     session,
-    user: session?.user ?? null,
+    user,
     loading,
     signIn,
     signUp,

@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { logWithTimestamp } from './logging';
+import { TRADE_STATUS } from '../types';
 
 if (!process.env.REACT_APP_SUPABASE_URL) {
   throw new Error('Missing env.REACT_APP_SUPABASE_URL');
@@ -117,7 +118,7 @@ export interface Card {
   tradeable: boolean;
   image_url: string;
   card_element: string;
-  traded?: boolean;
+  wishlisted?: boolean;
 }
 
 export interface Trade {
@@ -126,4 +127,6 @@ export interface Trade {
   user_id: string;
   offered_by: string | null;
   requested_date: string;
+  status: TRADE_STATUS;
+  wishlist_id: string | null;
 } 

@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword';
-import Trades from './pages/Trades';
+import Requests from './pages/Requests';
+import Offers from './pages/Offers';
 import Cards from './pages/Cards';
 import { useAuth } from './contexts/AuthContext';
 import './styles/globals.css';
@@ -35,7 +36,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
   return <>{element}</>;
 };
 
-// Login route component - redirects to trades if already authenticated
+// Login route component - redirects to requests if already authenticated
 const LoginRoute: React.FC = () => {
   const { user, loading } = useAuth();
   
@@ -48,9 +49,9 @@ const LoginRoute: React.FC = () => {
     );
   }
   
-  // Redirect to trades if already authenticated
+  // Redirect to requests if already authenticated
   if (user) {
-    return <Navigate to="/trades" replace />;
+    return <Navigate to="/requests" replace />;
   }
   
   // Render the login component if not authenticated
@@ -67,8 +68,9 @@ function App() {
           <Route path="reset-password" element={<ResetPassword />} />
           
           {/* Protected routes */}
-          <Route path="/" element={<ProtectedRoute element={<Navigate to="/trades" replace />} />} />
-          <Route path="trades" element={<ProtectedRoute element={<Trades />} />} />
+          <Route path="/" element={<ProtectedRoute element={<Navigate to="/requests" replace />} />} />
+          <Route path="requests" element={<ProtectedRoute element={<Requests />} />} />
+          <Route path="offers" element={<ProtectedRoute element={<Offers />} />} />
           <Route path="cards" element={<ProtectedRoute element={<Cards />} />} />
           
           {/* Fallback route */}

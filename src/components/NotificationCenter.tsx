@@ -85,7 +85,6 @@ const NotificationCenter: React.FC = () => {
     }
   }, [user, isInitialized]);
   
-  // Initial load when user is available
   useEffect(() => {
     if (!user) {
       setNotifications([]);
@@ -93,13 +92,9 @@ const NotificationCenter: React.FC = () => {
       return;
     }
     
-    // Initial fetch on component mount
     fetchNotifications(true);
-    
-    // We don't need to clean up anything since we've removed the subscription
   }, [user, fetchNotifications]);
   
-  // Fetch notifications when the panel is opened
   useEffect(() => {
     if (isOpen && user) {
       console.log('Notification panel opened, fetching latest notifications');
@@ -198,32 +193,37 @@ const NotificationCenter: React.FC = () => {
         <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-50 overflow-hidden">
           <div className="py-2 px-3 bg-gray-100 flex justify-between items-center">
             <h3 className="text-sm font-medium text-gray-900">Notifications</h3>
-            <div className="flex items-center space-x-2">
-              <button 
-                onClick={handleRefresh}
-                className="text-xs text-blue-600 hover:text-blue-800"
-                title="Refresh notifications"
-              >
-                Refresh
-              </button>
+            <div className="flex space-x-2">
               {unreadCount > 0 && (
-                <button 
+                <button
                   onClick={markAllAsViewed}
                   className="text-xs text-blue-600 hover:text-blue-800"
                 >
                   Mark all as read
                 </button>
               )}
+              <button
+                onClick={handleRefresh}
+                className="text-xs text-gray-600 hover:text-gray-800"
+              >
+                Refresh
+              </button>
             </div>
           </div>
           
-          <div className="divide-y divide-gray-200 max-h-96 overflow-y-auto">
-            {error && !notifications.length ? (
-              <div className="p-4 text-center text-red-500">{error}</div>
-            ) : notifications.length === 0 ? (
-              <div className="p-4 text-center text-gray-500">No notifications yet</div>
-            ) : (
-              notifications.map(notification => (
+          {error && (
+            <div className="p-3 bg-red-50 border-b border-red-100">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+
+          {loading ? (
+            <div className="p-4 text-center text-gray-500">Loading notifications...</div>
+          ) : notifications.length === 0 ? (
+            <div className="p-4 text-center text-gray-500">No notifications yet</div>
+          ) : (
+            <div className="divide-y divide-gray-200 max-h-96 overflow-y-auto">
+              {notifications.map(notification => (
                 <div 
                   key={notification.id} 
                   className={`p-4 hover:bg-gray-50 ${!notification.viewed ? 'bg-blue-50' : ''}`}
@@ -243,9 +243,9 @@ const NotificationCenter: React.FC = () => {
                     )}
                   </div>
                 </div>
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

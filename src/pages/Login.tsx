@@ -60,7 +60,7 @@ const Login = () => {
         if (error) {
           setError(error.message);
         } else {
-          navigate('/trades');
+          navigate('/requests');
         }
       }
     } catch (err) {

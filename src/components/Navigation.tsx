@@ -62,14 +62,24 @@ const Navigation = () => {
             {user ? (
               <>
                 <Link
-                  to="/trades"
+                  to="/requests"
                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
-                    isActive('/trades')
+                    isActive('/requests')
                       ? 'border-b-2 border-blue-500 text-gray-900'
                       : 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                   }`}
                 >
-                  Trades
+                  Requests
+                </Link>
+                <Link
+                  to="/offers"
+                  className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
+                    isActive('/offers')
+                      ? 'border-b-2 border-blue-500 text-gray-900'
+                      : 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  }`}
+                >
+                  Offers
                 </Link>
                 <Link
                   to="/cards"
@@ -179,14 +189,24 @@ const Navigation = () => {
           {user ? (
             <>
               <Link
-                to="/trades"
+                to="/requests"
                 className={`block px-4 py-2 text-base font-medium ${
-                  isActive('/trades')
+                  isActive('/requests')
                     ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500'
                     : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                 }`}
               >
-                Trades
+                Requests
+              </Link>
+              <Link
+                to="/offers"
+                className={`block px-4 py-2 text-base font-medium ${
+                  isActive('/offers')
+                    ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500'
+                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                }`}
+              >
+                Offers
               </Link>
               <Link
                 to="/cards"

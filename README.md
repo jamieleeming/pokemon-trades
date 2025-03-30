@@ -106,6 +106,19 @@ create table public.trades (
 );
 ```
 
+### Wishlists Table
+```sql
+create table public.wishlists (
+  id uuid not null default gen_random_uuid(),
+  created_at timestamp with time zone not null default now(),
+  user_id uuid null,
+  card_id uuid null,
+  constraint wishlists_pkey primary key (id),
+  constraint wishlists_card_id_fkey foreign KEY (card_id) references cards (id) on update CASCADE on delete CASCADE,
+  constraint wishlists_user_id_fkey foreign KEY (user_id) references users (id) on update CASCADE on delete CASCADE
+) TABLESPACE pg_default;
+```
+
 ## UUID Migration
 
 As of version 2.0, the application has migrated card IDs from integers to UUIDs for better scalability and uniqueness. If you're upgrading from a previous version, follow these steps:
@@ -130,12 +143,16 @@ FOR SELECT
 TO public
 USING (true);
 
--- Allow authenticated users to insert their own trades
+-- Allow authenticated users to create trades when they are the offered_by user
 CREATE POLICY "trades_insert_policy" 
 ON "public"."trades"
 FOR INSERT 
 TO public
-WITH CHECK (auth.uid() = user_id);
+WITH CHECK (
+  auth.uid() IS NOT NULL AND 
+  auth.uid() = offered_by AND
+  auth.uid() != user_id
+);
 
 -- Allow users to update trades they created or offer trades from others
 CREATE POLICY "trades_update_policy" 

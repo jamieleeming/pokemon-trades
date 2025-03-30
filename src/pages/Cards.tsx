@@ -1,15 +1,9 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase, Card as CardType } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
 import CollapsibleFilters from '../components/CollapsibleFilters';
-
-// Constants
-const CARDS_STORAGE_KEY = 'pokemon_trades_cards_cache';
-const CARDS_TIMESTAMP_KEY = 'pokemon_trades_cards_timestamp';
-const CACHE_VALIDITY_MS = 30 * 60 * 1000; // 30 minutes
 
 const Cards = () => {
   const [cards, setCards] = useState<CardType[]>([]);
@@ -42,7 +36,6 @@ const Cards = () => {
   const [elements, setElements] = useState<string[]>([]);
   
   const { user } = useAuth();
-  const navigate = useNavigate();
   
   // Track if component is mounted
   const isMountedRef = useRef(true);
@@ -72,15 +65,16 @@ const Cards = () => {
     setError(null);
 
     try {
-      // First get user's trades to mark cards as traded
-      const { data: tradesData, error: tradesError } = await supabase
-        .from('trades')
-        .select('card_id')
-        .eq('user_id', user.id);
+      // First get user's wishlist to mark cards as wishlisted
+      const { data: wishlistData, error: wishlistError } = await supabase
+        .from('wishlists')
+        .select('card_id, traded')
+        .eq('user_id', user.id)
+        .eq('traded', false);  // Only get non-traded items
 
-      if (tradesError) throw tradesError;
+      if (wishlistError) throw wishlistError;
 
-      const tradedCardIds = new Set(tradesData?.map(trade => trade.card_id) || []);
+      const wishlistedCardIds = new Set(wishlistData?.map(item => item.card_id) || []);
 
       // Then get all cards
       const { data: cardsData, error: cardsError } = await supabase
@@ -95,12 +89,12 @@ const Cards = () => {
         // Process cards data
         const processedCards = cardsData.map(card => ({
           ...card,
-          traded: tradedCardIds.has(card.id)
+          wishlisted: wishlistedCardIds.has(card.id)
         })) as CardType[];
 
         // Update state
         setCards(processedCards);
-        setSelectedCards(Array.from(tradedCardIds));
+        setSelectedCards(Array.from(wishlistedCardIds));
 
         // Update filter options
         const uniquePacks = Array.from(new Set(cardsData.map(card => card.pack))).filter(Boolean);
@@ -140,47 +134,64 @@ const Cards = () => {
 
     try {
       if (selectedCards.includes(cardId)) {
-        // Remove trade
+        // Check if the wishlist item has been traded before allowing removal
+        const { data: wishlistItem, error: checkError } = await supabase
+          .from('wishlists')
+          .select('traded')
+          .eq('card_id', cardId)
+          .eq('user_id', user.id)
+          .single();
+
+        if (checkError) throw checkError;
+
+        // If the item has been traded, don't allow removal
+        if (wishlistItem?.traded) {
+          showNotification('Cannot remove traded cards from wishlist', 'error');
+          return;
+        }
+
+        // Remove from wishlist only if not traded
         const { error } = await supabase
-          .from('trades')
+          .from('wishlists')
           .delete()
           .eq('card_id', cardId)
-          .eq('user_id', user.id);
+          .eq('user_id', user.id)
+          .eq('traded', false);  // Extra safety check
 
         if (error) throw error;
 
         setSelectedCards(prev => prev.filter(id => id !== cardId));
         setCards(prev => prev.map(card => 
-          card.id === cardId ? { ...card, traded: false } : card
+          card.id === cardId ? { ...card, wishlisted: false } : card
         ));
 
-        showNotification('Card removed from trades', 'success');
+        showNotification('Card removed from wishlist', 'success');
       } else {
-        // Add trade
+        // Add to wishlist
         const { error } = await supabase
-          .from('trades')
+          .from('wishlists')
           .insert({
             card_id: cardId,
             user_id: user.id,
-            requested_date: new Date().toISOString()
+            traded: false
           });
 
         if (error) throw error;
 
         setSelectedCards(prev => [...prev, cardId]);
         setCards(prev => prev.map(card => 
-          card.id === cardId ? { ...card, traded: true } : card
+          card.id === cardId ? { ...card, wishlisted: true } : card
         ));
 
-        showNotification('Card added to trades', 'success');
+        showNotification('Card added to wishlist', 'success');
       }
     } catch (err) {
-      console.error('Error updating trade:', err);
-      showNotification('Failed to update trade', 'error');
+      console.error('Error updating wishlist:', err);
+      showNotification('Failed to update wishlist', 'error');
     }
   }, [user, selectedCards, showNotification]);
 
-  // Filter trades
+  // Filter cards
   const filteredCards = useMemo(() => {
     return cards.filter(card => {
       const matchesSearch = searchQuery === '' || 
@@ -215,8 +226,21 @@ const Cards = () => {
 
   return (
     <div className="container py-8">
-      <h1 className="mb-2 text-3xl font-bold">Cards</h1>
-      <p className="mb-6 text-gray-600">Select the cards you are currently missing</p>
+      <div className="flex flex-col mb-8">
+        <h1 className="text-3xl font-bold mb-4">Cards</h1>
+        <div className="prose max-w-prose mb-8">
+          <p className="mb-4">
+            Select the cards you want to add to your wishlist. Any cards selected here will appear on the{' '}
+            <a href="/requests" className="text-blue-600 hover:text-blue-800">
+              Requests
+            </a>{' '}
+            page.
+          </p>
+          <p>
+          Cards that are not yet tradeable will not appear on the requests page.
+          </p>
+        </div>
+      </div>
       
       {error && (
         <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">
@@ -314,8 +338,8 @@ const Cards = () => {
               className="form-input"
             >
               <option value="All">All</option>
-              <option value="Selected">Selected</option>
-              <option value="Not Selected">Not Selected</option>
+              <option value="Selected">In Wishlist</option>
+              <option value="Not Selected">Not in Wishlist</option>
             </select>
           </div>
           
@@ -353,8 +377,8 @@ const Cards = () => {
                   
                   // Convert card.id to string to ensure consistent comparison
                   const cardIdString = String(card.id);
-                  // Use card.traded property as the primary indicator, fallback to selectedCards
-                  const isSelected = card.traded || selectedCards.includes(cardIdString);
+                  // Use card.wishlisted property as the primary indicator, fallback to selectedCards
+                  const isSelected = card.wishlisted || selectedCards.includes(cardIdString);
                   
                   return (
                     <div
