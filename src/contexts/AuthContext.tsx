@@ -95,8 +95,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, [handleSessionChange]);
 
-  // Initialize auth state on component mount
+  // Set up auth state listener
   useEffect(() => {
+    // Get initial session
     const initializeAuth = async () => {
       try {
         const { data: { session: initialSession } } = await supabase.auth.getSession();
@@ -107,29 +108,42 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     initializeAuth();
-  }, [handleSessionChange, refreshSession]);
 
-  // Set up auth state listener
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN') {
-        setUser(session?.user ?? null);
-        await refreshSession();
-      } else if (event === 'SIGNED_OUT') {
-        setUser(null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      logWithTimestamp('Auth state changed', { event, sessionExists: !!session });
+
+      switch (event) {
+        case 'INITIAL_SESSION':
+          handleSessionChange(session);
+          break;
+        case 'SIGNED_IN':
+          handleSessionChange(session);
+          break;
+        case 'SIGNED_OUT':
+          handleSessionChange(null);
+          break;
+        case 'TOKEN_REFRESHED':
+          handleSessionChange(session);
+          break;
+        case 'USER_UPDATED':
+          handleSessionChange(session);
+          break;
       }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [refreshSession]);
+  }, [handleSessionChange]);
 
   // Add tab visibility handler
   useEffect(() => {
-    const handleVisibilityChange = async () => {
+    const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        await refreshSession();
+        // Use setTimeout to avoid potential deadlocks with auth state changes
+        setTimeout(async () => {
+          await refreshSession();
+        }, 0);
       }
     };
 
