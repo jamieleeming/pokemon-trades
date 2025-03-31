@@ -5,6 +5,11 @@ import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
 import CollapsibleFilters from '../components/CollapsibleFilters';
 
+// Cache duration in milliseconds (1 minute)
+const CACHE_DURATION = 60 * 1000;
+// Debounce delay for selection updates (500ms)
+const SELECTION_DEBOUNCE = 500;
+
 const Cards = () => {
   const [cards, setCards] = useState<CardType[]>([]);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
@@ -37,8 +42,12 @@ const Cards = () => {
   
   const { user } = useAuth();
   
-  // Track if component is mounted
+  // Refs for caching and loading state
   const isMountedRef = useRef(true);
+  const lastLoadTimeRef = useRef(0);
+  const isLoadingRef = useRef(false);
+  const selectionTimeoutRef = useRef<NodeJS.Timeout>();
+  const pendingSelectionsRef = useRef<Set<string>>(new Set());
 
   // Helper to show notifications
   const showNotification = useCallback((message: string, type: 'success' | 'error') => {
@@ -57,10 +66,20 @@ const Cards = () => {
     }));
   }, []);
 
-  // Load cards data
-  const loadData = useCallback(async () => {
-    if (!user || !isMountedRef.current) return;
+  // Check if data needs refresh
+  const needsRefresh = useCallback(() => {
+    const now = Date.now();
+    const timeSinceLastLoad = now - lastLoadTimeRef.current;
+    return timeSinceLastLoad > CACHE_DURATION;
+  }, []);
 
+  // Load cards data with caching
+  const loadData = useCallback(async (force = false) => {
+    if (!user || !isMountedRef.current) return;
+    if (isLoadingRef.current) return;
+    if (!force && !needsRefresh()) return;
+
+    isLoadingRef.current = true;
     setLoading(true);
     setError(null);
 
@@ -104,6 +123,8 @@ const Cards = () => {
         setPacks(uniquePacks);
         setRarities(uniqueRarities);
         setElements(uniqueElements);
+        
+        lastLoadTimeRef.current = Date.now();
       }
     } catch (err) {
       console.error('Error loading cards:', err);
@@ -111,9 +132,108 @@ const Cards = () => {
     } finally {
       if (isMountedRef.current) {
         setLoading(false);
+        isLoadingRef.current = false;
       }
     }
-  }, [user]);
+  }, [user, needsRefresh]);
+
+  // Process pending selections
+  const processPendingSelections = useCallback(async () => {
+    if (!user || pendingSelectionsRef.current.size === 0) return;
+    
+    const pendingSelections = Array.from(pendingSelectionsRef.current);
+    pendingSelectionsRef.current.clear();
+    
+    try {
+      for (const cardId of pendingSelections) {
+        const isSelected = selectedCards.includes(cardId);
+        
+        if (isSelected) {
+          // Check if the wishlist item has been traded before allowing removal
+          const { data: wishlistItem, error: checkError } = await supabase
+            .from('wishlists')
+            .select('traded')
+            .eq('card_id', cardId)
+            .eq('user_id', user.id)
+            .single();
+
+          if (checkError) throw checkError;
+
+          // If the item has been traded, don't allow removal
+          if (wishlistItem?.traded) {
+            showNotification('Cannot remove traded cards from wishlist', 'error');
+            continue;
+          }
+
+          // Remove from wishlist only if not traded
+          const { error } = await supabase
+            .from('wishlists')
+            .delete()
+            .eq('card_id', cardId)
+            .eq('user_id', user.id)
+            .eq('traded', false);  // Extra safety check
+
+          if (error) throw error;
+        } else {
+          // Add to wishlist
+          const { error } = await supabase
+            .from('wishlists')
+            .insert({
+              card_id: cardId,
+              user_id: user.id,
+              traded: false
+            });
+
+          if (error) throw error;
+        }
+      }
+      
+      showNotification(
+        pendingSelections.length > 1 
+          ? 'Wishlist updated successfully' 
+          : selectedCards.includes(pendingSelections[0])
+            ? 'Card removed from wishlist'
+            : 'Card added to wishlist',
+        'success'
+      );
+    } catch (err) {
+      console.error('Error updating wishlist:', err);
+      showNotification('Failed to update wishlist', 'error');
+      // Reload data to ensure UI is in sync
+      loadData(true);
+    }
+  }, [user, selectedCards, showNotification, loadData]);
+
+  // Handle card selection with optimistic updates and debouncing
+  const handleCardSelect = useCallback((cardId: string) => {
+    if (!user) return;
+
+    // Optimistic update
+    setSelectedCards(prev => {
+      const isSelected = prev.includes(cardId);
+      return isSelected
+        ? prev.filter(id => id !== cardId)
+        : [...prev, cardId];
+    });
+    
+    setCards(prev => prev.map(card => 
+      card.id === cardId
+        ? { ...card, wishlisted: !card.wishlisted }
+        : card
+    ));
+
+    // Add to pending selections
+    pendingSelectionsRef.current.add(cardId);
+
+    // Debounce the processing
+    if (selectionTimeoutRef.current) {
+      clearTimeout(selectionTimeoutRef.current);
+    }
+    
+    selectionTimeoutRef.current = setTimeout(() => {
+      processPendingSelections();
+    }, SELECTION_DEBOUNCE);
+  }, [user, processPendingSelections]);
 
   // Initialize component
   useEffect(() => {
@@ -125,71 +245,25 @@ const Cards = () => {
     
     return () => {
       isMountedRef.current = false;
+      if (selectionTimeoutRef.current) {
+        clearTimeout(selectionTimeoutRef.current);
+      }
     };
   }, [user, loadData]);
 
-  // Handle card selection
-  const handleCardSelect = useCallback(async (cardId: string) => {
-    if (!user) return;
-
-    try {
-      if (selectedCards.includes(cardId)) {
-        // Check if the wishlist item has been traded before allowing removal
-        const { data: wishlistItem, error: checkError } = await supabase
-          .from('wishlists')
-          .select('traded')
-          .eq('card_id', cardId)
-          .eq('user_id', user.id)
-          .single();
-
-        if (checkError) throw checkError;
-
-        // If the item has been traded, don't allow removal
-        if (wishlistItem?.traded) {
-          showNotification('Cannot remove traded cards from wishlist', 'error');
-          return;
-        }
-
-        // Remove from wishlist only if not traded
-        const { error } = await supabase
-          .from('wishlists')
-          .delete()
-          .eq('card_id', cardId)
-          .eq('user_id', user.id)
-          .eq('traded', false);  // Extra safety check
-
-        if (error) throw error;
-
-        setSelectedCards(prev => prev.filter(id => id !== cardId));
-        setCards(prev => prev.map(card => 
-          card.id === cardId ? { ...card, wishlisted: false } : card
-        ));
-
-        showNotification('Card removed from wishlist', 'success');
-      } else {
-        // Add to wishlist
-        const { error } = await supabase
-          .from('wishlists')
-          .insert({
-            card_id: cardId,
-            user_id: user.id,
-            traded: false
-          });
-
-        if (error) throw error;
-
-        setSelectedCards(prev => [...prev, cardId]);
-        setCards(prev => prev.map(card => 
-          card.id === cardId ? { ...card, wishlisted: true } : card
-        ));
-
-        showNotification('Card added to wishlist', 'success');
+  // Handle visibility change
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && needsRefresh()) {
+        loadData();
       }
-    } catch (err) {
-      console.error('Error updating wishlist:', err);
-      showNotification('Failed to update wishlist', 'error');
-    }
-  }, [user, selectedCards, showNotification]);
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [loadData, needsRefresh]);
 
   // Filter cards
   const filteredCards = useMemo(() => {

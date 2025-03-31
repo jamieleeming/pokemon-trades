@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+
+// Debounce delay for username check (300ms)
+const USERNAME_CHECK_DEBOUNCE = 300;
 
 const Login = () => {
   const navigate = useNavigate();
   
   // Auth state from context
-  const { signIn, signUp, resetPassword } = useAuth();
+  const { signIn, signUp, resetPassword, checkUsername } = useAuth();
   
   // Form state
   const [email, setEmail] = useState('');
@@ -19,6 +22,63 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  
+  // Username availability state
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState<boolean | null>(null);
+  const usernameTimeoutRef = useRef<NodeJS.Timeout>();
+
+  // Helper function to determine button disabled state
+  const isButtonDisabled = useCallback((): boolean => {
+    if (loading) return true;
+    if (isSignUp && username) {
+      return isUsernameAvailable === false || isUsernameAvailable === null;
+    }
+    return false;
+  }, [loading, isSignUp, username, isUsernameAvailable]);
+
+  // Check username availability with debouncing
+  const checkUsernameAvailability = useCallback(async (value: string) => {
+    if (!value) {
+      setIsUsernameAvailable(null);
+      return;
+    }
+
+    setIsCheckingUsername(true);
+    try {
+      const isAvailable = await checkUsername(value);
+      setIsUsernameAvailable(isAvailable);
+    } catch (err) {
+      setIsUsernameAvailable(null);
+    } finally {
+      setIsCheckingUsername(false);
+    }
+  }, [checkUsername]);
+
+  // Handle username change with debouncing
+  const handleUsernameChange = useCallback((value: string) => {
+    setUsername(value);
+    setIsUsernameAvailable(null);
+
+    if (usernameTimeoutRef.current) {
+      clearTimeout(usernameTimeoutRef.current);
+    }
+
+    if (value) {
+      usernameTimeoutRef.current = setTimeout(() => {
+        checkUsernameAvailability(value);
+      }, USERNAME_CHECK_DEBOUNCE);
+    }
+  }, [checkUsernameAvailability]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (usernameTimeoutRef.current) {
+        clearTimeout(usernameTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +97,13 @@ const Login = () => {
           setIsForgotPassword(false);
         }
       } else if (isSignUp) {
+        // Check username availability one last time before submitting
+        const isAvailable = await checkUsername(username);
+        if (!isAvailable) {
+          setError('Username is no longer available. Please choose another.');
+          return;
+        }
+
         const { error, success } = await signUp(email, password, {
           name,
           username,
@@ -82,6 +149,7 @@ const Login = () => {
     setIsForgotPassword(false);
     setError(null);
     setSuccessMessage(null);
+    setIsUsernameAvailable(null);
   };
 
   return (
@@ -140,16 +208,43 @@ const Login = () => {
                     <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
                       Username
                     </label>
-                    <input
-                      id="username"
-                      name="username"
-                      type="text"
-                      required
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      placeholder="Choose a username"
-                    />
+                    <div className="relative">
+                      <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        required
+                        value={username}
+                        onChange={(e) => handleUsernameChange(e.target.value)}
+                        className={`block w-full rounded-lg border px-3 py-2 shadow-sm focus:ring-indigo-500 sm:text-sm ${
+                          isUsernameAvailable === null
+                            ? 'border-gray-300 focus:border-indigo-500'
+                            : isUsernameAvailable
+                              ? 'border-green-500 focus:border-green-500'
+                              : 'border-red-500 focus:border-red-500'
+                        }`}
+                        placeholder="Choose a username"
+                      />
+                      {username && (
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                          {isCheckingUsername ? (
+                            <svg className="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                          ) : isUsernameAvailable !== null && (
+                            <span className={isUsernameAvailable ? 'text-green-500' : 'text-red-500'}>
+                              {isUsernameAvailable ? '✓' : '✗'}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {username && isUsernameAvailable === false && (
+                      <p className="mt-1 text-sm text-red-600">
+                        This username is already taken
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label htmlFor="friendCode" className="block text-sm font-medium text-gray-700 mb-1">
@@ -202,10 +297,8 @@ const Login = () => {
 
             <button
               type="submit"
-              disabled={loading}
-              className={`flex w-full justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors ${
-                loading ? 'cursor-not-allowed opacity-50' : ''
-              }`}
+              disabled={isButtonDisabled()}
+              className="flex w-full justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? 'Processing...' : (
                 isForgotPassword 
@@ -213,29 +306,38 @@ const Login = () => {
                   : (isSignUp ? 'Create account' : 'Sign in')
               )}
             </button>
-          </form>
 
-          <div className="mt-3 text-center pb-1">
-            {!isForgotPassword && (
-              <button
-                type="button"
-                onClick={toggleSignUp}
-                className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
-              >
-                {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
-              </button>
-            )}
-            
-            {!isSignUp && (
-              <button
-                type="button"
-                onClick={toggleForgotPassword}
-                className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors ml-4"
-              >
-                {isForgotPassword ? 'Back to sign in' : 'Forgot your password?'}
-              </button>
-            )}
-          </div>
+            <div className="mt-4 text-center text-sm">
+              {isForgotPassword ? (
+                <button
+                  type="button"
+                  onClick={toggleForgotPassword}
+                  className="text-indigo-600 hover:text-indigo-500"
+                >
+                  Back to sign in
+                </button>
+              ) : (
+                <div className="space-x-4">
+                  <button
+                    type="button"
+                    onClick={toggleSignUp}
+                    className="text-indigo-600 hover:text-indigo-500"
+                  >
+                    {isSignUp ? 'Already have an account?' : 'Need an account?'}
+                  </button>
+                  {!isSignUp && (
+                    <button
+                      type="button"
+                      onClick={toggleForgotPassword}
+                      className="text-indigo-600 hover:text-indigo-500"
+                    >
+                      Forgot password?
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     </div>

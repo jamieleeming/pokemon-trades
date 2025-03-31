@@ -12,7 +12,8 @@ export const logWithTimestamp = (message: string, data?: any) => {
     'Starting data load, checking authentication',
     'Skipping duplicate load request',
     'Loading trades data',
-    'Trades data loaded'
+    'Trades data loaded',
+    'Initializing Supabase client'
   ];
   
   // Check if message should be filtered

@@ -1,7 +1,12 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback, useRef } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { logWithTimestamp } from '../lib/logging';
+
+// Cache duration for session refresh (1 minute)
+const SESSION_CACHE_DURATION = 60 * 1000;
+// Debounce delay for visibility changes (500ms)
+const VISIBILITY_DEBOUNCE = 500;
 
 interface UserData {
   name: string;
@@ -27,6 +32,7 @@ interface AuthContextType {
     error: any | null;
     success: boolean;
   }>;
+  checkUsername: (username: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -38,6 +44,7 @@ const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
   refreshSession: async () => false,
   resetPassword: async () => ({ error: null, success: false }),
+  checkUsername: async () => false,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -47,8 +54,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
+  // Refs for caching and debouncing
+  const lastSessionRefreshRef = useRef(0);
+  const visibilityTimeoutRef = useRef<NodeJS.Timeout>();
+  const profileCheckedRef = useRef(new Set<string>());
+
+  // Function to check if session needs refresh
+  const needsSessionRefresh = useCallback(() => {
+    const now = Date.now();
+    return now - lastSessionRefreshRef.current > SESSION_CACHE_DURATION;
+  }, []);
+
   // Function to update the user profile or create it if needed
   const ensureUserProfile = useCallback(async (user: User) => {
+    // Skip if we've already checked this user's profile in this session
+    if (profileCheckedRef.current.has(user.id)) return;
+
     try {
       const { data: existingUser } = await supabase
         .from('users')
@@ -67,6 +88,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         });
         logWithTimestamp('Created new user profile', { userId: user.id });
       }
+      
+      // Mark this user's profile as checked
+      profileCheckedRef.current.add(user.id);
     } catch (error) {
       console.error('Error managing user profile:', error);
     }
@@ -81,10 +105,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (newSession?.user) {
       ensureUserProfile(newSession.user);
     }
+    
+    // Update last refresh time
+    lastSessionRefreshRef.current = Date.now();
   }, [ensureUserProfile]);
 
   // Function to refresh the session
-  const refreshSession = useCallback(async (): Promise<boolean> => {
+  const refreshSession = useCallback(async (force = false): Promise<boolean> => {
+    if (!force && !needsSessionRefresh()) return true;
+
     try {
       const { data: { session: newSession } } = await supabase.auth.getSession();
       handleSessionChange(newSession);
@@ -93,7 +122,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.error('Error refreshing session:', error);
       return false;
     }
-  }, [handleSessionChange]);
+  }, [handleSessionChange, needsSessionRefresh]);
 
   // Set up auth state listener
   useEffect(() => {
@@ -114,19 +143,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       switch (event) {
         case 'INITIAL_SESSION':
-          handleSessionChange(session);
-          break;
         case 'SIGNED_IN':
+        case 'TOKEN_REFRESHED':
+        case 'USER_UPDATED':
           handleSessionChange(session);
           break;
         case 'SIGNED_OUT':
           handleSessionChange(null);
-          break;
-        case 'TOKEN_REFRESHED':
-          handleSessionChange(session);
-          break;
-        case 'USER_UPDATED':
-          handleSessionChange(session);
+          // Clear profile check cache on sign out
+          profileCheckedRef.current.clear();
           break;
       }
     });
@@ -136,14 +161,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, [handleSessionChange]);
 
-  // Add tab visibility handler
+  // Add tab visibility handler with debouncing
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        // Use setTimeout to avoid potential deadlocks with auth state changes
-        setTimeout(async () => {
-          await refreshSession();
-        }, 0);
+        if (visibilityTimeoutRef.current) {
+          clearTimeout(visibilityTimeoutRef.current);
+        }
+        
+        visibilityTimeoutRef.current = setTimeout(() => {
+          refreshSession();
+        }, VISIBILITY_DEBOUNCE);
       }
     };
 
@@ -151,8 +179,40 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (visibilityTimeoutRef.current) {
+        clearTimeout(visibilityTimeoutRef.current);
+      }
     };
   }, [refreshSession]);
+
+  // Username availability check with caching
+  const usernameCache = useRef(new Map<string, { result: boolean; timestamp: number }>());
+  
+  const checkUsername = useCallback(async (username: string): Promise<boolean> => {
+    // Check cache first
+    const cached = usernameCache.current.get(username);
+    if (cached && Date.now() - cached.timestamp < SESSION_CACHE_DURATION) {
+      return cached.result;
+    }
+
+    try {
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('username')
+        .eq('username', username)
+        .single();
+
+      const result = !existingUser;
+      // Cache the result
+      usernameCache.current.set(username, {
+        result,
+        timestamp: Date.now()
+      });
+      return result;
+    } catch {
+      return false;
+    }
+  }, []);
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -165,14 +225,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signUp = async (email: string, password: string, userData: UserData) => {
     try {
-      // Check if username is taken
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('username')
-        .eq('username', userData.username)
-        .single();
-
-      if (existingUser) {
+      // Check if username is taken using cached function
+      const isAvailable = await checkUsername(userData.username);
+      if (!isAvailable) {
         return {
           error: { message: 'Username already taken' },
           success: false,
@@ -193,6 +248,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    // Clear caches
+    usernameCache.current.clear();
+    profileCheckedRef.current.clear();
   };
 
   const resetPassword = async (email: string) => {
@@ -215,6 +273,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     signOut,
     refreshSession,
     resetPassword,
+    checkUsername,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

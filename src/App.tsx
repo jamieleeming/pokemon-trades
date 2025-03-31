@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword';
@@ -58,27 +58,51 @@ const LoginRoute: React.FC = () => {
   return <Login />;
 };
 
+// Create router with future flags
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      // Public routes
+      {
+        path: "login",
+        element: <LoginRoute />
+      },
+      {
+        path: "reset-password",
+        element: <ResetPassword />
+      },
+      
+      // Protected routes
+      {
+        path: "/",
+        element: <ProtectedRoute element={<Navigate to="/requests" replace />} />
+      },
+      {
+        path: "requests",
+        element: <ProtectedRoute element={<Requests />} />
+      },
+      {
+        path: "offers",
+        element: <ProtectedRoute element={<Offers />} />
+      },
+      {
+        path: "cards",
+        element: <ProtectedRoute element={<Cards />} />
+      },
+      
+      // Fallback route
+      {
+        path: "*",
+        element: <Navigate to="/" replace />
+      }
+    ]
+  }
+]);
+
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* Public routes */}
-          <Route path="login" element={<LoginRoute />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-          
-          {/* Protected routes */}
-          <Route path="/" element={<ProtectedRoute element={<Navigate to="/requests" replace />} />} />
-          <Route path="requests" element={<ProtectedRoute element={<Requests />} />} />
-          <Route path="offers" element={<ProtectedRoute element={<Offers />} />} />
-          <Route path="cards" element={<ProtectedRoute element={<Cards />} />} />
-          
-          {/* Fallback route */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App; 

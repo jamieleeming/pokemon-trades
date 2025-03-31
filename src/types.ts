@@ -87,4 +87,46 @@ export interface WishlistItem {
     username: string;
     friend_code: string;
   };
-} 
+}
+
+export enum NOTIFICATION_TYPE {
+  OFFER_RECEIVED = 'OFFER_RECEIVED',
+  COUNTEROFFER_RECEIVED = 'COUNTEROFFER_RECEIVED',
+  TRADE_ACCEPTED = 'TRADE_ACCEPTED',
+  OFFER_REJECTED = 'OFFER_REJECTED'
+}
+
+export interface TradeNotification {
+  id: string;
+  created_at: string;
+  user_id: string;
+  type: NOTIFICATION_TYPE;
+  message: string;
+  viewed: boolean;
+  metadata: {
+    actorUsername: string;
+    wishlistItemName?: string;
+    cardName?: string;
+  };
+}
+
+// Helper functions to generate consistent notification messages
+export const createNotificationMessage = (
+  type: NOTIFICATION_TYPE,
+  actorUsername: string,
+  wishlistItemName?: string,
+  cardName?: string
+): string => {
+  switch (type) {
+    case NOTIFICATION_TYPE.OFFER_RECEIVED:
+      return `Someone has offered you a ${wishlistItemName}`;
+    case NOTIFICATION_TYPE.COUNTEROFFER_RECEIVED:
+      return `${actorUsername} has responded to your ${wishlistItemName} offer`;
+    case NOTIFICATION_TYPE.TRADE_ACCEPTED:
+      return `${actorUsername} has accepted your ${wishlistItemName} offer`;
+    case NOTIFICATION_TYPE.OFFER_REJECTED:
+      return `${actorUsername} declined your offer for ${wishlistItemName}`;
+    default:
+      return '';
+  }
+}; 

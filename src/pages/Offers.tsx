@@ -1,15 +1,54 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+/**
+ * Offers Page Component
+ * 
+ * This component manages the display and interaction of trade offers in the application.
+ * It handles multiple trade states, real-time updates, and complex user interactions.
+ * 
+ * Key Features:
+ * - Real-time trade status updates
+ * - Optimistic UI updates for better UX
+ * - Caching with automatic refresh (60s cache duration)
+ * - Complex trade flow management
+ * 
+ * Trade Flow States:
+ * 1. OFFERED: Initial state when a user offers a trade
+ * 2. NEGOTIATING: When the recipient has selected a card to trade back
+ * 3. ACCEPTED: Both parties have agreed to the trade
+ * 4. COMPLETE: Trade has been completed in-game
+ * 
+ * Data Management:
+ * - Uses caching (CACHE_DURATION) to minimize database queries
+ * - Implements debouncing (REFRESH_DEBOUNCE) to prevent excessive updates
+ * - Maintains optimistic updates for immediate user feedback
+ */
+
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import { Trade2, WishlistItem, TRADE_STATUS, Card } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
+import { createTradeNotification } from '../lib/notifications';
+import { NOTIFICATION_TYPE } from '../types';
 
+// Cache duration in milliseconds (1 minute)
+const CACHE_DURATION = 60 * 1000;
+// Debounce delay for data refresh (500ms)
+const REFRESH_DEBOUNCE = 500;
+
+/**
+ * Interface for cards that can be offered in a trade.
+ * Extends the base Card type with additional trading-specific information.
+ */
 interface EligibleCardWithOfferer extends Card {
   offererUsername: string;
   wishlistItemId: string;
 }
 
+/**
+ * Interface for wishlist items that includes trade offers and eligible cards.
+ * This is the main data structure used throughout the component.
+ */
 interface WishlistItemWithOffers extends WishlistItem {
   offers: Trade2[];
   eligibleCards?: EligibleCardWithOfferer[];
@@ -27,6 +66,11 @@ const Offers = () => {
   const [error, setError] = useState<string | null>(null);
   
   const { user } = useAuth();
+  
+  // Refs for caching and debouncing
+  const lastLoadTime = useRef<number>(0);
+  const refreshTimeout = useRef<NodeJS.Timeout>();
+  const isLoadingRef = useRef(false);
   
   const [notification, setNotification] = useState<{
     message: string;
@@ -80,11 +124,27 @@ const Offers = () => {
     showNotification('Friend code copied to clipboard!', 'success');
   };
 
-  // Load data
-  const loadData = useCallback(async () => {
+  // Check if data needs refresh
+  const needsRefresh = useCallback(() => {
+    return Date.now() - lastLoadTime.current > CACHE_DURATION;
+  }, []);
+
+  /**
+   * Main data loading function that fetches all necessary trade information.
+   * This function handles:
+   * 1. Loading user's wishlist items
+   * 2. Fetching associated trades
+   * 3. Combining and structuring the data for display
+   * 
+   * @param force - If true, bypasses the cache and forces a fresh load
+   */
+  const loadData = useCallback(async (force = false) => {
     if (!user) return;
+    if (isLoadingRef.current) return;
+    if (!force && !needsRefresh()) return;
     
     try {
+      isLoadingRef.current = true;
       setLoading(true);
       setError(null);
 
@@ -103,8 +163,6 @@ const Offers = () => {
         .eq('user_id', user.id);
 
       if (wishlistError) throw wishlistError;
-
-      console.log('Wishlist items:', wishlistData?.length);
 
       if (!wishlistData?.length) {
         setWishlistItems([]);
@@ -136,11 +194,7 @@ const Offers = () => {
             card_id,
             traded,
             cards:card_id (*),
-            users:user_id (
-              id,
-              username,
-              friend_code
-            )
+            users:user_id (*)
           ),
           request:request_id (
             id,
@@ -149,23 +203,13 @@ const Offers = () => {
             card_id,
             traded,
             cards:card_id (*),
-            users:user_id (
-              id,
-              username,
-              friend_code
-            )
+            users:user_id (*)
           )
         `)
         .or(`offer_id.in.(${wishlistData.map(item => item.id).join(',')}),request_id.in.(${wishlistData.map(item => item.id).join(',')})`)
-        .in('status', [TRADE_STATUS.OFFERED, TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE]); // Include all active and completed trades
+        .in('status', [TRADE_STATUS.OFFERED, TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE]);
 
-      if (tradesError) {
-        console.error('Trades error:', tradesError);
-        throw tradesError;
-      }
-
-      console.log('Trades found:', tradesData?.length);
-      console.log('Sample trade:', tradesData?.[0]);
+      if (tradesError) throw tradesError;
 
       // Combine the data
       const itemsWithOffers = wishlistData
@@ -175,71 +219,104 @@ const Offers = () => {
             .filter(trade => trade.offer_id === item.id || trade.request_id === item.id)
             .map(trade => ({
               ...trade,
-              // Ensure all required fields from Trade2 interface are present
-              id: trade.id,
-              offered_at: trade.offered_at,
-              requested_at: trade.requested_at,
-              offer_id: trade.offer_id,
-              request_id: trade.request_id,
-              status: trade.status as TRADE_STATUS,
-              offered_by: trade.offered_by,
               offerer: Array.isArray(trade.offerer) ? trade.offerer[0] : trade.offerer,
               offer: Array.isArray(trade.offer) ? trade.offer[0] : trade.offer,
               request: Array.isArray(trade.request) ? trade.request[0] : trade.request
             } as unknown as Trade2));
           
-          console.log(`Offers for item ${item.id}:`, offers.length);
           return {
             ...(item as unknown as WishlistItem),
             offers
           } as WishlistItemWithOffers;
         })
-        .filter(item => item.offers.length > 0); // Only include items that have offers
+        .filter(item => item.offers.length > 0);
 
-      console.log('Items with offers:', itemsWithOffers.length);
       setWishlistItems(itemsWithOffers);
+      lastLoadTime.current = Date.now();
     } catch (err) {
       console.error('Error loading data:', err);
       setError('Failed to load data. Please try again.');
     } finally {
       setLoading(false);
+      isLoadingRef.current = false;
     }
-  }, [user]);
+  }, [user, needsRefresh]);
 
-  // Load eligible cards for a wishlist item
-  const loadEligibleCards = useCallback(async (item: WishlistItemWithOffers) => {
+  // Debounced refresh function
+  const refreshData = useCallback(() => {
+    if (refreshTimeout.current) {
+      clearTimeout(refreshTimeout.current);
+    }
+    
+    refreshTimeout.current = setTimeout(() => {
+      loadData(true);
+    }, REFRESH_DEBOUNCE);
+  }, [loadData]);
+
+  /**
+   * Updates the status of a trade with optimistic updates.
+   * This ensures immediate UI feedback while the database update happens in the background.
+   * 
+   * @param itemId - ID of the wishlist item
+   * @param tradeId - ID of the trade to update
+   * @param updates - Partial trade object with updates to apply
+   */
+  const updateTradeStatus = useCallback((itemId: string, tradeId: string, updates: Partial<Trade2>) => {
+    setWishlistItems(prev => prev.map(item => {
+      if (item.id !== itemId) return item;
+      
+      return {
+        ...item,
+        offers: item.offers.map(offer => 
+          offer.id === tradeId
+            ? { ...offer, ...updates }
+            : offer
+        )
+      };
+    }));
+  }, []);
+
+  /**
+   * Loads eligible cards for trade offers.
+   * This function handles the complex logic of determining which cards can be traded:
+   * - Filters out cards already involved in other trades
+   * - Ensures rarity matching
+   * - Handles special cases for trades in negotiation/accepted states
+   * 
+   * @param items - Array of wishlist items to load eligible cards for
+   */
+  const loadEligibleCards = useCallback(async (items: WishlistItemWithOffers[]) => {
     try {
-      // Get all users involved in the trades (both offerers and receivers)
-      const involvedUsers = item.offers.flatMap(offer => {
-        const users = [];
-        // Include the user who made the offer
-        if (offer.offered_by) users.push(offer.offered_by);
-        // Include the user who owns the request_id wishlist item
-        if (offer.request?.user_id) users.push(offer.request.user_id);
-        return users;
-      }).filter((id): id is string => Boolean(id));
+      // Get all users involved in the trades across all items
+      const involvedUsers = items.flatMap(item => 
+        item.offers.flatMap(offer => {
+          const users = [];
+          if (offer.offered_by) users.push(offer.offered_by);
+          if (offer.request?.user_id) users.push(offer.request.user_id);
+          return users;
+        })
+      ).filter((id): id is string => Boolean(id));
 
       // Create a map of usernames for all involved users
       const usernames = new Map<string, string>(
-        item.offers.flatMap(offer => {
-          const mappings: [string, string][] = [];
-          // Include the username of the user who made the offer
-          if (offer.offered_by && offer.offerer?.username) {
-            mappings.push([offer.offered_by, offer.offerer.username]);
-          }
-          // Include the username of the user who owns the offer card
-          if (offer.offer?.user_id && offer.offer?.users?.username) {
-            mappings.push([offer.offer.user_id, offer.offer.users.username]);
-          }
-          // Include the username of the user who owns the request card
-          if (offer.request?.user_id && offer.request?.users?.username) {
-            mappings.push([offer.request.user_id, offer.request.users.username]);
-          }
-          return mappings;
-        })
+        items.flatMap(item => 
+          item.offers.flatMap(offer => {
+            const mappings: [string, string][] = [];
+            if (offer.offered_by && offer.offerer?.username) {
+              mappings.push([offer.offered_by, offer.offerer.username]);
+            }
+            if (offer.offer?.user_id && offer.offer?.users?.username) {
+              mappings.push([offer.offer.user_id, offer.offer.users.username]);
+            }
+            if (offer.request?.user_id && offer.request?.users?.username) {
+              mappings.push([offer.request.user_id, offer.request.users.username]);
+            }
+            return mappings;
+          })
+        )
       );
       
-      // Get all wishlist items from these users
+      // Get all wishlist items from these users in a single query
       const { data: tradeableWishlistItems, error: wishlistError } = await supabase
         .from('wishlists')
         .select(`
@@ -254,7 +331,7 @@ const Offers = () => {
 
       if (wishlistError) throw wishlistError;
 
-      // Get all trades in negotiation or accepted state to check for committed cards
+      // Get all trades in negotiation or accepted state in a single query
       const { data: committedTrades, error: tradesError } = await supabase
         .from('trades2')
         .select(`
@@ -267,19 +344,14 @@ const Offers = () => {
 
       if (tradesError) throw tradesError;
 
-      // Create a set of wishlist item IDs that are already committed in trades
+      // Create a set of committed wishlist IDs
       const committedWishlistIds = new Set([
-        // Include cards that are part of negotiating or accepted trades (both request_id and offer_id)
         ...(committedTrades || []).flatMap(trade => [trade.request_id, trade.offer_id]),
-        // Also include cards that the user has used in their own counter-offers
         ...(tradeableWishlistItems || [])
           .filter(wishlistItem => 
-            wishlistItems.some(otherItem => 
-              otherItem.id !== item.id && // Don't exclude cards from the current trade
+            items.some(otherItem => 
               otherItem.offers.some(offer => 
-                // Check if this card is being used in any counter-offer
                 offer.request_id === wishlistItem.id &&
-                // Only exclude if it's in negotiation or accepted state
                 [TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED].includes(offer.status)
               )
             )
@@ -287,120 +359,110 @@ const Offers = () => {
           .map(wishlistItem => wishlistItem.id)
       ].filter(Boolean));
 
-      // Find if there's an existing trade in an advanced stage
-      const advancedTrade = item.offers.find(offer => 
-        [TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE].includes(offer.status)
-      );
+      // Process each item's eligible cards
+      const updatedItems = items.map(item => {
+        // Find advanced trade if any
+        const advancedTrade = item.offers.find(offer => 
+          [TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE].includes(offer.status)
+        );
 
-      // Create base eligible cards list from wishlist items
-      let eligibleCards = (tradeableWishlistItems || [])
-        .filter(wishlistItem => 
-          wishlistItem?.cards && 
-          typeof wishlistItem.cards === 'object' &&
-          'tradeable' in wishlistItem.cards &&
-          'card_rarity' in wishlistItem.cards &&
-          wishlistItem.cards.tradeable === true &&
-          wishlistItem.cards.card_rarity === item.cards?.card_rarity &&
-          // Exclude cards that are already committed in other trades
-          !committedWishlistIds.has(wishlistItem.id)
-        )
-        .map(wishlistItem => ({
-          ...(wishlistItem.cards as unknown as Card),
-          offererUsername: (wishlistItem as any).users?.username || usernames.get(wishlistItem.user_id || '') || 'Unknown User',
-          wishlistItemId: wishlistItem.id
-        } as EligibleCardWithOfferer));
+        // Filter eligible cards for this item
+        let eligibleCards = (tradeableWishlistItems || [])
+          .filter(wishlistItem => 
+            wishlistItem?.cards && 
+            typeof wishlistItem.cards === 'object' &&
+            'tradeable' in wishlistItem.cards &&
+            'card_rarity' in wishlistItem.cards &&
+            wishlistItem.cards.tradeable === true &&
+            wishlistItem.cards.card_rarity === item.cards?.card_rarity &&
+            !committedWishlistIds.has(wishlistItem.id)
+          )
+          .map(wishlistItem => ({
+            ...(wishlistItem.cards as unknown as Card),
+            offererUsername: (wishlistItem as any).users?.username || usernames.get(wishlistItem.user_id || '') || 'Unknown User',
+            wishlistItemId: wishlistItem.id
+          } as EligibleCardWithOfferer));
 
-      // If there's a trade in negotiation, make sure to include the originally offered card
-      if (advancedTrade?.status === TRADE_STATUS.NEGOTIATING && advancedTrade.offer?.cards) {
-        const originalCard = {
-          ...advancedTrade.offer.cards,
-          offererUsername: advancedTrade.offer.users?.username || usernames.get(advancedTrade.offer.user_id || '') || 'Unknown User',
-          wishlistItemId: advancedTrade.offer_id
-        } as EligibleCardWithOfferer;
-
-        // Add the original card if it's not already in the list
-        if (!eligibleCards.some(card => card.id === originalCard.id)) {
-          eligibleCards.push(originalCard);
-        }
-      }
-
-      // For accepted trades, make sure to include both the offered and requested cards
-      if (advancedTrade?.status === TRADE_STATUS.ACCEPTED) {
-        // Include the offered card
-        if (advancedTrade.offer?.cards) {
-          const offeredCard = {
+        // Add advanced trade cards if needed
+        if (advancedTrade?.status === TRADE_STATUS.NEGOTIATING && advancedTrade.offer?.cards) {
+          const originalCard = {
             ...advancedTrade.offer.cards,
             offererUsername: advancedTrade.offer.users?.username || usernames.get(advancedTrade.offer.user_id || '') || 'Unknown User',
             wishlistItemId: advancedTrade.offer_id
           } as EligibleCardWithOfferer;
 
-          if (!eligibleCards.some(card => card.id === offeredCard.id)) {
-            eligibleCards.push(offeredCard);
+          if (!eligibleCards.some(card => card.id === originalCard.id)) {
+            eligibleCards.push(originalCard);
           }
         }
 
-        // Include the requested/counter-offered card
-        if (advancedTrade.request?.cards) {
-          const requestedCard = {
-            ...advancedTrade.request.cards,
-            offererUsername: advancedTrade.request.users?.username || usernames.get(advancedTrade.request.user_id || '') || 'Unknown User',
-            wishlistItemId: advancedTrade.request_id
-          } as EligibleCardWithOfferer;
+        if (advancedTrade?.status === TRADE_STATUS.ACCEPTED) {
+          if (advancedTrade.offer?.cards) {
+            const offeredCard = {
+              ...advancedTrade.offer.cards,
+              offererUsername: advancedTrade.offer.users?.username || usernames.get(advancedTrade.offer.user_id || '') || 'Unknown User',
+              wishlistItemId: advancedTrade.offer_id
+            } as EligibleCardWithOfferer;
 
-          if (!eligibleCards.some(card => card.id === requestedCard.id)) {
-            eligibleCards.push(requestedCard);
+            if (!eligibleCards.some(card => card.id === offeredCard.id)) {
+              eligibleCards.push(offeredCard);
+            }
+          }
+
+          if (advancedTrade.request?.cards) {
+            const requestedCard = {
+              ...advancedTrade.request.cards,
+              offererUsername: advancedTrade.request.users?.username || usernames.get(advancedTrade.request.user_id || '') || 'Unknown User',
+              wishlistItemId: advancedTrade.request_id
+            } as EligibleCardWithOfferer;
+
+            if (!eligibleCards.some(card => card.id === requestedCard.id)) {
+              eligibleCards.push(requestedCard);
+            }
           }
         }
-      }
 
-      // Remove duplicates
-      eligibleCards = eligibleCards.filter((card, index, self) => 
-        index === self.findIndex((c) => c.id === card.id)
-      );
+        // Remove duplicates
+        eligibleCards = eligibleCards.filter((card, index, self) => 
+          index === self.findIndex((c) => c.id === card.id)
+        );
 
-      // If there's an existing trade, set the selected card based on who made the offer
-      let selectedCardId: string | undefined = undefined;
-      if (advancedTrade) {
-        const isOfferer = advancedTrade.offered_by === user?.id;
+        // Set selected card if needed
+        let selectedCardId: string | undefined = undefined;
+        if (advancedTrade) {
+          const isOfferer = advancedTrade.offered_by === user?.id;
+          selectedCardId = isOfferer 
+            ? advancedTrade.offer?.cards?.id
+            : (advancedTrade.status === TRADE_STATUS.ACCEPTED && advancedTrade.request?.cards?.id)
+              ? advancedTrade.request?.cards?.id
+              : advancedTrade.request?.cards?.id;
+        }
 
-        // For both negotiating and accepted trades:
-        // If we're the original offerer (A):
-        // - In negotiation: show the card we offered
-        // - In accepted: show the card we offered
-        // If we're the responder (B):
-        // - In negotiation: show the card we selected to give
-        // - In accepted: show the card we counter-offered with
-        selectedCardId = isOfferer 
-          ? advancedTrade.offer?.cards?.id  // A sees their original offered card
-          : (advancedTrade.status === TRADE_STATUS.ACCEPTED && advancedTrade.request?.cards?.id)
-            ? advancedTrade.request?.cards?.id  // B sees their counter-offered card
-            : advancedTrade.request?.cards?.id; // B sees their selected card
+        return {
+          ...item,
+          eligibleCards,
+          selectedCardId
+        };
+      });
 
-        console.log('Trade selection debug:', {
-          isOfferer,
-          userId: user?.id,
-          offeredBy: advancedTrade.offered_by,
-          selectedCardId,
-          offerCard: advancedTrade.offer?.cards?.card_name,
-          requestCard: advancedTrade.request?.cards?.card_name,
-          offerCardId: advancedTrade.offer?.cards?.id,
-          requestCardId: advancedTrade.request?.cards?.id,
-          status: advancedTrade.status
-        });
-      }
-
-      // Update the wishlist item with eligible cards and potentially selected card
-      setWishlistItems(prev => prev.map(prevItem => 
-        prevItem.id === item.id 
-          ? { ...prevItem, eligibleCards, selectedCardId }
-          : prevItem
-      ));
+      // Update all items at once to prevent multiple rerenders
+      setWishlistItems(updatedItems);
     } catch (err) {
       console.error('Error loading eligible cards:', err);
       showNotification('Failed to load eligible cards', 'error');
     }
-  }, [showNotification, wishlistItems, user?.id]);
+  }, [showNotification, user?.id]);
 
+  /**
+   * Handles the submission of a trade response.
+   * This occurs when a user selects a card to trade in response to an offer.
+   * 
+   * Flow:
+   * 1. Validates card selection
+   * 2. Updates trade status to NEGOTIATING
+   * 3. Sends notification to original offerer
+   * 4. Handles optimistic UI updates
+   */
   const handleSubmitTrade = async (item: WishlistItemWithOffers) => {
     if (!item.selectedCardId || !item.eligibleCards) {
       showNotification('Please select a card first', 'error');
@@ -414,19 +476,22 @@ const Offers = () => {
         return;
       }
 
-      // Find the trade offer from the user who owns the selected card
       const relevantOffer = item.offers.find(offer => 
         offer.offerer?.username === selectedCard.offererUsername
       );
 
       if (!relevantOffer) {
-        console.log('Debug - Selected Card:', selectedCard);
-        console.log('Debug - Available Offers:', item.offers);
         showNotification('Could not find the corresponding trade offer', 'error');
         return;
       }
 
-      // Update the trade with the selected card's wishlist item ID
+      // Optimistic update
+      updateTradeStatus(item.id, relevantOffer.id, {
+        request_id: selectedCard.wishlistItemId,
+        status: TRADE_STATUS.NEGOTIATING,
+        requested_at: new Date().toISOString()
+      });
+
       const { error: updateError } = await supabase
         .from('trades2')
         .update({
@@ -438,16 +503,35 @@ const Offers = () => {
 
       if (updateError) throw updateError;
 
+      // Send notification to the original offerer about the counter-offer
+      if (relevantOffer.offered_by) {
+        await createTradeNotification({
+          userId: relevantOffer.offered_by,
+          type: NOTIFICATION_TYPE.COUNTEROFFER_RECEIVED,
+          actorUsername: item.users?.username || 'A user',
+          wishlistItemName: item.cards?.card_name || 'Unknown card',
+          cardName: selectedCard.card_name || 'Unknown card'
+        });
+      }
+
       showNotification('Trade updated successfully', 'success');
-      
-      // Refresh the data
-      await loadData();
+      refreshData();
     } catch (err) {
       console.error('Error submitting trade:', err);
       showNotification('Failed to submit trade', 'error');
+      refreshData();
     }
   };
 
+  /**
+   * Handles accepting a trade.
+   * This occurs when the original offerer accepts the counter-offer.
+   * 
+   * Flow:
+   * 1. Updates trade status to ACCEPTED
+   * 2. Sends notification to original offerer
+   * 3. Enables the Complete Trade button for both parties
+   */
   const handleAcceptTrade = async (item: WishlistItemWithOffers) => {
     try {
       const negotiatingOffer = item.offers.find(offer => 
@@ -460,7 +544,11 @@ const Offers = () => {
         return;
       }
 
-      // Update the trade status to accepted
+      // Optimistic update
+      updateTradeStatus(item.id, negotiatingOffer.id, {
+        status: TRADE_STATUS.ACCEPTED
+      });
+
       const { error: updateError } = await supabase
         .from('trades2')
         .update({
@@ -470,16 +558,35 @@ const Offers = () => {
 
       if (updateError) throw updateError;
 
+      // Send notification to the original offerer that their trade was accepted
+      if (negotiatingOffer.offer?.users?.id) {
+        await createTradeNotification({
+          userId: negotiatingOffer.offer.users.id,
+          type: NOTIFICATION_TYPE.TRADE_ACCEPTED,
+          actorUsername: negotiatingOffer.request?.users?.username || 'A user',
+          wishlistItemName: negotiatingOffer.request?.cards?.card_name || 'Unknown card',
+          cardName: negotiatingOffer.offer?.cards?.card_name || 'Unknown card'
+        });
+      }
+
       showNotification('Trade accepted successfully', 'success');
-      
-      // Refresh the data
-      await loadData();
+      refreshData();
     } catch (err) {
       console.error('Error accepting trade:', err);
       showNotification('Failed to accept trade', 'error');
+      refreshData();
     }
   };
 
+  /**
+   * Handles rejecting a trade.
+   * This resets the trade back to its initial OFFERED state.
+   * 
+   * Flow:
+   * 1. Clears the request_id
+   * 2. Resets status to OFFERED
+   * 3. Allows the recipient to select a different card
+   */
   const handleRejectTrade = async (item: WishlistItemWithOffers) => {
     try {
       const negotiatingOffer = item.offers.find(offer => 
@@ -503,16 +610,34 @@ const Offers = () => {
 
       if (updateError) throw updateError;
 
+      // Send notification to the person whose counter-offer was rejected
+      if (negotiatingOffer.offer?.users?.id) {
+        await createTradeNotification({
+          userId: negotiatingOffer.offer.users.id,
+          type: NOTIFICATION_TYPE.OFFER_REJECTED,
+          actorUsername: item.users?.username || 'A user',
+          wishlistItemName: item.cards?.card_name || 'Unknown card',
+          cardName: negotiatingOffer.offer?.cards?.card_name || 'Unknown card'
+        });
+      }
+
       showNotification('Trade rejected successfully', 'success');
-      
-      // Refresh the data
-      await loadData();
+      refreshData();
     } catch (err) {
       console.error('Error rejecting trade:', err);
       showNotification('Failed to reject trade', 'error');
     }
   };
 
+  /**
+   * Handles completing a trade.
+   * This is the final state after both parties have completed the trade in-game.
+   * 
+   * Flow:
+   * 1. Updates trade status to COMPLETE
+   * 2. Moves trade to the Completed Trades section
+   * 3. Updates related wishlist items via database trigger
+   */
   const handleCompleteTrade = async (item: WishlistItemWithOffers) => {
     try {
       const acceptedOffer = item.offers.find(offer => 
@@ -537,31 +662,43 @@ const Offers = () => {
       showNotification('Trade completed successfully', 'success');
       
       // Refresh the data
-      await loadData();
+      refreshData();
     } catch (err) {
       console.error('Error completing trade:', err);
       showNotification('Failed to complete trade', 'error');
     }
   };
 
-  // Load data on mount and when user changes
+  // Effect for initial load and user changes
   useEffect(() => {
     loadData();
-  }, [loadData]);
-
-  // Load eligible cards for each wishlist item when they're loaded
-  useEffect(() => {
-    const loadEligibleCardsForItems = async () => {
-      if (wishlistItems.length > 0) {
-        for (const item of wishlistItems) {
-          if (!item.eligibleCards) {
-            await loadEligibleCards(item);
-          }
-        }
+    
+    return () => {
+      if (refreshTimeout.current) {
+        clearTimeout(refreshTimeout.current);
       }
     };
+  }, [loadData]);
 
-    loadEligibleCardsForItems();
+  // Effect for visibility changes
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && needsRefresh()) {
+        loadData();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [loadData, needsRefresh]);
+
+  // Load eligible cards for all wishlist items at once when they're loaded
+  useEffect(() => {
+    if (wishlistItems.length > 0 && wishlistItems.some(item => !item.eligibleCards)) {
+      loadEligibleCards(wishlistItems);
+    }
   }, [wishlistItems, loadEligibleCards]);
 
   const handleCardSelect = (itemId: string, cardId: string | '') => {
@@ -901,7 +1038,7 @@ const Offers = () => {
                       
                       <div className="mt-4 border-t pt-4">
                         {!item.eligibleCards ? (
-                          <div className="text-sm text-gray-500">Loading eligible cards...</div>
+                          <div className="text-sm text-gray-500">Loading trade actions...</div>
                         ) : item.eligibleCards.length === 0 ? (
                           <div className="text-sm text-gray-500">No eligible cards found</div>
                         ) : (

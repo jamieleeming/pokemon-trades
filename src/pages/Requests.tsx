@@ -6,9 +6,12 @@ import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
 import CollapsibleFilters from '../components/CollapsibleFilters';
 import { logWithTimestamp } from '../lib/logging';
+import { createTrade2 } from '../lib/trades2';
 
-// Cache duration in milliseconds (5 minutes)
-const CACHE_DURATION = 5 * 60 * 1000;
+// Cache duration in milliseconds (1 minute)
+const CACHE_DURATION = 60 * 1000;
+// Debounce delay for data refresh (500ms)
+const REFRESH_DEBOUNCE = 500;
 
 const Requests = () => {
   const [trades, setTrades] = useState<Trade2[]>([]);
@@ -34,6 +37,7 @@ const Requests = () => {
   const dataLoadedRef = useRef(false);
   const lastDataLoadTimeRef = useRef(0);
   const pendingLoadRef = useRef(false);
+  const refreshTimeout = useRef<NodeJS.Timeout>();
   
   const [notification, setNotification] = useState<{
     message: string;
@@ -74,11 +78,9 @@ const Requests = () => {
       setLoading(true);
       setError(null);
       
-      // Check if we need to refresh session
       await refreshSession();
       
       // Load trades2 data first
-      logWithTimestamp('Loading trades data');
       const { data: tradesData, error: tradesError } = await supabase
         .from('trades2')
         .select(`
@@ -126,22 +128,10 @@ const Requests = () => {
             friend_code
           )
         `)
-        .or(`status.eq.${TRADE_STATUS.ACCEPTED},status.eq.${TRADE_STATUS.COMPLETE},and(status.eq.${TRADE_STATUS.OFFERED},offered_by.eq.${user.id})`)
+        .or(`status.eq.${TRADE_STATUS.ACCEPTED},status.eq.${TRADE_STATUS.COMPLETE},status.eq.${TRADE_STATUS.NEGOTIATING},and(status.eq.${TRADE_STATUS.OFFERED},offered_by.eq.${user.id})`)
         .order('offered_at', { ascending: false });
 
-      if (tradesError) {
-        console.error('Trades query error:', tradesError);
-        throw tradesError;
-      }
-
-      console.log('Raw trades data:', tradesData);
-      console.log('All trades:', tradesData?.map(trade => ({
-        id: trade.id,
-        status: trade.status,
-        offer_id: trade.offer_id,
-        request_id: trade.request_id,
-        offered_by: trade.offered_by
-      })));
+      if (tradesError) throw tradesError;
 
       // Get all wishlist IDs that are part of accepted or completed trades
       const committedWishlistIds = new Set<string>(
@@ -150,8 +140,6 @@ const Requests = () => {
           .flatMap(trade => [trade.offer_id, trade.request_id])
           .filter(Boolean)
       );
-      
-      console.log('Committed wishlist IDs:', Array.from(committedWishlistIds));
 
       // Map the trades data to match the Trade2 interface
       setTrades((tradesData || []).map(trade => {
@@ -193,34 +181,9 @@ const Requests = () => {
 
       if (wishlistError) throw wishlistError;
 
-      // Fix type issue with card_name access by properly typing the cards object
-      console.log('All wishlist items before filtering:', wishlistData?.map(item => ({
-        id: item.id,
-        card_name: item.cards?.[0]?.card_name
-      })));
-
       const validWishlistItems = (wishlistData || [])
-        .filter((item) => {
-          const isValid = item && 
-            item.cards && 
-            item.users;
-          
-          if (!isValid && item) {
-            console.log('Item excluded:', {
-              id: item.id,
-              hasCards: !!item.cards,
-              hasUsers: !!item.users
-            });
-          }
-          
-          return isValid;
-        })
+        .filter((item) => item && item.cards && item.users)
         .map(item => item as unknown as WishlistItem);
-
-      console.log('Filtered wishlist items:', validWishlistItems.map(item => ({
-        id: item.id,
-        card_name: item.cards?.card_name
-      })));
 
       setWishlistItems(validWishlistItems);
 
@@ -248,36 +211,50 @@ const Requests = () => {
     }
   }, [user, needsReload, refreshSession]);
 
-  // Handle making an offer
+  // Debounced refresh function
+  const refreshData = useCallback(() => {
+    if (refreshTimeout.current) {
+      clearTimeout(refreshTimeout.current);
+    }
+    
+    refreshTimeout.current = setTimeout(() => {
+      loadData(true);
+    }, REFRESH_DEBOUNCE);
+  }, [loadData]);
+
+  // Optimistic update helper
+  const updateProcessingOffers = useCallback((wishlistId: string, isProcessing: boolean) => {
+    setProcessingOffers(prev => {
+      const next = new Set(Array.from(prev));
+      if (isProcessing) {
+        next.add(wishlistId);
+      } else {
+        next.delete(wishlistId);
+      }
+      return next;
+    });
+  }, []);
+
+  // Handle making an offer with optimistic updates
   const handleMakeOffer = async (wishlistId: string) => {
     if (!user) return;
     
     try {
-      setProcessingOffers(prev => new Set([...Array.from(prev), wishlistId]));
+      // Optimistic update
+      updateProcessingOffers(wishlistId, true);
       
-      const { error } = await supabase
-        .from('trades2')
-        .insert({
-          offer_id: wishlistId,
-          offered_by: user.id,
-          status: TRADE_STATUS.OFFERED
-        })
-        .select()
-        .single();
+      const trade = await createTrade2(wishlistId);
       
-      if (error) throw error;
+      if (!trade) throw new Error('Failed to create trade');
       
-      await loadData(true);
+      // Debounced refresh instead of immediate
+      refreshData();
       showNotification('Offer made successfully!', 'success');
     } catch (err) {
       console.error('Error making offer:', err);
       showNotification('Failed to make offer', 'error');
       // Remove from processing set if there's an error
-      setProcessingOffers(prev => {
-        const next = new Set(Array.from(prev));
-        next.delete(wishlistId);
-        return next;
-      });
+      updateProcessingOffers(wishlistId, false);
     }
   };
 
@@ -294,6 +271,14 @@ const Requests = () => {
     return trades.some(trade => 
       (trade.offer_id === wishlistId || trade.request_id === wishlistId) && 
       [TRADE_STATUS.ACCEPTED.toLowerCase(), TRADE_STATUS.COMPLETE.toLowerCase()].includes(trade.status?.toLowerCase())
+    );
+  }, [trades]);
+
+  // Check if a card is in negotiation
+  const isCardInNegotiation = useCallback((wishlistId: string) => {
+    return trades.some(trade => 
+      (trade.offer_id === wishlistId || trade.request_id === wishlistId) && 
+      trade.status === TRADE_STATUS.NEGOTIATING
     );
   }, [trades]);
 
@@ -319,41 +304,30 @@ const Requests = () => {
     });
   }, [wishlistItems, searchQuery, packFilter, rarityFilter, elementFilter, tradeableOnly, hideOffered, hasUserMadeOffer, isCardCommitted]);
 
-  // Load data on mount and when user changes
+  // Effect for initial load and user changes
   useEffect(() => {
-    let mounted = true;
-    
-    const initData = async () => {
-      if (!user || !mounted) return;
-      
-      if (needsReload()) {
-        await loadData();
-      }
-    };
-    
-    initData();
+    loadData();
     
     return () => {
-      mounted = false;
+      if (refreshTimeout.current) {
+        clearTimeout(refreshTimeout.current);
+      }
     };
-  }, [user, loadData, needsReload]);
+  }, [loadData]);
 
   // Handle visibility change
   useEffect(() => {
-    const handleVisibilityChange = async () => {
-      if (document.visibilityState === 'visible' && user) {
-        if (needsReload()) {
-          await loadData();
-        }
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && needsReload()) {
+        loadData();
       }
     };
     
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [user, needsReload, loadData]);
+  }, [loadData, needsReload]);
 
   return (
     <div className="container py-8">
@@ -512,7 +486,7 @@ const Requests = () => {
               {filteredWishlistItems.map((item) => {
                 const isProcessing = processingOffers.has(item.id);
                 const hasOffered = hasUserMadeOffer(item.id);
-                const isDisabled = isProcessing || hasOffered;
+                const isDisabled = isProcessing || hasOffered || isCardInNegotiation(item.id);
 
                 return (
                   <tr key={item.id} className="hover:bg-gray-50">
@@ -576,7 +550,7 @@ const Requests = () => {
                             : 'bg-blue-600 hover:bg-blue-700 text-white'
                         }`}
                       >
-                        {hasOffered ? 'Offered' : 'Offer'}
+                        {hasOffered ? 'Offered' : isCardInNegotiation(item.id) ? 'In Negotiation' : 'Offer'}
                       </button>
                     </td>
                   </tr>

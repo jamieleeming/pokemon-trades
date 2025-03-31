@@ -1,29 +1,122 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { NOTIFICATION_TYPE, TradeNotification } from '../types';
 
-interface Notification {
-  id: string;
-  created_at: string;
-  user_id: string;
-  message: string;
-  viewed: boolean;
-}
+// Cache duration in milliseconds (1 minute)
+const CACHE_DURATION = 60 * 1000;
+// Debounce delay for refresh (500ms)
+const REFRESH_DEBOUNCE = 500;
 
 const NotificationCenter: React.FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<TradeNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
-  
-  const fetchAttemptsRef = useRef(0);
-  const lastFetchTimeRef = useRef(0);
   
   const { user } = useAuth();
   const notificationRef = useRef<HTMLDivElement>(null);
   
+  // Refs for caching and loading state
+  const lastLoadTimeRef = useRef(0);
+  const isLoadingRef = useRef(false);
+  const refreshTimeoutRef = useRef<NodeJS.Timeout>();
+  const subscriptionRef = useRef<any>(null);
+  
+  // Check if data needs refresh
+  const needsRefresh = useCallback(() => {
+    const now = Date.now();
+    const timeSinceLastLoad = now - lastLoadTimeRef.current;
+    return timeSinceLastLoad > CACHE_DURATION;
+  }, []);
+
+  // Debounced refresh function
+  const debouncedRefresh = useCallback(() => {
+    if (refreshTimeoutRef.current) {
+      clearTimeout(refreshTimeoutRef.current);
+    }
+
+    refreshTimeoutRef.current = setTimeout(() => {
+      fetchNotifications(true);
+    }, REFRESH_DEBOUNCE);
+  }, []);
+  
+  const fetchNotifications = useCallback(async (forceRefresh = false) => {
+    if (!user) return;
+    if (isLoadingRef.current) return;
+    if (!forceRefresh && !needsRefresh()) return;
+    
+    isLoadingRef.current = true;
+    setLoading(true);
+    
+    try {
+      setError(null);
+      
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      
+      if (data) {
+        setNotifications(data as TradeNotification[]);
+        setUnreadCount(data.filter(notification => !notification.viewed).length);
+        lastLoadTimeRef.current = Date.now();
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      setError('Failed to load notifications');
+    } finally {
+      isLoadingRef.current = false;
+      setLoading(false);
+    }
+  }, [user, needsRefresh]);
+
+  // Set up real-time subscription
+  useEffect(() => {
+    if (!user) return;
+
+    // Subscribe to new notifications
+    const subscription = supabase
+      .channel('notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          debouncedRefresh();
+        }
+      )
+      .subscribe();
+
+    subscriptionRef.current = subscription;
+
+    return () => {
+      if (subscriptionRef.current) {
+        supabase.removeChannel(subscriptionRef.current);
+      }
+    };
+  }, [user, debouncedRefresh]);
+  
+  // Initial load
+  useEffect(() => {
+    if (!user) {
+      setNotifications([]);
+      setUnreadCount(0);
+      return;
+    }
+    
+    fetchNotifications(true);
+  }, [user, fetchNotifications]);
+  
+  // Handle click outside to close panel
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
@@ -39,71 +132,50 @@ const NotificationCenter: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
-  
-  const fetchNotifications = useCallback(async (forceRefresh = false) => {
+
+  // Get notification icon based on type
+  const getNotificationIcon = (type: NOTIFICATION_TYPE) => {
+    switch (type) {
+      case NOTIFICATION_TYPE.OFFER_RECEIVED:
+        return (
+          <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+          </svg>
+        );
+      case NOTIFICATION_TYPE.TRADE_ACCEPTED:
+        return (
+          <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        );
+      case NOTIFICATION_TYPE.OFFER_REJECTED:
+        return (
+          <svg className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        );
+      case NOTIFICATION_TYPE.COUNTEROFFER_RECEIVED:
+        return (
+          <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
+  // Optimistic update for marking as viewed
+  const markAsViewed = useCallback(async (id: string) => {
     if (!user) return;
     
-    const now = Date.now();
-    if (!forceRefresh && fetchAttemptsRef.current > 3 && now - lastFetchTimeRef.current < 60000) {
-      console.log('Skipping notification fetch - too many recent attempts');
-      return;
-    }
-    
-    fetchAttemptsRef.current += 1;
-    lastFetchTimeRef.current = now;
-    
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const { data, error } = await supabase
-        .from('notifications')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        throw error;
-      }
-      
-      if (data) {
-        setNotifications(data);
-        setUnreadCount(data.filter(notification => !notification.viewed).length);
-        fetchAttemptsRef.current = 0;
-      }
-      
-      setIsInitialized(true);
-    } catch (error) {
-      console.error('Error fetching notifications:', error);
-      setError('Failed to load notifications. Please try again later.');
-      
-      if (isInitialized) {
-        console.log('Using cached notification data due to fetch error');
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [user, isInitialized]);
-  
-  useEffect(() => {
-    if (!user) {
-      setNotifications([]);
-      setUnreadCount(0);
-      return;
-    }
-    
-    fetchNotifications(true);
-  }, [user, fetchNotifications]);
-  
-  useEffect(() => {
-    if (isOpen && user) {
-      console.log('Notification panel opened, fetching latest notifications');
-      fetchNotifications(true);
-    }
-  }, [isOpen, user, fetchNotifications]);
-  
-  const markAsViewed = async (id: string) => {
-    if (!user) return;
+    // Optimistic update
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === id ? { ...notification, viewed: true } : notification
+      )
+    );
+    setUnreadCount(prev => Math.max(0, prev - 1));
     
     try {
       const { error } = await supabase
@@ -112,24 +184,23 @@ const NotificationCenter: React.FC = () => {
         .eq('id', id)
         .eq('user_id', user.id);
       
-      if (error) {
-        throw error;
-      }
-      
-      setNotifications(prevNotifications => 
-        prevNotifications.map(notification => 
-          notification.id === id ? { ...notification, viewed: true } : notification
-        )
-      );
-      
-      setUnreadCount(prevCount => Math.max(0, prevCount - 1));
+      if (error) throw error;
     } catch (error) {
       console.error('Error marking notification as viewed:', error);
+      // Revert optimistic update on error
+      debouncedRefresh();
     }
-  };
+  }, [user, debouncedRefresh]);
   
-  const markAllAsViewed = async () => {
+  // Optimistic update for marking all as viewed
+  const markAllAsViewed = useCallback(async () => {
     if (!user) return;
+    
+    // Optimistic update
+    setNotifications(prev => 
+      prev.map(notification => ({ ...notification, viewed: true }))
+    );
+    setUnreadCount(0);
     
     try {
       const { error } = await supabase
@@ -138,28 +209,30 @@ const NotificationCenter: React.FC = () => {
         .eq('user_id', user.id)
         .eq('viewed', false);
       
-      if (error) {
-        throw error;
-      }
-      
-      setNotifications(prevNotifications => 
-        prevNotifications.map(notification => ({ ...notification, viewed: true }))
-      );
-      
-      setUnreadCount(0);
+      if (error) throw error;
     } catch (error) {
       console.error('Error marking all notifications as viewed:', error);
+      // Revert optimistic update on error
+      debouncedRefresh();
     }
-  };
+  }, [user, debouncedRefresh]);
   
-  const toggleNotifications = () => {
+  const toggleNotifications = useCallback(() => {
     setIsOpen(!isOpen);
-  };
-  
-  const handleRefresh = () => {
-    fetchNotifications(true);
-  };
-  
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+      }
+      if (subscriptionRef.current) {
+        supabase.removeChannel(subscriptionRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="relative" ref={notificationRef}>
       <button 
@@ -193,22 +266,14 @@ const NotificationCenter: React.FC = () => {
         <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-50 overflow-hidden">
           <div className="py-2 px-3 bg-gray-100 flex justify-between items-center">
             <h3 className="text-sm font-medium text-gray-900">Notifications</h3>
-            <div className="flex space-x-2">
-              {unreadCount > 0 && (
-                <button
-                  onClick={markAllAsViewed}
-                  className="text-xs text-blue-600 hover:text-blue-800"
-                >
-                  Mark all as read
-                </button>
-              )}
+            {unreadCount > 0 && (
               <button
-                onClick={handleRefresh}
-                className="text-xs text-gray-600 hover:text-gray-800"
+                onClick={markAllAsViewed}
+                className="text-xs text-blue-600 hover:text-blue-800"
               >
-                Refresh
+                Mark all as read
               </button>
-            </div>
+            )}
           </div>
           
           {error && (
@@ -230,6 +295,9 @@ const NotificationCenter: React.FC = () => {
                   onClick={() => markAsViewed(notification.id)}
                 >
                   <div className="flex items-start">
+                    <div className="flex-shrink-0 mr-3">
+                      {getNotificationIcon(notification.type)}
+                    </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-gray-900">{notification.message}</p>
                       <p className="text-xs text-gray-500 mt-1">
