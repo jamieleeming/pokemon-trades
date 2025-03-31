@@ -31,17 +31,6 @@ const NotificationCenter: React.FC = () => {
     return timeSinceLastLoad > CACHE_DURATION;
   }, []);
 
-  // Debounced refresh function
-  const debouncedRefresh = useCallback(() => {
-    if (refreshTimeoutRef.current) {
-      clearTimeout(refreshTimeoutRef.current);
-    }
-
-    refreshTimeoutRef.current = setTimeout(() => {
-      fetchNotifications(true);
-    }, REFRESH_DEBOUNCE);
-  }, []);
-  
   const fetchNotifications = useCallback(async (forceRefresh = false) => {
     if (!user) return;
     if (isLoadingRef.current) return;
@@ -75,6 +64,17 @@ const NotificationCenter: React.FC = () => {
     }
   }, [user, needsRefresh]);
 
+  // Debounced refresh function
+  const debouncedRefresh = useCallback(() => {
+    if (refreshTimeoutRef.current) {
+      clearTimeout(refreshTimeoutRef.current);
+    }
+
+    refreshTimeoutRef.current = setTimeout(() => {
+      fetchNotifications(true);
+    }, REFRESH_DEBOUNCE);
+  }, [fetchNotifications]);
+  
   // Set up real-time subscription
   useEffect(() => {
     if (!user) return;
@@ -219,7 +219,7 @@ const NotificationCenter: React.FC = () => {
   
   const toggleNotifications = useCallback(() => {
     setIsOpen(!isOpen);
-  }, []);
+  }, [isOpen]);
 
   // Cleanup on unmount
   useEffect(() => {

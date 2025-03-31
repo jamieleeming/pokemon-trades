@@ -5,7 +5,6 @@ import { useAuth } from '../contexts/AuthContext';
 import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
 import CollapsibleFilters from '../components/CollapsibleFilters';
-import { logWithTimestamp } from '../lib/logging';
 import { createTrade2 } from '../lib/trades2';
 
 // Cache duration in milliseconds (1 minute)

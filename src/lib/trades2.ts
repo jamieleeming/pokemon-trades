@@ -119,8 +119,6 @@ export async function updateTrade2Status(
   // Send appropriate notification based on status
   if (trade) {
     const offererUserId = trade.offer?.users?.id;
-    const requesterUserId = trade.request?.users?.id;
-    const offererUsername = trade.offer?.users?.username || 'A user';
     const requesterUsername = trade.request?.users?.username || 'A user';
     const itemName = trade.offer?.cards?.card_name;
 
