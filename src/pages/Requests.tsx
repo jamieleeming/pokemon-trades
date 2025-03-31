@@ -12,6 +12,9 @@ const CACHE_DURATION = 60 * 1000;
 // Debounce delay for data refresh (500ms)
 const REFRESH_DEBOUNCE = 500;
 
+type SortColumn = 'name' | 'number' | 'pack' | 'rarity' | 'player' | 'requested';
+type SortDirection = 'asc' | 'desc';
+
 const Requests = () => {
   const [trades, setTrades] = useState<Trade2[]>([]);
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
@@ -23,8 +26,10 @@ const Requests = () => {
   const [packFilter, setPackFilter] = useState('');
   const [rarityFilter, setRarityFilter] = useState('');
   const [elementFilter, setElementFilter] = useState('');
-  const [tradeableOnly, setTradeableOnly] = useState(true);
   const [hideOffered, setHideOffered] = useState(false);
+  
+  const [sortColumn, setSortColumn] = useState<SortColumn>('requested');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   
   const [loading, setLoading] = useState(false);
   const [processingOffers, setProcessingOffers] = useState<Set<string>>(new Set());
@@ -281,13 +286,54 @@ const Requests = () => {
     );
   }, [trades]);
 
-  // Filter wishlist items
+  // Sort function for wishlist items
+  const sortItems = useCallback((items: WishlistItem[]) => {
+    return [...items].sort((a, b) => {
+      const direction = sortDirection === 'asc' ? 1 : -1;
+      
+      switch (sortColumn) {
+        case 'name':
+          return direction * ((a.cards?.card_name || '').localeCompare(b.cards?.card_name || ''));
+        case 'number':
+          const aNum = Number(a.cards?.card_number || 0);
+          const bNum = Number(b.cards?.card_number || 0);
+          return direction * (aNum - bNum);
+        case 'pack':
+          return direction * ((a.cards?.pack || '').localeCompare(b.cards?.pack || ''));
+        case 'rarity':
+          return direction * ((a.cards?.card_rarity || '').localeCompare(b.cards?.card_rarity || ''));
+        case 'player':
+          return direction * ((a.users?.username || '').localeCompare(b.users?.username || ''));
+        case 'requested':
+          return direction * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        default:
+          return 0;
+      }
+    });
+  }, [sortColumn, sortDirection]);
+
+  // Handle sort column change
+  const handleSort = useCallback((column: SortColumn) => {
+    if (sortColumn === column) {
+      // If clicking the same column, toggle direction
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      // If clicking a new column, set it with default desc direction
+      setSortColumn(column);
+      setSortDirection('desc');
+    }
+  }, [sortColumn]);
+
+  // Filter and sort wishlist items
   const filteredWishlistItems = useMemo(() => {
-    return wishlistItems.filter(item => {
+    const filtered = wishlistItems.filter(item => {
       if (!item.cards) return false;
       
       // Check if the card is part of any accepted or completed trade
       if (isCardCommitted(item.id)) return false;
+
+      // Always filter out non-tradeable cards
+      if (!item.cards.tradeable) return false;
       
       const matchesSearch = searchQuery === '' || 
         (item.cards.card_name && item.cards.card_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -296,12 +342,13 @@ const Requests = () => {
       const matchesPack = packFilter === '' || item.cards.pack === packFilter;
       const matchesRarity = rarityFilter === '' || item.cards.card_rarity === rarityFilter;
       const matchesElement = elementFilter === '' || item.cards.card_element === elementFilter;
-      const matchesTradeable = !tradeableOnly || item.cards.tradeable === true;
       const matchesOffered = !hideOffered || !hasUserMadeOffer(item.id);
       
-      return matchesSearch && matchesPack && matchesRarity && matchesElement && matchesTradeable && matchesOffered;
+      return matchesSearch && matchesPack && matchesRarity && matchesElement && matchesOffered;
     });
-  }, [wishlistItems, searchQuery, packFilter, rarityFilter, elementFilter, tradeableOnly, hideOffered, hasUserMadeOffer, isCardCommitted]);
+
+    return sortItems(filtered);
+  }, [wishlistItems, searchQuery, packFilter, rarityFilter, elementFilter, hideOffered, hasUserMadeOffer, isCardCommitted, sortItems]);
 
   // Effect for initial load and user changes
   useEffect(() => {
@@ -440,15 +487,6 @@ const Requests = () => {
             <label className="flex items-center">
               <input
                 type="checkbox"
-                checked={tradeableOnly}
-                onChange={(e) => setTradeableOnly(e.target.checked)}
-                className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm font-medium text-gray-700">Tradeable Only</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
                 checked={hideOffered}
                 onChange={(e) => setHideOffered(e.target.checked)}
                 className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
@@ -472,12 +510,72 @@ const Requests = () => {
               <tr>
                 <th className="px-3 sm:px-6 py-3 sm:hidden">Card</th>
                 <th className="hidden sm:table-cell px-6 py-3">Image</th>
-                <th className="hidden sm:table-cell px-6 py-3">Name</th>
-                <th className="hidden sm:table-cell px-6 py-3">Number</th>
-                <th className="hidden sm:table-cell px-6 py-3">Pack</th>
-                <th className="hidden md:table-cell px-6 py-3">Rarity</th>
-                <th className="px-3 sm:px-6 py-3">Player</th>
-                <th className="hidden sm:table-cell px-6 py-3">Requested</th>
+                <th 
+                  className="hidden sm:table-cell px-6 py-3 cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort('name')}
+                >
+                  <div className="flex items-center">
+                    Name
+                    {sortColumn === 'name' && (
+                      <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
+                <th 
+                  className="hidden sm:table-cell px-6 py-3 cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort('number')}
+                >
+                  <div className="flex items-center">
+                    Number
+                    {sortColumn === 'number' && (
+                      <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
+                <th 
+                  className="hidden sm:table-cell px-6 py-3 cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort('pack')}
+                >
+                  <div className="flex items-center">
+                    Pack
+                    {sortColumn === 'pack' && (
+                      <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
+                <th 
+                  className="hidden md:table-cell px-6 py-3 cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort('rarity')}
+                >
+                  <div className="flex items-center">
+                    Rarity
+                    {sortColumn === 'rarity' && (
+                      <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
+                <th 
+                  className="px-3 sm:px-6 py-3 cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort('player')}
+                >
+                  <div className="flex items-center">
+                    Player
+                    {sortColumn === 'player' && (
+                      <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
+                <th 
+                  className="hidden sm:table-cell px-6 py-3 cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort('requested')}
+                >
+                  <div className="flex items-center">
+                    Requested
+                    {sortColumn === 'requested' && (
+                      <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
                 <th className="px-3 sm:px-6 py-3">Actions</th>
               </tr>
             </thead>
