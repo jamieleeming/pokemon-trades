@@ -32,53 +32,55 @@ export async function getTrade2ById(id: string): Promise<Trade2 | null> {
 }
 
 // Create a new trade
-export async function createTrade2(offerId: string): Promise<Trade2 | null> {
-  // First get the current user's ID
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
-  if (userError || !user) {
-    console.error('Error getting user:', userError);
-    return null;
-  }
+export const createTrade2 = async (wishlistId: string) => {
+  try {
+    // Get the wishlist item first to get the user_id
+    const { data: wishlistData, error: wishlistError } = await supabase
+      .from('wishlists')
+      .select('user_id')
+      .eq('id', wishlistId)
+      .single();
 
-  const { data: trade, error } = await supabase
-    .from('trades2')
-    .insert({
-      offer_id: offerId,
-      status: TRADE_STATUS.OFFERED,
-      offered_by: user.id
-    })
-    .select(`
-      *,
-      offer:offer_id (
-        *,
-        cards:card_id (*),
-        users:user_id (*)
-      ),
-      offerer:offered_by (
-        id,
-        username
-      )
-    `)
-    .single();
+    if (wishlistError) throw wishlistError;
+    if (!wishlistData) throw new Error('Wishlist item not found');
 
-  if (error) {
+    // Get the current user
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError) throw userError;
+    if (!user) throw new Error('User not authenticated');
+
+    // Create the trade with offered_to set to the wishlist owner's user_id
+    const { data: trade, error: tradeError } = await supabase
+      .from('trades2')
+      .insert({
+        offer_id: wishlistId,
+        status: TRADE_STATUS.OFFERED,
+        offered_at: new Date().toISOString(),
+        offered_by: user.id, // Add the current user's ID
+        offered_to: wishlistData.user_id // Add the offered_to field
+      })
+      .select()
+      .single();
+
+    if (tradeError) throw tradeError;
+
+    // Send notification to the recipient
+    if (trade?.offer?.users?.id) {
+      await createTradeNotification({
+        userId: trade.offer.users.id,
+        type: NOTIFICATION_TYPE.OFFER_RECEIVED,
+        actorUsername: trade.offerer?.username || 'A user',
+        wishlistItemName: trade.offer.cards?.card_name,
+        cardName: trade.offer.cards?.card_name
+      });
+    }
+
+    return trade;
+  } catch (error) {
     console.error('Error creating trade:', error);
-    return null;
+    throw error; // Re-throw the error instead of returning null
   }
-
-  // Send notification to the recipient
-  if (trade?.offer?.users?.id) {
-    await createTradeNotification({
-      userId: trade.offer.users.id,
-      type: NOTIFICATION_TYPE.OFFER_RECEIVED,
-      actorUsername: trade.offerer?.username || 'A user',
-      wishlistItemName: trade.offer.cards?.card_name,
-      cardName: trade.offer.cards?.card_name
-    });
-  }
-
-  return trade;
-}
+};
 
 // Update a trade's status
 export async function updateTrade2Status(

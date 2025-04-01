@@ -93,6 +93,7 @@ const Requests = () => {
           offer_id,
           request_id,
           offered_by,
+          offered_to,
           offered_at,
           offer:offer_id (
             id,
@@ -153,6 +154,7 @@ const Requests = () => {
           offer_id: trade.offer_id,
           request_id: trade.request_id,
           offered_by: trade.offered_by,
+          offered_to: trade.offered_to,
           offered_at: trade.offered_at || new Date().toISOString(),
           requested_at: null,
           offer: trade.offer?.[0] as unknown as WishlistItem | undefined,

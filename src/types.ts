@@ -47,14 +47,14 @@ export interface Trade {
 
 // New trades2 table interface
 export interface Trade2 {
-  id: string; // UUID
-  offered_at: string; // timestamp with time zone
-  requested_at: string | null; // timestamp with time zone
-  offer_id: string | null; // UUID referencing wishlists.id
-  request_id: string | null; // UUID referencing wishlists.id
+  id: string;
   status: TRADE_STATUS;
-  offered_by: string | null; // UUID referencing users.id
-  // Include optional joined fields for convenience
+  offer_id: string;
+  request_id: string | null;
+  offered_by: string;
+  offered_to: string;
+  offered_at: string;
+  requested_at: string | null;
   offer?: WishlistItem;
   request?: WishlistItem;
   offerer?: User;

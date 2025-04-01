@@ -182,6 +182,7 @@ const Offers = () => {
           offer_id,
           request_id,
           offered_by,
+          offered_to,
           offerer:offered_by (
             id,
             username,
@@ -287,14 +288,9 @@ const Offers = () => {
    */
   const loadEligibleCards = useCallback(async (items: WishlistItemWithOffers[]) => {
     try {
-      // Get all users involved in the trades across all items
+      // Get all users who have made offers across all items
       const involvedUsers = items.flatMap(item => 
-        item.offers.flatMap(offer => {
-          const users = [];
-          if (offer.offered_by) users.push(offer.offered_by);
-          if (offer.request?.user_id) users.push(offer.request.user_id);
-          return users;
-        })
+        item.offers.map(offer => offer.offered_by)
       ).filter((id): id is string => Boolean(id));
 
       // Create a map of usernames for all involved users
@@ -305,18 +301,12 @@ const Offers = () => {
             if (offer.offered_by && offer.offerer?.username) {
               mappings.push([offer.offered_by, offer.offerer.username]);
             }
-            if (offer.offer?.user_id && offer.offer?.users?.username) {
-              mappings.push([offer.offer.user_id, offer.offer.users.username]);
-            }
-            if (offer.request?.user_id && offer.request?.users?.username) {
-              mappings.push([offer.request.user_id, offer.request.users.username]);
-            }
             return mappings;
           })
         )
       );
       
-      // Get all wishlist items from these users in a single query
+      // Get all wishlist items from users who have made offers
       const { data: tradeableWishlistItems, error: wishlistError } = await supabase
         .from('wishlists')
         .select(`
@@ -331,7 +321,7 @@ const Offers = () => {
 
       if (wishlistError) throw wishlistError;
 
-      // Get all trades in negotiation or accepted state in a single query
+      // Get all trades in negotiation or accepted state
       const { data: committedTrades, error: tradesError } = await supabase
         .from('trades2')
         .select(`
@@ -366,6 +356,9 @@ const Offers = () => {
           [TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE].includes(offer.status)
         );
 
+        // Get the list of users who have made offers on this specific item
+        const itemOfferers = new Set(item.offers.map(offer => offer.offered_by));
+
         // Filter eligible cards for this item
         let eligibleCards = (tradeableWishlistItems || [])
           .filter(wishlistItem => 
@@ -376,6 +369,8 @@ const Offers = () => {
             wishlistItem.cards.tradeable === true &&
             wishlistItem.cards.card_rarity === item.cards?.card_rarity &&
             !committedWishlistIds.has(wishlistItem.id) &&
+            // Only include cards from users who have made offers on this item
+            itemOfferers.has(wishlistItem.user_id || '') &&
             // Exclude the logged-in user's cards
             wishlistItem.user_id !== user?.id
           )
@@ -905,50 +900,56 @@ const Offers = () => {
                         </div>
                       </div>
                       <div className="flex items-start space-x-4">
-                        {item.cards?.image_url && (
-                          <div className="flex-shrink-0">
-                            <img 
-                              src={item.cards.image_url} 
-                              alt={item.cards.card_name || 'Card'}
-                              className="h-24 w-auto object-contain rounded"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                              }}
-                            />
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-medium text-gray-900 truncate">
-                            {item.cards?.card_name || 'Unknown Card'}
-                          </h3>
-                          <p className="mt-1 text-sm text-gray-500">
-                            #{String(item.cards?.card_number || '000').padStart(3, '0')} · {item.cards?.pack || 'Unknown Pack'} · {item.cards?.card_rarity || 'Unknown Rarity'}
-                          </p>
-                          <div className="mt-2 text-sm text-gray-500">
-                            {/* Show the username of the person who made the offer */}
-                            {(() => {
-                              const activeOffer = item.offers.find(offer => 
-                                [TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED].includes(offer.status)
-                              ) || item.offers[0];
-                              return activeOffer.offerer?.username || 'Unknown User';
-                            })()}
-                            {/* Show the friend code of the person who made the offer */}
-                            {(() => {
-                              const activeOffer = item.offers.find(offer => 
-                                [TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED].includes(offer.status)
-                              ) || item.offers[0];
-                              const friendCode = activeOffer.offerer?.friend_code;
-                              return friendCode && (
-                                <button
-                                  onClick={() => handleCopyFriendCode(friendCode)}
-                                  className="ml-2 text-blue-600 hover:text-blue-800"
-                                >
-                                  {friendCode}
-                                </button>
-                              );
-                            })()}
-                          </div>
-                        </div>
+                        {(() => {
+                          const activeOffer = item.offers.find(offer => 
+                            [TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED].includes(offer.status)
+                          ) || item.offers[0];
+
+                          const isOfferer = activeOffer.offered_by === user?.id;
+                          const cardToShow = isOfferer ? activeOffer.request?.cards : activeOffer.offer?.cards;
+                          
+                          // Get the other user in the trade based on offered_by and offered_to
+                          const otherUser = isOfferer
+                            ? activeOffer.offer?.users  // If we're the offerer (offered_by), show the person we offered to (in offer.users)
+                            : activeOffer.offerer;      // If we're the receiver (offered_to), show the person who made the offer (offerer)
+                          const friendCode = otherUser?.friend_code || '';
+
+                          return (
+                            <>
+                              {cardToShow?.image_url && (
+                                <div className="flex-shrink-0">
+                                  <img 
+                                    src={cardToShow.image_url} 
+                                    alt={cardToShow.card_name || 'Card'}
+                                    className="h-24 w-auto object-contain rounded"
+                                    onError={(e) => {
+                                      e.currentTarget.style.display = 'none';
+                                    }}
+                                  />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <h3 className="text-lg font-medium text-gray-900 truncate">
+                                  {cardToShow?.card_name || 'Unknown Card'}
+                                </h3>
+                                <p className="mt-1 text-sm text-gray-500">
+                                  #{String(cardToShow?.card_number || '000').padStart(3, '0')} · {cardToShow?.pack || 'Unknown Pack'} · {cardToShow?.card_rarity || 'Unknown Rarity'}
+                                </p>
+                                <div className="mt-2 text-sm text-gray-500">
+                                  {otherUser?.username || 'Unknown User'}
+                                  {friendCode && (
+                                    <button
+                                      onClick={() => handleCopyFriendCode(friendCode)}
+                                      className="ml-2 text-blue-600 hover:text-blue-800"
+                                    >
+                                      {friendCode}
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </>
+                          );
+                        })()}
                       </div>
                       
                       {/* Lower card display section */}
@@ -962,11 +963,12 @@ const Offers = () => {
                             );
 
                             if (advancedTrade) {
-                              // Determine which card to show based on who made the offer
                               const isOfferer = advancedTrade.offered_by === user?.id;
+                              // If we're the offerer, show our offer card
+                              // If we're the receiver, show our counter-offer card
                               const cardToShow = isOfferer 
-                                ? advancedTrade.offer?.cards // If we made the offer, show our offered card
-                                : advancedTrade.request?.cards; // If we received the offer, show our counter-offered card
+                                ? advancedTrade.offer?.cards
+                                : advancedTrade.request?.cards;
 
                               if (!cardToShow) return null;
 
