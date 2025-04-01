@@ -143,113 +143,149 @@ const Offers = () => {
     if (isLoadingRef.current) return;
     if (!force && !needsRefresh()) return;
     
-    try {
-      isLoadingRef.current = true;
-      setLoading(true);
-      setError(null);
+    let retryCount = 0;
+    const maxRetries = 3;
 
-      // First get the user's wishlist items
-      const { data: wishlistData, error: wishlistError } = await supabase
-        .from('wishlists')
-        .select(`
-          id,
-          created_at,
-          user_id,
-          card_id,
-          traded,
-          cards:card_id (*),
-          users:user_id (*)
-        `)
-        .eq('user_id', user.id);
+    const tryLoadData = async () => {
+      try {
+        isLoadingRef.current = true;
+        setLoading(true);
+        setError(null);
 
-      if (wishlistError) throw wishlistError;
+        // First get the user's wishlist items
+        const { data: wishlistData, error: wishlistError } = await supabase
+          .from('wishlists')
+          .select(`
+            id,
+            created_at,
+            user_id,
+            card_id,
+            traded,
+            cards:card_id (*),
+            users:user_id (*)
+          `)
+          .eq('user_id', user.id);
 
-      if (!wishlistData?.length) {
-        setWishlistItems([]);
-        return;
+        if (wishlistError) throw wishlistError;
+
+        if (!wishlistData?.length) {
+          setWishlistItems([]);
+          return;
+        }
+
+        // Split into chunks if too many wishlist items
+        const chunkSize = 10;
+        const wishlistChunks = [];
+        for (let i = 0; i < wishlistData.length; i += chunkSize) {
+          wishlistChunks.push(wishlistData.slice(i, i + chunkSize));
+        }
+
+        interface RawTradeData {
+          id: string;
+          offered_at: string;
+          requested_at: string;
+          status: string;
+          offer_id: string;
+          request_id: string;
+          offered_by: string;
+          offerer: { id: string; username: string; friend_code: string; }[];
+          offer: WishlistItem[];
+          request: WishlistItem[];
+        }
+
+        let allTradesData: RawTradeData[] = [];
+        
+        // Process each chunk
+        for (const chunk of wishlistChunks) {
+          const { data: tradesData, error: tradesError } = await supabase
+            .from('trades2')
+            .select(`
+              id,
+              offered_at,
+              requested_at,
+              status,
+              offer_id,
+              request_id,
+              offered_by,
+              offerer:offered_by (
+                id,
+                username,
+                friend_code
+              ),
+              offer:offer_id (
+                id,
+                created_at,
+                user_id,
+                card_id,
+                traded,
+                cards:card_id (*),
+                users:user_id (*)
+              ),
+              request:request_id (
+                id,
+                created_at,
+                user_id,
+                card_id,
+                traded,
+                cards:card_id (*),
+                users:user_id (*)
+              )
+            `)
+            .or(`offer_id.in.(${chunk.map(item => `'${item.id}'`).join(',')}),request_id.in.(${chunk.map(item => `'${item.id}'`).join(',')})`)
+            .or(`user_id.eq.${user.id},offered_by.eq.${user.id}`)
+            .in('status', [TRADE_STATUS.OFFERED, TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE]);
+
+          if (tradesError) throw tradesError;
+          if (tradesData) {
+            allTradesData = [...allTradesData, ...tradesData];
+          }
+        }
+
+        // Combine the data with validation
+        const itemsWithOffers = wishlistData
+          .filter(item => item && item.cards && item.users)
+          .map(item => {
+            const offers = allTradesData
+              .filter(trade => {
+                if (trade.offer_id === item.id) {
+                  return trade.offer?.[0]?.user_id === user.id;
+                } else if (trade.request_id === item.id) {
+                  return trade.offered_by === user.id;
+                }
+                return false;
+              })
+              .map(trade => ({
+                ...trade,
+                offerer: trade.offerer[0],
+                offer: trade.offer[0],
+                request: trade.request[0]
+              } as unknown as Trade2));
+            
+            return {
+              ...(item as unknown as WishlistItem),
+              offers
+            } as WishlistItemWithOffers;
+          })
+          .filter(item => item.offers.length > 0);
+
+        setWishlistItems(itemsWithOffers);
+        lastLoadTime.current = Date.now();
+      } catch (err) {
+        console.error('Error loading data:', err);
+        if (retryCount < maxRetries) {
+          retryCount++;
+          console.log(`Retrying... Attempt ${retryCount} of ${maxRetries}`);
+          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+          return tryLoadData();
+        }
+        setError('Failed to load data. Please try again.');
+      } finally {
+        setLoading(false);
+        isLoadingRef.current = false;
       }
+    };
 
-      // Get all trades where either:
-      // 1. The wishlist item is being offered to the user (offer_id matches)
-      // 2. The wishlist item was offered by the user and someone has counter-offered (request_id matches)
-      const { data: tradesData, error: tradesError } = await supabase
-        .from('trades2')
-        .select(`
-          id,
-          offered_at,
-          requested_at,
-          status,
-          offer_id,
-          request_id,
-          offered_by,
-          offerer:offered_by (
-            id,
-            username,
-            friend_code
-          ),
-          offer:offer_id (
-            id,
-            created_at,
-            user_id,
-            card_id,
-            traded,
-            cards:card_id (*),
-            users:user_id (*)
-          ),
-          request:request_id (
-            id,
-            created_at,
-            user_id,
-            card_id,
-            traded,
-            cards:card_id (*),
-            users:user_id (*)
-          )
-        `)
-        .or(`and(offer_id.in.(${wishlistData.map(item => item.id).join(',')}),user_id.eq.${user.id}),and(request_id.in.(${wishlistData.map(item => item.id).join(',')}),offered_by.eq.${user.id})`)
-        .in('status', [TRADE_STATUS.OFFERED, TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE]);
-
-      if (tradesError) throw tradesError;
-
-      // Combine the data with validation
-      const itemsWithOffers = wishlistData
-        .filter(item => item && item.cards && item.users)
-        .map(item => {
-          const offers = (tradesData || [])
-            .filter(trade => {
-              // Validate trade ownership and associations
-              if (trade.offer_id === item.id) {
-                // This is an offer for our wishlist item
-                return trade.offer && 'user_id' in trade.offer && trade.offer.user_id === user.id;
-              } else if (trade.request_id === item.id) {
-                // This is a request for our wishlist item
-                return trade.offered_by === user.id;
-              }
-              return false;
-            })
-            .map(trade => ({
-              ...trade,
-              offerer: Array.isArray(trade.offerer) ? trade.offerer[0] : trade.offerer,
-              offer: Array.isArray(trade.offer) ? trade.offer[0] : trade.offer,
-              request: Array.isArray(trade.request) ? trade.request[0] : trade.request
-            } as unknown as Trade2));
-          
-          return {
-            ...(item as unknown as WishlistItem),
-            offers
-          } as WishlistItemWithOffers;
-        })
-        .filter(item => item.offers.length > 0);
-
-      setWishlistItems(itemsWithOffers);
-      lastLoadTime.current = Date.now();
-    } catch (err) {
-      console.error('Error loading data:', err);
-      setError('Failed to load data. Please try again.');
-    } finally {
-      setLoading(false);
-      isLoadingRef.current = false;
-    }
+    tryLoadData();
   }, [user, needsRefresh]);
 
   // Debounced refresh function
