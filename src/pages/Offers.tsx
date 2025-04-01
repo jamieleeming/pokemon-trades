@@ -143,19 +143,51 @@ const Offers = () => {
     if (isLoadingRef.current) return;
     if (!force && !needsRefresh()) return;
     
-    let retryCount = 0;
-    const maxRetries = 3;
+    try {
+      isLoadingRef.current = true;
+      setLoading(true);
+      setError(null);
 
-    const tryLoadData = async (): Promise<void> => {
-      try {
-        isLoadingRef.current = true;
-        setLoading(true);
-        setError(null);
+      // First get the user's wishlist items
+      const { data: wishlistData, error: wishlistError } = await supabase
+        .from('wishlists')
+        .select(`
+          id,
+          created_at,
+          user_id,
+          card_id,
+          traded,
+          cards:card_id (*),
+          users:user_id (*)
+        `)
+        .eq('user_id', user.id);
 
-        // First get the user's wishlist items
-        const { data: wishlistData, error: wishlistError } = await supabase
-          .from('wishlists')
-          .select(`
+      if (wishlistError) throw wishlistError;
+
+      if (!wishlistData?.length) {
+        setWishlistItems([]);
+        return;
+      }
+
+      // Get all trades where either:
+      // 1. The wishlist item is being offered to the user (offer_id matches)
+      // 2. The wishlist item was offered by the user and someone has counter-offered (request_id matches)
+      const { data: tradesData, error: tradesError } = await supabase
+        .from('trades2')
+        .select(`
+          id,
+          offered_at,
+          requested_at,
+          status,
+          offer_id,
+          request_id,
+          offered_by,
+          offerer:offered_by (
+            id,
+            username,
+            friend_code
+          ),
+          offer:offer_id (
             id,
             created_at,
             user_id,
@@ -163,131 +195,51 @@ const Offers = () => {
             traded,
             cards:card_id (*),
             users:user_id (*)
-          `)
-          .eq('user_id', user.id);
+          ),
+          request:request_id (
+            id,
+            created_at,
+            user_id,
+            card_id,
+            traded,
+            cards:card_id (*),
+            users:user_id (*)
+          )
+        `)
+        .or(`offer_id.in.(${wishlistData.map(item => item.id).join(',')}),request_id.in.(${wishlistData.map(item => item.id).join(',')})`)
+        .in('status', [TRADE_STATUS.OFFERED, TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE]);
 
-        if (wishlistError) throw wishlistError;
+      if (tradesError) throw tradesError;
 
-        if (!wishlistData?.length) {
-          setWishlistItems([]);
-          return;
-        }
+      // Combine the data
+      const itemsWithOffers = wishlistData
+        .filter(item => item && item.cards && item.users)
+        .map(item => {
+          const offers = (tradesData || [])
+            .filter(trade => trade.offer_id === item.id || trade.request_id === item.id)
+            .map(trade => ({
+              ...trade,
+              offerer: Array.isArray(trade.offerer) ? trade.offerer[0] : trade.offerer,
+              offer: Array.isArray(trade.offer) ? trade.offer[0] : trade.offer,
+              request: Array.isArray(trade.request) ? trade.request[0] : trade.request
+            } as unknown as Trade2));
+          
+          return {
+            ...(item as unknown as WishlistItem),
+            offers
+          } as WishlistItemWithOffers;
+        })
+        .filter(item => item.offers.length > 0);
 
-        // Split into chunks if too many wishlist items
-        const chunkSize = 10;
-        const wishlistChunks = [];
-        for (let i = 0; i < wishlistData.length; i += chunkSize) {
-          wishlistChunks.push(wishlistData.slice(i, i + chunkSize));
-        }
-
-        interface RawTradeData {
-          id: string;
-          offered_at: string;
-          requested_at: string;
-          status: string;
-          offer_id: string;
-          request_id: string;
-          offered_by: string;
-          offerer: { id: string; username: string; friend_code: string; }[];
-          offer: WishlistItem[];
-          request: WishlistItem[];
-        }
-
-        let allTradesData: RawTradeData[] = [];
-        
-        // Process each chunk
-        for (const chunk of wishlistChunks) {
-          const { data: tradesData, error: tradesError } = await supabase
-            .from('trades2')
-            .select(`
-              id,
-              offered_at,
-              requested_at,
-              status,
-              offer_id,
-              request_id,
-              offered_by,
-              offerer:offered_by (
-                id,
-                username,
-                friend_code
-              ),
-              offer:offer_id (
-                id,
-                created_at,
-                user_id,
-                card_id,
-                traded,
-                cards:card_id (*),
-                users:user_id (*)
-              ),
-              request:request_id (
-                id,
-                created_at,
-                user_id,
-                card_id,
-                traded,
-                cards:card_id (*),
-                users:user_id (*)
-              )
-            `)
-            .or(`offer_id.in.(${chunk.map(item => `'${item.id}'`).join(',')}),request_id.in.(${chunk.map(item => `'${item.id}'`).join(',')})`)
-            .or(`user_id.eq.${user.id},offered_by.eq.${user.id}`)
-            .in('status', [TRADE_STATUS.OFFERED, TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE]);
-
-          if (tradesError) throw tradesError;
-          if (tradesData) {
-            // Type assertion to handle the Supabase response type
-            const typedTradesData = tradesData as unknown as RawTradeData[];
-            allTradesData = [...allTradesData, ...typedTradesData];
-          }
-        }
-
-        // Combine the data with validation
-        const itemsWithOffers = wishlistData
-          .filter(item => item && item.cards && item.users)
-          .map(item => {
-            const offers = allTradesData
-              .filter(trade => {
-                if (trade.offer_id === item.id) {
-                  return trade.offer?.[0]?.user_id === user.id;
-                } else if (trade.request_id === item.id) {
-                  return trade.offered_by === user.id;
-                }
-                return false;
-              })
-              .map(trade => ({
-                ...trade,
-                offerer: trade.offerer[0],
-                offer: trade.offer[0],
-                request: trade.request[0]
-              } as unknown as Trade2));
-            
-            return {
-              ...(item as unknown as WishlistItem),
-              offers
-            } as WishlistItemWithOffers;
-          })
-          .filter(item => item.offers.length > 0);
-
-        setWishlistItems(itemsWithOffers);
-        lastLoadTime.current = Date.now();
-      } catch (err) {
-        console.error('Error loading data:', err);
-        if (retryCount < maxRetries) {
-          retryCount++;
-          console.log(`Retrying... Attempt ${retryCount} of ${maxRetries}`);
-          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
-          return tryLoadData();
-        }
-        setError('Failed to load data. Please try again.');
-      } finally {
-        setLoading(false);
-        isLoadingRef.current = false;
-      }
-    };
-
-    tryLoadData();
+      setWishlistItems(itemsWithOffers);
+      lastLoadTime.current = Date.now();
+    } catch (err) {
+      console.error('Error loading data:', err);
+      setError('Failed to load data. Please try again.');
+    } finally {
+      setLoading(false);
+      isLoadingRef.current = false;
+    }
   }, [user, needsRefresh]);
 
   // Debounced refresh function
@@ -423,7 +375,9 @@ const Offers = () => {
             'card_rarity' in wishlistItem.cards &&
             wishlistItem.cards.tradeable === true &&
             wishlistItem.cards.card_rarity === item.cards?.card_rarity &&
-            !committedWishlistIds.has(wishlistItem.id)
+            !committedWishlistIds.has(wishlistItem.id) &&
+            // Exclude the logged-in user's cards
+            wishlistItem.user_id !== user?.id
           )
           .map(wishlistItem => ({
             ...(wishlistItem.cards as unknown as Card),
@@ -847,10 +801,11 @@ const Offers = () => {
                           ? completedOffer.offer?.cards    // If we made the offer, we sent our offered card
                           : completedOffer.request?.cards; // If someone else made the offer, we sent our requested card
 
-                        // Set up trading partner based on who made the offer
+                        // Set up trading partner - if we made the offer (isOfferer), show the user who owns the wishlist item
+                        // otherwise show the user who made the offer to us
                         const tradingPartner = isOfferer
-                          ? completedOffer.request?.users  // If we made the offer, show the request owner
-                          : completedOffer.offerer;        // If someone else made the offer, show the offerer
+                          ? completedOffer.offer?.users  // If we made the offer, show the wishlist item owner
+                          : completedOffer.offerer;      // If someone else made the offer, show the offerer
 
                         return (
                           <tr key={item.id}>
@@ -970,15 +925,28 @@ const Offers = () => {
                             #{String(item.cards?.card_number || '000').padStart(3, '0')} · {item.cards?.pack || 'Unknown Pack'} · {item.cards?.card_rarity || 'Unknown Rarity'}
                           </p>
                           <div className="mt-2 text-sm text-gray-500">
-                            {item.users?.username || 'Unknown User'}
-                            {item.users?.friend_code && (
-                              <button
-                                onClick={() => handleCopyFriendCode(item.users?.friend_code || '')}
-                                className="ml-2 text-blue-600 hover:text-blue-800"
-                              >
-                                {item.users?.friend_code}
-                              </button>
-                            )}
+                            {/* Show the username of the person who made the offer */}
+                            {(() => {
+                              const activeOffer = item.offers.find(offer => 
+                                [TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED].includes(offer.status)
+                              ) || item.offers[0];
+                              return activeOffer.offerer?.username || 'Unknown User';
+                            })()}
+                            {/* Show the friend code of the person who made the offer */}
+                            {(() => {
+                              const activeOffer = item.offers.find(offer => 
+                                [TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED].includes(offer.status)
+                              ) || item.offers[0];
+                              const friendCode = activeOffer.offerer?.friend_code;
+                              return friendCode && (
+                                <button
+                                  onClick={() => handleCopyFriendCode(friendCode)}
+                                  className="ml-2 text-blue-600 hover:text-blue-800"
+                                >
+                                  {friendCode}
+                                </button>
+                              );
+                            })()}
                           </div>
                         </div>
                       </div>
@@ -1024,23 +992,13 @@ const Offers = () => {
                                       #{String(cardToShow.card_number || '000').padStart(3, '0')} · {cardToShow.pack || 'Unknown Pack'} · {cardToShow.card_rarity || 'Unknown Rarity'}
                                     </p>
                                     <div className="mt-2 text-sm text-gray-500">
-                                      {isOfferer 
-                                        ? advancedTrade.offer?.users?.username 
-                                        : advancedTrade.request?.users?.username || 'Unknown User'}
-                                      {(isOfferer 
-                                        ? advancedTrade.offer?.users?.friend_code
-                                        : advancedTrade.request?.users?.friend_code) && (
+                                      {user?.user_metadata?.username || 'You'}
+                                      {user?.user_metadata?.friend_code && (
                                         <button
-                                          onClick={() => handleCopyFriendCode(
-                                            isOfferer 
-                                              ? advancedTrade.offer?.users?.friend_code || ''
-                                              : advancedTrade.request?.users?.friend_code || ''
-                                          )}
+                                          onClick={() => handleCopyFriendCode(user.user_metadata.friend_code)}
                                           className="ml-2 text-blue-600 hover:text-blue-800"
                                         >
-                                          {isOfferer 
-                                            ? advancedTrade.offer?.users?.friend_code
-                                            : advancedTrade.request?.users?.friend_code}
+                                          {user.user_metadata.friend_code}
                                         </button>
                                       )}
                                     </div>
@@ -1075,7 +1033,15 @@ const Offers = () => {
                                     #{String(selectedCard.card_number || '000').padStart(3, '0')} · {selectedCard.pack || 'Unknown Pack'} · {selectedCard.card_rarity || 'Unknown Rarity'}
                                   </p>
                                   <div className="mt-2 text-sm text-gray-500">
-                                    {selectedCard.offererUsername || 'Unknown User'}
+                                    {user?.user_metadata?.username || 'You'}
+                                    {user?.user_metadata?.friend_code && (
+                                      <button
+                                        onClick={() => handleCopyFriendCode(user.user_metadata.friend_code)}
+                                        className="ml-2 text-blue-600 hover:text-blue-800"
+                                      >
+                                        {user.user_metadata.friend_code}
+                                      </button>
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -1138,17 +1104,55 @@ const Offers = () => {
                             ) : (
                               // Case 4: Open offer with no request_id - show card selector
                               <div className="flex space-x-2">
+                                <style>
+                                  {`
+                                    .trade-select {
+                                      max-width: 100%;
+                                      width: 100%;
+                                    }
+                                    .trade-select option {
+                                      max-width: 300px;
+                                      white-space: nowrap;
+                                      overflow: hidden;
+                                      text-overflow: ellipsis;
+                                    }
+                                  `}
+                                </style>
                                 <select
-                                  className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                  className="trade-select flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                   value={item.selectedCardId || ''}
                                   onChange={(e) => handleCardSelect(item.id, e.target.value)}
                                 >
                                   <option value="">Select a card to send</option>
-                                  {item.eligibleCards.map(card => (
-                                    <option key={card.id} value={card.id}>
-                                      {card.card_name} ({card.offererUsername})
-                                    </option>
-                                  ))}
+                                  {(() => {
+                                    // Group cards by pack
+                                    const cardsByPack = item.eligibleCards?.reduce((acc, card) => {
+                                      const pack = card.pack || 'Unknown Pack';
+                                      if (!acc[pack]) {
+                                        acc[pack] = [];
+                                      }
+                                      acc[pack].push(card);
+                                      return acc;
+                                    }, {} as Record<string, typeof item.eligibleCards>);
+
+                                    // Sort packs alphabetically
+                                    return Object.entries(cardsByPack || {})
+                                      .sort(([packA], [packB]) => packA.localeCompare(packB))
+                                      .map(([pack, cards]) => (
+                                        <optgroup key={pack} label={pack}>
+                                          {cards?.sort((a, b) => {
+                                            // Sort by card number, handling non-numeric parts
+                                            const aNum = parseInt(a.card_number || '0');
+                                            const bNum = parseInt(b.card_number || '0');
+                                            return aNum - bNum;
+                                          }).map(card => (
+                                            <option key={card.id} value={card.id} title={`#${String(card.card_number || '000').padStart(3, '0')} ${card.card_name} (${card.offererUsername})`}>
+                                              #{String(card.card_number || '000').padStart(3, '0')} {card.card_name} ({card.offererUsername})
+                                            </option>
+                                          ))}
+                                        </optgroup>
+                                      ));
+                                  })()}
                                 </select>
                                 
                                 <button
