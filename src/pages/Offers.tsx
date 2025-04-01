@@ -206,17 +206,27 @@ const Offers = () => {
             users:user_id (*)
           )
         `)
-        .or(`offer_id.in.(${wishlistData.map(item => item.id).join(',')}),request_id.in.(${wishlistData.map(item => item.id).join(',')})`)
+        .or(`and(offer_id.in.(${wishlistData.map(item => item.id).join(',')}),user_id.eq.${user.id}),and(request_id.in.(${wishlistData.map(item => item.id).join(',')}),offered_by.eq.${user.id})`)
         .in('status', [TRADE_STATUS.OFFERED, TRADE_STATUS.NEGOTIATING, TRADE_STATUS.ACCEPTED, TRADE_STATUS.COMPLETE]);
 
       if (tradesError) throw tradesError;
 
-      // Combine the data
+      // Combine the data with validation
       const itemsWithOffers = wishlistData
         .filter(item => item && item.cards && item.users)
         .map(item => {
           const offers = (tradesData || [])
-            .filter(trade => trade.offer_id === item.id || trade.request_id === item.id)
+            .filter(trade => {
+              // Validate trade ownership and associations
+              if (trade.offer_id === item.id) {
+                // This is an offer for our wishlist item
+                return trade.offer && 'user_id' in trade.offer && trade.offer.user_id === user.id;
+              } else if (trade.request_id === item.id) {
+                // This is a request for our wishlist item
+                return trade.offered_by === user.id;
+              }
+              return false;
+            })
             .map(trade => ({
               ...trade,
               offerer: Array.isArray(trade.offerer) ? trade.offerer[0] : trade.offerer,

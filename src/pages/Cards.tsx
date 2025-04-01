@@ -47,15 +47,7 @@ const Cards = () => {
   const lastLoadTimeRef = useRef(0);
   const isLoadingRef = useRef(false);
   const selectionTimeoutRef = useRef<NodeJS.Timeout>();
-  
-  // Add type for pending selections
-  type PendingSelection = {
-    cardId: string;
-    action: 'add' | 'remove';
-  };
-
-  // Update ref type
-  const pendingSelectionsRef = useRef<Set<PendingSelection>>(new Set());
+  const pendingSelectionsRef = useRef<Set<string>>(new Set());
 
   // Helper to show notifications
   const showNotification = useCallback((message: string, type: 'success' | 'error') => {
@@ -153,66 +145,55 @@ const Cards = () => {
     pendingSelectionsRef.current.clear();
     
     try {
-      // Group by action
-      const toAdd = pendingSelections
-        .filter(selection => selection.action === 'add')
-        .map(selection => selection.cardId);
-      const toRemove = pendingSelections
-        .filter(selection => selection.action === 'remove')
-        .map(selection => selection.cardId);
+      for (const cardId of pendingSelections) {
+        const isSelected = selectedCards.includes(cardId);
+        
+        if (isSelected) {
+          // Check if the wishlist item has been traded before allowing removal
+          const { data: wishlistItem, error: checkError } = await supabase
+            .from('wishlists')
+            .select('traded')
+            .eq('card_id', cardId)
+            .eq('user_id', user.id)
+            .single();
 
-      // Handle removals first
-      if (toRemove.length > 0) {
-        // Check which cards can be removed (not traded)
-        const { data: wishlistItems, error: checkError } = await supabase
-          .from('wishlists')
-          .select('card_id, traded')
-          .in('card_id', toRemove)
-          .eq('user_id', user.id);
+          if (checkError) throw checkError;
 
-        if (checkError) throw checkError;
+          // If the item has been traded, don't allow removal
+          if (wishlistItem?.traded) {
+            showNotification('Cannot remove traded cards from wishlist', 'error');
+            continue;
+          }
 
-        // Filter out traded cards
-        const tradedCards = new Set(wishlistItems?.filter(item => item.traded).map(item => item.card_id) || []);
-        const safeToRemove = toRemove.filter(cardId => !tradedCards.has(cardId));
-
-        if (tradedCards.size > 0) {
-          showNotification('Some traded cards could not be removed from wishlist', 'error');
-        }
-
-        if (safeToRemove.length > 0) {
+          // Remove from wishlist only if not traded
           const { error } = await supabase
             .from('wishlists')
             .delete()
-            .in('card_id', safeToRemove)
+            .eq('card_id', cardId)
             .eq('user_id', user.id)
-            .eq('traded', false);
+            .eq('traded', false);  // Extra safety check
+
+          if (error) throw error;
+        } else {
+          // Add to wishlist
+          const { error } = await supabase
+            .from('wishlists')
+            .insert({
+              card_id: cardId,
+              user_id: user.id,
+              traded: false
+            });
 
           if (error) throw error;
         }
       }
-
-      // Handle additions
-      if (toAdd.length > 0) {
-        const { error } = await supabase
-          .from('wishlists')
-          .insert(toAdd.map(cardId => ({
-            card_id: cardId,
-            user_id: user.id,
-            traded: false
-          })));
-
-        if (error) throw error;
-      }
-
-      // Show appropriate notification
-      const totalChanges = toAdd.length + toRemove.length;
+      
       showNotification(
-        totalChanges > 1 
+        pendingSelections.length > 1 
           ? 'Wishlist updated successfully' 
-          : toAdd.length === 1
-            ? 'Card added to wishlist'
-            : 'Card removed from wishlist',
+          : selectedCards.includes(pendingSelections[0])
+            ? 'Card removed from wishlist'
+            : 'Card added to wishlist',
         'success'
       );
     } catch (err) {
@@ -221,32 +202,28 @@ const Cards = () => {
       // Reload data to ensure UI is in sync
       loadData(true);
     }
-  }, [user, showNotification, loadData]);
+  }, [user, selectedCards, showNotification, loadData]);
 
   // Handle card selection with optimistic updates and debouncing
   const handleCardSelect = useCallback((cardId: string) => {
     if (!user) return;
 
-    const isCurrentlySelected = selectedCards.includes(cardId);
-    
     // Optimistic update
-    setSelectedCards((prev: string[]) => {
-      return isCurrentlySelected
-        ? prev.filter((id: string) => id !== cardId)
+    setSelectedCards(prev => {
+      const isSelected = prev.includes(cardId);
+      return isSelected
+        ? prev.filter(id => id !== cardId)
         : [...prev, cardId];
     });
     
-    setCards((prev: CardType[]) => prev.map(card => 
+    setCards(prev => prev.map(card => 
       card.id === cardId
         ? { ...card, wishlisted: !card.wishlisted }
         : card
     ));
 
-    // Add to pending selections with the intended action
-    pendingSelectionsRef.current.add({
-      cardId,
-      action: isCurrentlySelected ? 'remove' : 'add'
-    });
+    // Add to pending selections
+    pendingSelectionsRef.current.add(cardId);
 
     // Debounce the processing
     if (selectionTimeoutRef.current) {
@@ -256,7 +233,7 @@ const Cards = () => {
     selectionTimeoutRef.current = setTimeout(() => {
       processPendingSelections();
     }, SELECTION_DEBOUNCE);
-  }, [user, selectedCards, processPendingSelections]);
+  }, [user, processPendingSelections]);
 
   // Initialize component
   useEffect(() => {
