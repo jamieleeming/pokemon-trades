@@ -146,7 +146,7 @@ const Offers = () => {
     let retryCount = 0;
     const maxRetries = 3;
 
-    const tryLoadData = async () => {
+    const tryLoadData = async (): Promise<void> => {
       try {
         isLoadingRef.current = true;
         setLoading(true);
@@ -237,7 +237,9 @@ const Offers = () => {
 
           if (tradesError) throw tradesError;
           if (tradesData) {
-            allTradesData = [...allTradesData, ...tradesData];
+            // Type assertion to handle the Supabase response type
+            const typedTradesData = tradesData as unknown as RawTradeData[];
+            allTradesData = [...allTradesData, ...typedTradesData];
           }
         }
 
