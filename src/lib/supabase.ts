@@ -24,10 +24,10 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     storage: localStorage,
     storageKey: 'pokemon-trades-auth',
   },
-  // Disable realtime subscriptions since we don't use them
+  // Enable realtime for notifications
   realtime: {
     params: {
-      eventsPerSecond: 0
+      eventsPerSecond: 2  // Limit to 2 events per second to prevent flooding
     }
   }
 });
