@@ -4,6 +4,7 @@ export const EVENT_CATEGORY = {
   TRADE: 'trade',
   CARD: 'card',
   USER: 'user',
+  NOTIFICATION: 'notification'
 } as const;
 
 // Analytics event tracking utility
@@ -70,4 +71,14 @@ export const trackUser = {
   openNotification: () => trackEvent(EVENT_CATEGORY.USER, 'open_notification'),
   clickNavigation: (itemName: string) => 
     trackEvent(EVENT_CATEGORY.USER, 'click_navigation', itemName),
+};
+
+// Notification Events
+export const trackNotification = {
+  view: (type: string) => 
+    trackEvent(EVENT_CATEGORY.NOTIFICATION, 'view', type),
+  click: (type: string) => 
+    trackEvent(EVENT_CATEGORY.NOTIFICATION, 'click', type),
+  dismiss: (type: string) => 
+    trackEvent(EVENT_CATEGORY.NOTIFICATION, 'dismiss', type),
 }; 

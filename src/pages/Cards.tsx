@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import DbSetupGuide from '../components/DbSetupGuide';
 import Notification from '../components/Notification';
 import CollapsibleFilters from '../components/CollapsibleFilters';
+import { trackCard } from '../lib/analytics';
 
 // Cache duration in milliseconds (1 minute)
 const CACHE_DURATION = 60 * 1000;
@@ -204,13 +205,65 @@ const Cards = () => {
     }
   }, [user, selectedCards, showNotification, loadData]);
 
+  // Handle search query changes
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (value) {
+      trackCard.search(value);
+    }
+  };
+
+  // Handle filter changes
+  const handlePackFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setPackFilter(value);
+    if (value) {
+      trackCard.filter(`pack:${value}`);
+    }
+  };
+
+  const handleRarityFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setRarityFilter(value);
+    if (value) {
+      trackCard.filter(`rarity:${value}`);
+    }
+  };
+
+  const handleElementFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setElementFilter(value);
+    if (value) {
+      trackCard.filter(`element:${value}`);
+    }
+  };
+
+  const handleTradeableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    setTradeableOnly(value);
+    if (value) {
+      trackCard.filter('tradeable:true');
+    }
+  };
+
   // Handle card selection with optimistic updates and debouncing
   const handleCardSelect = useCallback((cardId: string) => {
     if (!user) return;
 
+    // Find the card to get its name
+    const card = cards.find(c => c.id === cardId);
+    if (!card?.card_name) return;
+
     // Optimistic update
     setSelectedCards(prev => {
       const isSelected = prev.includes(cardId);
+      // Track the wishlist change
+      if (isSelected) {
+        trackCard.removeFromWishlist(card.card_name);
+      } else {
+        trackCard.addToWishlist(card.card_name);
+      }
       return isSelected
         ? prev.filter(id => id !== cardId)
         : [...prev, cardId];
@@ -233,7 +286,7 @@ const Cards = () => {
     selectionTimeoutRef.current = setTimeout(() => {
       processPendingSelections();
     }, SELECTION_DEBOUNCE);
-  }, [user, processPendingSelections]);
+  }, [user, processPendingSelections, cards]);
 
   // Initialize component
   useEffect(() => {
@@ -324,31 +377,29 @@ const Cards = () => {
       
       {/* Filters */}
       <CollapsibleFilters title="Filters">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {/* Search */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <div>
             <label htmlFor="search" className="mb-1 block text-sm font-medium text-gray-700">
               Search
             </label>
             <input
+              type="search"
               id="search"
-              type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Card name or number"
+              onChange={handleSearchChange}
+              placeholder="Search by name or number"
               className="form-input"
             />
           </div>
           
-          {/* Pack filter */}
           <div>
             <label htmlFor="pack" className="mb-1 block text-sm font-medium text-gray-700">
-              Booster Pack
+              Pack
             </label>
             <select
               id="pack"
               value={packFilter}
-              onChange={(e) => setPackFilter(e.target.value)}
+              onChange={handlePackFilterChange}
               className="form-input"
             >
               <option value="">All Packs</option>
@@ -360,7 +411,6 @@ const Cards = () => {
             </select>
           </div>
           
-          {/* Rarity filter */}
           <div>
             <label htmlFor="rarity" className="mb-1 block text-sm font-medium text-gray-700">
               Rarity
@@ -368,7 +418,7 @@ const Cards = () => {
             <select
               id="rarity"
               value={rarityFilter}
-              onChange={(e) => setRarityFilter(e.target.value)}
+              onChange={handleRarityFilterChange}
               className="form-input"
             >
               <option value="">All Rarities</option>
@@ -380,7 +430,6 @@ const Cards = () => {
             </select>
           </div>
           
-          {/* Element filter */}
           <div>
             <label htmlFor="element" className="mb-1 block text-sm font-medium text-gray-700">
               Element
@@ -388,7 +437,7 @@ const Cards = () => {
             <select
               id="element"
               value={elementFilter}
-              onChange={(e) => setElementFilter(e.target.value)}
+              onChange={handleElementFilterChange}
               className="form-input"
             >
               <option value="">All Elements</option>
@@ -400,30 +449,12 @@ const Cards = () => {
             </select>
           </div>
           
-          {/* Status filter */}
-          <div>
-            <label htmlFor="status" className="mb-1 block text-sm font-medium text-gray-700">
-              Status
-            </label>
-            <select
-              id="status"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="form-input"
-            >
-              <option value="All">All</option>
-              <option value="Selected">In Wishlist</option>
-              <option value="Not Selected">Not in Wishlist</option>
-            </select>
-          </div>
-          
-          {/* Tradeable filter */}
-          <div className="flex items-end lg:col-span-4">
+          <div className="flex items-end lg:col-span-1">
             <label className="flex items-center">
               <input
                 type="checkbox"
                 checked={tradeableOnly}
-                onChange={(e) => setTradeableOnly(e.target.checked)}
+                onChange={handleTradeableChange}
                 className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <span className="text-sm font-medium text-gray-700">Tradeable Only</span>

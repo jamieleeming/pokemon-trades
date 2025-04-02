@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { NOTIFICATION_TYPE, TradeNotification } from '../types';
+import { trackNotification } from '../lib/analytics';
 
 // Cache duration in milliseconds (1 minute)
 const CACHE_DURATION = 60 * 1000;
@@ -121,6 +122,7 @@ const NotificationCenter: React.FC = () => {
     const handleClickOutside = (event: MouseEvent) => {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        trackNotification.dismiss('notification_center');
       }
     };
 
@@ -165,9 +167,22 @@ const NotificationCenter: React.FC = () => {
     }
   };
 
+  // Toggle notification panel
+  const toggleNotifications = () => {
+    setIsOpen(!isOpen);
+    if (!isOpen) {
+      trackNotification.view('notification_center');
+    }
+  };
+
   // Optimistic update for marking as viewed
   const markAsViewed = useCallback(async (id: string) => {
     if (!user) return;
+    
+    const notification = notifications.find(n => n.id === id);
+    if (notification) {
+      trackNotification.click(notification.type);
+    }
     
     // Optimistic update
     setNotifications(prev => 
@@ -190,11 +205,13 @@ const NotificationCenter: React.FC = () => {
       // Revert optimistic update on error
       debouncedRefresh();
     }
-  }, [user, debouncedRefresh]);
+  }, [user, debouncedRefresh, notifications]);
   
   // Optimistic update for marking all as viewed
   const markAllAsViewed = useCallback(async () => {
     if (!user) return;
+
+    trackNotification.click('mark_all_read');
     
     // Optimistic update
     setNotifications(prev => 
@@ -217,10 +234,6 @@ const NotificationCenter: React.FC = () => {
     }
   }, [user, debouncedRefresh]);
   
-  const toggleNotifications = useCallback(() => {
-    setIsOpen(!isOpen);
-  }, [isOpen]);
-
   // Cleanup on unmount
   useEffect(() => {
     return () => {

@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 import { Trade2, TRADE_STATUS } from '../types';
 import { createTradeNotification } from './notifications';
 import { NOTIFICATION_TYPE } from '../types';
+import { trackTrade } from './analytics';
 
 // Fetch a trade by ID with related wishlist items
 export async function getTrade2ById(id: string): Promise<Trade2 | null> {
@@ -56,13 +57,18 @@ export const createTrade2 = async (wishlistId: string) => {
         offer_id: wishlistId,
         status: TRADE_STATUS.OFFERED,
         offered_at: new Date().toISOString(),
-        offered_by: user.id, // Add the current user's ID
-        offered_to: wishlistData.user_id // Add the offered_to field
+        offered_by: user.id,
+        offered_to: wishlistData.user_id
       })
       .select()
       .single();
 
     if (tradeError) throw tradeError;
+
+    // Track the offer creation
+    if (trade?.offer?.cards?.card_name) {
+      trackTrade.createOffer(trade.offer.cards.card_name);
+    }
 
     // Send notification to the recipient
     if (trade?.offer?.users?.id) {
@@ -78,7 +84,7 @@ export const createTrade2 = async (wishlistId: string) => {
     return trade;
   } catch (error) {
     console.error('Error creating trade:', error);
-    throw error; // Re-throw the error instead of returning null
+    throw error;
   }
 };
 
@@ -118,14 +124,16 @@ export async function updateTrade2Status(
     return null;
   }
 
-  // Send appropriate notification based on status
+  // Track trade status changes and send notifications
   if (trade) {
     const offererUserId = trade.offer?.users?.id;
     const requesterUsername = trade.request?.users?.username || 'A user';
-    const itemName = trade.offer?.cards?.card_name;
+    const itemName = trade.offer?.cards?.card_name || 'Unknown Card';
 
     switch (status) {
       case TRADE_STATUS.NEGOTIATING:
+        // Track counter offer
+        trackTrade.counterOffer(itemName);
         // Notify offerer about counteroffer
         if (offererUserId) {
           await createTradeNotification({
@@ -138,6 +146,8 @@ export async function updateTrade2Status(
         break;
 
       case TRADE_STATUS.ACCEPTED:
+        // Track accepted offer
+        trackTrade.acceptOffer(itemName);
         // Notify offerer that their trade was accepted
         if (offererUserId) {
           await createTradeNotification({
@@ -150,10 +160,13 @@ export async function updateTrade2Status(
         break;
 
       case TRADE_STATUS.COMPLETE:
-        // No notification for completed trades
+        // Track completed trade
+        trackTrade.completeTrade(itemName);
         break;
 
       case TRADE_STATUS.REJECTED:
+        // Track rejected offer
+        trackTrade.rejectOffer(itemName);
         // Notify offerer that their trade was rejected
         if (offererUserId) {
           await createTradeNotification({
