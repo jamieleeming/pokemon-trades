@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { trackAuth } from '../lib/analytics';
 
 // Debounce delay for username check (300ms)
 const USERNAME_CHECK_DEBOUNCE = 300;
@@ -93,6 +94,7 @@ const Login = () => {
         if (error) {
           setError(error.message);
         } else {
+          trackAuth.passwordReset();
           setSuccessMessage('Password reset instructions have been sent to your email address.');
           setIsForgotPassword(false);
         }
@@ -113,6 +115,7 @@ const Login = () => {
         if (error) {
           setError(error.message);
         } else if (success) {
+          trackAuth.signUp();
           setSuccessMessage(`Your account has been created! Please check your email (${email}) to confirm your account before signing in.`);
           // Reset the form and switch back to sign-in mode
           setName('');
@@ -127,6 +130,7 @@ const Login = () => {
         if (error) {
           setError(error.message);
         } else {
+          trackAuth.signIn();
           navigate('/requests');
         }
       }

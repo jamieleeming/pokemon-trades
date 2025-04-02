@@ -2,8 +2,11 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navigation from './Navigation';
 import { AuthProvider } from '../contexts/AuthContext';
+import usePageTracking from '../hooks/usePageTracking';
 
 const Layout = () => {
+  usePageTracking();
+
   return (
     <AuthProvider>
       <div className="flex min-h-screen flex-col bg-gray-50">

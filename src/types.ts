@@ -30,21 +30,6 @@ export enum TRADE_STATUS {
   REJECTED = "rejected"
 }
 
-export interface Trade {
-  id: number;
-  card_id: string;
-  user_id: string;
-  offered_by: string | null;
-  requested_date: string;
-  accepted_date?: string | null;
-  status: TRADE_STATUS;
-  wishlist_id: string | null;
-  linked_trade_id: number | null;
-  cards?: Card;
-  users?: User;
-  offerers?: User | null;
-}
-
 // New trades2 table interface
 export interface Trade2 {
   id: string;

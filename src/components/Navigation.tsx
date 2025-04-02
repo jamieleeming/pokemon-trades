@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import NotificationCenter from './NotificationCenter';
+import { trackAuth } from '../lib/analytics';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,6 +37,7 @@ const Navigation = () => {
   const handleSignOut = async () => {
     try {
       await signOut();
+      trackAuth.signOut();
     } catch (error) {
       console.error('Error signing out:', error);
     }

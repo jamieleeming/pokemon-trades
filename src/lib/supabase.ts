@@ -120,13 +120,3 @@ export interface Card {
   card_element: string;
   wishlisted?: boolean;
 }
-
-export interface Trade {
-  id: number;
-  card_id: string;
-  user_id: string;
-  offered_by: string | null;
-  requested_date: string;
-  status: TRADE_STATUS;
-  wishlist_id: string | null;
-} 
