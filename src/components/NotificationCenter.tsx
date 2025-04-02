@@ -8,6 +8,8 @@ import { trackNotification } from '../lib/analytics';
 const CACHE_DURATION = 60 * 1000;
 // Debounce delay for refresh (500ms)
 const REFRESH_DEBOUNCE = 500;
+// Maximum number of retries for realtime connection
+const MAX_RETRIES = 3;
 
 const NotificationCenter: React.FC = () => {
   const [notifications, setNotifications] = useState<TradeNotification[]>([]);
@@ -24,6 +26,9 @@ const NotificationCenter: React.FC = () => {
   const isLoadingRef = useRef(false);
   const refreshTimeoutRef = useRef<NodeJS.Timeout>();
   const subscriptionRef = useRef<any>(null);
+  
+  // Add retry count state
+  const retryCountRef = useRef(0);
   
   // Check if data needs refresh
   const needsRefresh = useCallback(() => {
@@ -76,32 +81,70 @@ const NotificationCenter: React.FC = () => {
     }, REFRESH_DEBOUNCE);
   }, [fetchNotifications]);
   
-  // Set up real-time subscription
+  // Set up real-time subscription with retry logic
   useEffect(() => {
-    if (!user) return;
+    let subscription: any = null;
+    let retryTimeout: NodeJS.Timeout | null = null;
 
-    // Subscribe to new notifications
-    const subscription = supabase
-      .channel('notifications')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${user.id}`
-        },
-        (payload) => {
-          debouncedRefresh();
+    const setupSubscription = async () => {
+      if (!user || retryCountRef.current >= MAX_RETRIES) return;
+
+      try {
+        // Clean up any existing subscription first
+        if (subscriptionRef.current) {
+          await supabase.removeChannel(subscriptionRef.current);
         }
-      )
-      .subscribe();
 
-    subscriptionRef.current = subscription;
+        subscription = supabase
+          .channel(`notifications:${user.id}`)
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'notifications',
+              filter: `user_id=eq.${user.id}`
+            },
+            (payload) => {
+              debouncedRefresh();
+            }
+          )
+          .subscribe((status) => {
+            if (status === 'SUBSCRIBED') {
+              // Reset retry count on successful subscription
+              retryCountRef.current = 0;
+              subscriptionRef.current = subscription;
+            } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+              // Attempt retry if we haven't exceeded max retries
+              if (retryCountRef.current < MAX_RETRIES) {
+                retryCountRef.current++;
+                retryTimeout = setTimeout(() => {
+                  setupSubscription();
+                }, 1000 * Math.pow(2, retryCountRef.current)); // Exponential backoff
+              }
+            }
+          });
+      } catch (error) {
+        console.error('Error setting up realtime subscription:', error);
+        // Attempt retry if we haven't exceeded max retries
+        if (retryCountRef.current < MAX_RETRIES) {
+          retryCountRef.current++;
+          retryTimeout = setTimeout(() => {
+            setupSubscription();
+          }, 1000 * Math.pow(2, retryCountRef.current)); // Exponential backoff
+        }
+      }
+    };
 
+    setupSubscription();
+
+    // Cleanup function
     return () => {
-      if (subscriptionRef.current) {
-        supabase.removeChannel(subscriptionRef.current);
+      if (retryTimeout) {
+        clearTimeout(retryTimeout);
+      }
+      if (subscription) {
+        supabase.removeChannel(subscription);
       }
     };
   }, [user, debouncedRefresh]);
